@@ -4,7 +4,11 @@
   "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "rm -rf dist .cache .parcel-cache",
+    "dev": "cp src\\manifest.json dist\\ && parcel src\\{background.js,index.html}",
+    "prod": "set NODE_ENV=production npx parcel build src\\{background.js,index.js}",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "zip -r chrome-extension.zip .\\dist"
   },
   "repository": {
     "type": "git",
