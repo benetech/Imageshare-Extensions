@@ -1,7 +1,5 @@
 
 // Service Workers are replacing Background in Chrome MV3
-const bra = (greeting) => {
-  return `${greeting}, bra!`
-}
+const greetingEdit = greeting => `${greeting}, bra!`
 
-export {bra}
+export {greetingEdit}
