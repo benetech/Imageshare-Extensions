@@ -1,0 +1,32 @@
+{
+  "name": "Imageshare-Extensions",
+  "version": "1.0.0",
+  "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf dist .cache .parcel-cache",
+    "dev": "cp src\\manifest.json dist\\ && parcel src\\{background.js,index.html}",
+    "prod": "set NODE_ENV=production npx parcel build src\\{background.js,index.js}",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "zip -r chrome-extension.zip .\\dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benetech/Imageshare-Extensions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benetech/Imageshare-Extensions/issues"
+  },
+  "homepage": "https://github.com/benetech/Imageshare-Extensions#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.2.0",
+    "parcel": "^2.0.0-nightly.513",
+    "postcss-import": "^14.0.0"
+  },
+  "dependencies": {
+    "crx-hotreload": "^1.0.6"
+  }
+}

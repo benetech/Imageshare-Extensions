@@ -1,0 +1,22 @@
+{
+  "name": "Imageshare Search",
+  "description": "An extension that searches Imageshare keywords for matches with users' current site content. Notifies user of matches and opens Imageshare, in a net window, to results view.",
+  "version": "0.1.0",
+  "manifest-version": 2,
+  "browser_action": {
+    "default_icon": "screenshot.jpg"
+    },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "icons" : {
+    "16": "screenshot.jpg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["index.js"]
+    }
+  ]
+
+}
