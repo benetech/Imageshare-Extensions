@@ -5,6 +5,8 @@ Imageshare Search
 Imageshare Search is a web extension designed to make finding and retreiving resources from Imageshare easier than ever.
 
 
+
+
 ** Developer instructions for viewing current feature progress.
 This document will be updated regularly, so be sure to check back accordingly.
 
@@ -21,7 +23,9 @@ Loading context-menu into Canary:
 3) Click "Load Unpacked"
 4) For now load only /src
 5) Give your Imageshare extension permissions for "on all sites". You can do this by clicking "details", scroll down to "Site Access" and choosing the "on all sites" radio.
-6) Once loaded you should be able to go to any other page, right click anywhere, and see that either a type specific test entry in the menu, or a general Imageshare test entry with children.
+6) Once loaded you should be able to go to any other page, right click anywhere, and see that either a type specific test entry in the menu, or a general Imageshare test entry with children or similar.
+
+WARNING: This branch is still a working branch, so changes may be pushed up at any time.
 
 
 
