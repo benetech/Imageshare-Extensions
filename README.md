@@ -23,9 +23,8 @@ Loading context-menu into Canary:
 3) Click "Load Unpacked"
 4) For now load only /src
 5) Give your Imageshare extension permissions for "on all sites". You can do this by clicking "details", scroll down to "Site Access" and choosing the "on all sites" radio.
-6) Once loaded you should be able to go to any other page, right click anywhere, and see that either a type specific test entry in the menu, or a general Imageshare test entry with children or similar.
+6) Once loaded you should be able to go to any other page, right click a selection, link, video, image or audio item, and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search.
 
-WARNING: This branch is still a working branch, so changes may be pushed up at any time.
 
 
 
