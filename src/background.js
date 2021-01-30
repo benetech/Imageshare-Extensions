@@ -1,5 +1,4 @@
-// hot reload cannot be run on service worker
-// import "crx-hotreload";
+console.log("Service-worker has loaded via background.js.");
 
 // The onClicked callback function.
 function onClickHandler(info, tab) {
