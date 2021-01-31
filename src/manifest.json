@@ -9,7 +9,8 @@
     "default_icon": "screenshot.jpg"
   },
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "tabs"
   ],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
