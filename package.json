@@ -9,7 +9,6 @@
     "prod-ch": "set NODE_ENV=production npx parcel build src-chrome\\{background.js,index.js}",
     "dev-f": "cp src-firefox\\manifest.json dist\\ && parcel src-firefox\\{background.js,index.js}",
     "prod-f": "set NODE_ENV=production npx parcel build src-firefox\\{background.js,index.js}",
-
     "test": "echo \"Error: no test specified\" && exit 1",
     "zip": "zip -r chrome-extension.zip .\\dist"
   },

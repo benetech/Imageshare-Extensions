@@ -1,1 +1,1 @@
-console.log("Content script has loaded via Manifest V2.");
+console.log('Content script has loaded via Manifest V2.');

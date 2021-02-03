@@ -1,4 +1,4 @@
-console.log("Background script has loaded via background.js.");
+console.log('Background script has loaded via background.js.');
 // hot reload cannot be run on service worker
 // import "crx-hotreload";
 
