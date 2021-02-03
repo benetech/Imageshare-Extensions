@@ -19,6 +19,15 @@ function onClickHandler(info, tab) {
         {
           url: newURL,
           active: false
+          //callback inititates alert
+          //alert itself cannot be run via background so function must call a non service worker script to run
+        },function (tab) {
+          console.log("Tab Object: " + JSON.stringify(tab));
+
+          chrome.scripting.executeScript({
+            file: 'results.js',
+            tabID: tab.id
+          });
         }
       );
 
