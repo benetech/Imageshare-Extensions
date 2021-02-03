@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
-    "dev": "cp src\\manifest.json dist\\ && parcel src\\{background.js,index.js}",
-    "prod": "set NODE_ENV=production npx parcel build src\\{background.js,index.js}",
+    "dev-ch": "cp src-chrome\\manifest.json dist\\ && parcel src-chrome\\{background.js,index.js}",
+    "prod-ch": "set NODE_ENV=production npx parcel build src-chrome\\{background.js,index.js}",
+    "dev-f": "cp src-firefox\\manifest.json dist\\ && parcel src-firefox\\{background.js,index.js}",
+    "prod-f": "set NODE_ENV=production npx parcel build src-firefox\\{background.js,index.js}",
+
     "test": "echo \"Error: no test specified\" && exit 1",
     "zip": "zip -r chrome-extension.zip .\\dist"
   },
