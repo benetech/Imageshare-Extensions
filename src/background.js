@@ -24,10 +24,10 @@ function onClickHandler(info, tab) {
         },function (tab) {
           console.log("Tab Object: " + JSON.stringify(tab));
 
-          chrome.scripting.executeScript({
-            file: 'results.js',
-            tabID: tab.id
-          });
+          // chrome.scripting.executeScript({
+          //   file: 'results.js',
+          //   tabID: tab.id
+          // });
         }
       );
 
