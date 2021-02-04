@@ -3,15 +3,56 @@
   "version": "1.0.0",
   "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
   "main": "index.js",
-  "chrome": "dist/src-chrome/index.js",
-  "chrome-modern": "dist/src-chrome-mv3/index.js",
-  "firefox": "dist/src-firefox/index.js",
-  "safari": "dist/src-safari/index.js",
+  "chrome": ["dist/src-chrome/index.js", "dist/src-chrome/background.js"],
+  "chrome-modern": ["dist/src-chrome-mv3/index.js", "dist/src-chrome-mv3/background.js"],
+  "firefox": ["dist/src-firefox/index.js", "dist/src-firefox/background.js"],
+  "safari": ["dist/src-safari/index.js", "dist/src-safari/background.js"],
   "targets": {
-    "chrome": { },
-    "chrome-modern": { },
-    "firefox": { },
-    "safari": { }
+    "main": false,
+    "chrome": {
+      "distDir": "./dist/src-chrome",
+      "engines": {
+        "browsers": "Chrome 70"
+      },
+      "optimize": true,
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+        }
+    },
+    "chrome-modern": {
+      "distDir": "./dist/src-chrome-mv3",
+      "engines": {
+        "browsers": "Chrome 70"
+      },
+      "optimize": true,
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+        }
+    },
+    "firefox": {
+      "distDir": "./dist/src-firefox",
+      "engines": {
+        "browsers": "Firefox 70"
+      },
+      "optimize": true,
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+        }
+    },
+    "safari": {
+      "distDir": "./dist/src-safari",
+      "engines": {
+        "browsers": "Safari 70"
+      },
+      "optimize": true,
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+        }
+     }
   },
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
