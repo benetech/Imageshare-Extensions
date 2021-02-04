@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
   "main": "index.js",
+  "chrome": "dist/src-chrome/index.js",
+  "chrome-modern": "dist/src-chrome-mv3/index.js",
+  "firefox": "dist/src-firefox/index.js",
+  "safari": "dist/src-safari/index.js",
+  "targets": {
+    "chrome": { },
+    "chrome-modern": { },
+    "firefox": { },
+    "safari": { }
+  },
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
     "dev-ch": "cp src-chrome\\manifest.json dist\\ && parcel src-chrome\\{background.js,index.js}",
