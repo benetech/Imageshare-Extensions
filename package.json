@@ -2,6 +2,7 @@
   "name": "Imageshare-Extensions",
   "version": "1.0.0",
   "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
+  "browserslist": ["> 1%", "not dead"],
   "main": "index.js",
   "chrome": ["dist/src-chrome/index.js", "dist/src-chrome/background.js"],
   "chrome-modern": ["dist/src-chrome-mv3/index.js", "dist/src-chrome-mv3/background.js"],
@@ -23,7 +24,7 @@
     "chrome-modern": {
       "distDir": "./dist/src-chrome-mv3",
       "engines": {
-        "browsers": "Chrome 70"
+        "browsers": "Chrome 90"
       },
       "optimize": true,
       "sourceMap": {
