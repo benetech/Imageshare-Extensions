@@ -1,47 +1,66 @@
 console.log("Service-worker has loaded via background.js.");
 
+import axios from 'axios';
+
+// open Imageshare in new tab with selection search results
+function openImageshare (newURL) {
+    chrome.tabs.create({
+      url: newURL,
+         active: false
+         //callback inititates alert
+         //alert itself cannot be run via background so function must call a non service worker script to run
+      },function (tab) {
+         console.log("Tab Object: " + JSON.stringify(tab));
+        // notify user of successful search
+                  // chrome.scripting.executeScript({
+                  //   file: 'results.js',
+                  //   tabID: tab.id
+                  // });
+      }
+    );
+}
+
+function runAPIstandard (selection) {
+  //Imageshare API
+  const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+  const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
+
+  //Send a GET request to API to determine if selection matches search results
+  axios.get(`${IMGS_API_URL}filter/?query=${selection}`)
+    .then(response => {
+      console.log(`Response from Imageshare: ${response.data}`);
+      if (response.data.length === 0) {
+      console.log(`No results found for ${selection}`);
+      } else {
+      console.log(`${response.data.length} found for ${selection}`);
+      openImageshare(newURL);
+    }
+  })
+    .catch(error => console.error('On get imgs data error', error));
+}
+
 // The onClicked callback function.
 function onClickHandler(info, tab) {
-
-    // console.log("item " + info.menuItemId + " was clicked");
-    // console.log("info: " + JSON.stringify(info));
-    // console.log("tab: " + JSON.stringify(tab));
+    //Test receipt selection object
     console.log("Selection Object: " + JSON.stringify(info.selectionText));
 
+    //Extract selection
     let selection = info.selectionText;
-    let optionClicked = info.menuItemId;
-    let newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
+    let option = info.menuItemId;
 
-    if (optionClicked === "standard selection"){
+    //Initiate standard search
+    if (option === "standard selection"){
       console.log("Standard Option: search " + selection); //works
-      // open Imageshare in new tab with selection search results
-      chrome.tabs.create(
-        {
-          url: newURL,
-          active: false
-          //callback inititates alert
-          //alert itself cannot be run via background so function must call a non service worker script to run
-        },function (tab) {
-          console.log("Tab Object: " + JSON.stringify(tab));
+      runAPIstandard(selection);
 
-          // chrome.scripting.executeScript({
-          //   file: 'results.js',
-          //   tabID: tab.id
-          // });
-        }
-      );
-
-
-    }
-    else
-    if (optionClicked === "advanced selection") {
+    } if (option === "advanced selection") {
       console.log("Advanced Option: search " + selection); //works
-      // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
-    }
-    else {
-      console.log("Error handling");
-    }
+      // runAPIadvanced(selection);
 
+      // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
+    } else {
+        console.log("Error handling");
+    }
 }
 
 chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -64,18 +83,8 @@ chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create(
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
 
-    // Testing menu item creation
-    // console.log("'" + context + "' item:" + id);
+
   }
 
 
-  // Intentionally create an invalid item, to show off error checking in the
-  // create callback.
-  // console.log("About to try creating an invalid item - an error about " +
-  //     "duplicate item child1 should show up");
-  // chrome.contextMenus.create({"title": "ErrorTests", "id": "child1 selection"}, function() {
-  //   if (chrome.extension.lastError) {
-  //     console.log("Got expected error: " + chrome.extension.lastError.message);
-  //   }
-  // });
 });
