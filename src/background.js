@@ -26,13 +26,18 @@ function runAPIstandard (selection) {
   const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
 
   //Send a GET request to API to determine if selection matches search results
-  axios.get(`${IMGS_API_URL}filter/?query=${selection}`)
-    .then(response => {
-      console.log(`Response from Imageshare: ${response.data}`);
-      if (response.data.length === 0) {
+  fetch(`${IMGS_API_URL}filter/?query=${selection}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(json => {
+      console.log('Response from Imageshare: ' + json.data);
+      const results = json.data;
+
+      if (results.length === 0) {
       console.log(`No results found for ${selection}`);
       } else {
-      console.log(`${response.data.length} found for ${selection}`);
+      console.log(`${results.length} found for ${selection}`);
       openImageshare(newURL);
     }
   })
