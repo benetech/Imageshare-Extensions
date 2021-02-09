@@ -6,12 +6,18 @@
     "scripts" : ["background.js"]
   },
   "browser_action": {
-    "default_icon": "./src-chrome/screenshot.jpg"
+    "default_icon": "screenshot.jpg"
+  },
+  "icons" : {
+    "16": "screenshot.jpg"
   },
   "permissions": [
     "contextMenus",
+    "storage",
+    "activeTab",
     "*://*/*"
   ],
+
   "content_scripts": [
     {
       "js": ["index.js"],
