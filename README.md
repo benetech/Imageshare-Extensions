@@ -23,3 +23,10 @@ Code for later
 // creating and managing cache
 // const version = 1;const assetCacheName = `assets-${version}`;self.addEventListener("install", event => {  caches.open(assetCacheName).then(cache => {    // confidently do stuff with your very own cache  });});
 // const version = 2;const assetCacheName = `assets-${version}`;self.addEventListener("activate", event => {  event.waitUntil(    caches.keys().then(cacheNames => {      return Promise.all(        cacheNames.map(cacheName => {          if (cacheName !== assetCacheName){            return caches.delete(cacheName);          }        });      );    });  );});
+
+// chrome.scripting.executeScript({
+//   function: showAlert(`No results found for ${selection}`)
+// });
+// chrome.scripting.executeScript({
+//   function: showAlert(`${results.length} found for ${selection}`)
+// });

@@ -1,21 +1,18 @@
 console.log("Service-worker has loaded via background.js.");
 
-import axios from 'axios';
+// function showAlert (text) {
+//   alert("text");
+// }
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
     chrome.tabs.create({
       url: newURL,
          active: false
-         //callback inititates alert
-         //alert itself cannot be run via background so function must call a non service worker script to run
+
       },function (tab) {
-         console.log("Tab Object: " + JSON.stringify(tab));
-        // notify user of successful search
-                  // chrome.scripting.executeScript({
-                  //   file: 'results.js',
-                  //   tabID: tab.id
-                  // });
+          // for dev only, removed for production
+          console.log("Tab Object: " + JSON.stringify(tab));
       }
     );
 }
@@ -31,17 +28,19 @@ function runAPIstandard (selection) {
   })
     .then(response => response.json())
     .then(json => {
-      console.log('Response from Imageshare: ' + json.data);
+      // console.log('Response from Imageshare: ' + json.data);
       const results = json.data;
 
       if (results.length === 0) {
-      console.log(`No results found for ${selection}`);
+        console.log(`No results found for ${selection}`);
+
       } else {
       console.log(`${results.length} found for ${selection}`);
+
       openImageshare(newURL);
     }
   })
-    .catch(error => console.error('On get imgs data error', error));
+    .catch(error => console.error('On GET data error', error));
 }
 
 // The onClicked callback function.
