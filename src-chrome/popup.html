@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Popup</title>
+    <style>
+      dt { white-space: nowrap }
+    </style>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <h1>Imageshare Search</h1>
+    <input type="search" id="search">
+    <label for="search">Search Imageshare</label>
+    <button>Run Standard Search</button>
+    <fieldset>
+      <dl>
+        <dt><label for="subject">Subject: </label></dt>
+        <dd><select id="subject" disabled>
+          <option value="allow">Biographies</option>
+          <option value="session_only">Session only</option>
+          <option value="block">Block</option>
+        </select></dd>
+        <dt><label for="type">Type: </label></dt>
+        <dd><select id="type" disabled>
+          <option value="allow">Allow</option>
+          <option value="block">Block</option>
+        </select>
+        <dt><label for="accommodation">Accommodation: </label></dt>
+        <dd><select id="accommodation" disabled>
+          <option value="allow">Allow</option>
+          <option value="block">Block</option>
+        </select></dd>
+        <dt><label for="source">Source: </label></dt>
+        <dd><select id="source" disabled>
+          <option value="allow">Allow</option>
+          <option value="ask">Ask</option>
+          <option value="block">Block</option>
+        </select></dd>
+
+      </dl>
+    </fieldset>
+    <button>Advanced Search</button>
+
+    <p>Would you like to save these settings?</p>
+    <div>
+      <input type="checkbox" id="save-advanced" name="save-advanced"
+             checked>
+      <label for="save-advanced">Check the box to save.</label>
+    </div>
+  </body>
+</html>
