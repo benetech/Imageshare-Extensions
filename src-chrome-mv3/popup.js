@@ -1,10 +1,28 @@
 
+window.addEventListener("DOMContentLoaded",
+  function () {
+    console.log("test");
+    const subjList = document.getElementById("subject");
 
-let searchText = document.getElementById("search").value;
+        fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
+      method: 'GET',
+    }).then(response => response.json())
+    .then (json => {
+      const subjects = json.data
+      console.log("hello from foreach subject" + subjects);
 
-function runStandard () {
-  var type = this.id;
-  var setting = this.value;
+      subjects.forEach(element => {
+        const option = document.createElement('option');
+          option.innerText = element.attributes.name;
+          option.value = element.id;
+          subjList.prepend(option);
+        // subjList.prepend(
+        //   <option value={element.id}>{element.attributes.name}</option>
+        // )
+      });
+    })
+  }
+)
 
 
-}
+
