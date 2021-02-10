@@ -1,3 +1,2 @@
-import { greetingEdit } from '../sw'
+console.log("Content script has loaded via Manifest V3.");
 
-document.querySelector('h1').textContent = greetingEdit('Sup from SW.js');

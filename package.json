@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
-    "dev": "cp src\\manifest.json dist\\ && parcel src\\{background.js,index.html}",
+    "dev": "cp src\\manifest.json dist\\ && parcel src\\{background.js,index.js}",
     "prod": "set NODE_ENV=production npx parcel build src\\{background.js,index.js}",
     "test": "echo \"Error: no test specified\" && exit 1",
     "zip": "zip -r chrome-extension.zip .\\dist"
