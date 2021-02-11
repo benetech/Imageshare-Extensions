@@ -13,6 +13,7 @@ function openImageshare (newURL) {
     );
 }
 
+// Standard Imageshare Search
 function runAPIstandard (selection) {
   //Imageshare API
   const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
@@ -29,10 +30,26 @@ function runAPIstandard (selection) {
 
       if (results.length === 0) {
         console.log(`No results found for ${selection}`);
+        const tabId = chrome.tabs.getCurrent();
+        console.log("Tab ID: " + Object.keys(tabId));
+        chrome.scripting.executeScript({
+          target: {tabId: tabId},
+          // 'found': false,
+          // 'message': `No results found for ${selection}`,
+          files: ['alerts.js']
+        });
 
       } else {
-      console.log(`${results.length} found for ${selection}`);
-      openImageshare(newURL);
+        console.log(`${results.length} found for ${selection}`);
+        const tabId = chrome.tabs.getCurrent();
+        console.log("Tab ID: " + Object.keys(tabId));
+        chrome.scripting.executeScript({
+          target: {tabId: tabId},
+          // 'found': true,
+          // 'message': `${results.length} found for ${selection}`,
+          files: ['alerts.js']
+        });
+        openImageshare(newURL);
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -49,7 +66,7 @@ function onClickHandler(info, tab) {
 
     //Initiate standard search
     if (option === "standard selection"){
-      console.log("Standard Option: search " + selection); //works
+      console.log("Standard Option: search " + selection); //work
       runAPIstandard(selection);
 
     } if (option === "advanced selection") {

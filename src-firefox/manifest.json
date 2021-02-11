@@ -8,8 +8,13 @@
   "browser_action": {
     "default_icon": "screenshot.jpg"
   },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
   "permissions": [
     "contextMenus",
+    "scripting",
     "*://*/*"
   ],
   "content_scripts": [

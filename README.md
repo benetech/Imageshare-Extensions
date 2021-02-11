@@ -9,7 +9,7 @@ Imageshare Search is a web extension designed to make finding and retreiving res
 
 For Safari Build:
 
-Once converter is run the following must be added to info.plist inside Extension> Resources <key>NSExtension</key><dict>. Note this is one of 2 info.plist files, so makesure you're in the correct folder. 
+Once converter is run the following must be added to info.plist inside Extension> Resources <key>NSExtension</key><dict>. Note this is one of 2 info.plist files, so makesure you're in the correct folder.
 
 <key>SFSafariContextMenu</key>
         <array>
@@ -23,6 +23,8 @@ Once converter is run the following must be added to info.plist inside Extension
 
 
 Code for later use:
+Opening Options Progamatically:
+runtime.openOptionsPage()
 
 Build targets package.json
   // "chrome": ["dist/src-chrome/index.js", "dist/src-chrome/background.js"],
