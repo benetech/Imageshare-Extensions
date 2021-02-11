@@ -1,4 +1,8 @@
 console.log("Service-worker has loaded via background.js.");
+//Listening for messages from content scripts
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  console.log("sent from tab.id=", sender.tab.id);
+});
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
