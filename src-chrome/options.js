@@ -64,94 +64,33 @@ window.addEventListener("DOMContentLoaded",
     })
 
     //GET search input
-    const stSearchButton = document.getElementById("standard-search");
-    const searchInput = document.getElementById("search");
-
-    //Code duplicated in Background.js
-    //Recommend creating a shared access version for cleaner code
-
-    function openImageshare (newURL) {
-      chrome.tabs.create({
-        url: newURL,
-           active: false
-        });
-    }
-
-    function runAPIstandard (selection) {
-          //Imageshare API
-          const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
-          const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
-
-          //Send a GET request to API to determine if selection matches search results
-          fetch(`${IMGS_API_URL}filter/?query=${selection}`, {
-            method: 'GET',
-          })
-            .then(response => response.json())
-            .then(json => {
-              // console.log('Response from Imageshare: ' + json.data);
-              const results = json.data;
-
-              if (results.length === 0) {
-                console.log(`No results found for ${selection}`);
-
-              } else {
-              console.log(`${results.length} found for ${selection}`);
-              openImageshare(newURL);
-            }
-          })
-            .catch(error => console.error('On GET data error', error));
-    }
-
-    //Advance search function
-    //Consider combining search functions for cleaner code
-
-    function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
-      //Imageshare API
-      const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
-      const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
-
-      //Send a GET request to API to determine if selection matches search results
-      fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then(json => {
-          // console.log('Response from Imageshare: ' + json.data);
-          const results = json.data;
-
-          if (results.length === 0) {
-            console.log(`No results found for ${selection}`);
-
-          } else {
-          console.log(`${results.length} found for ${selection}`);
-          openImageshare(newURL);
-        }
-      })
-        .catch(error => console.error('On GET data error', error));
-}
+    // const stSearchButton = document.getElementById("standard-search");
+    // const searchInput = document.getElementById("search");
 
     // Run standard search from popup input
-    stSearchButton.addEventListener("click",
-     function () {
-        let userSearch = searchInput.value;
-        console.log(userSearch);
-        runAPIstandard(userSearch);
-     }
-    );
+    // stSearchButton.addEventListener("click",
+    //  function () {
+    //     let userSearch = searchInput.value;
+    //     console.log(userSearch);
+    //     runAPIstandard(userSearch);
+    //  }
+    // );
 
     // Advanced Search
-    const advSearchButton = document.getElementById("advanced-search")
+    const advSaveButton = document.getElementById("advanced-criteria-save")
 
-    advSearchButton.addEventListener("click",
+    advSaveButton.addEventListener("click",
     function () {
-       let userSearch = searchInput.value;
+      //  let userSearch = searchInput.value;
        const userSubject = subjList.value;
        const userType = typeList.value;
        const userAcc = accList.value;
        const userSrc = srcList.value;
 
-       console.log(userSearch + "advanced");
-       runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
+      //  console.log(userSearch + "advanced");
+      //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
+
+      // save criteria to local storage
     }
    );
 

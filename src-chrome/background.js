@@ -5,14 +5,10 @@ function openImageshare (newURL) {
     chrome.tabs.create({
       url: newURL,
          active: false
-
-      },function (tab) {
-          // for dev only, removed for production
-          console.log("Tab Object: " + JSON.stringify(tab));
-      }
-    );
+      });
 }
 
+// run a standard search
 function runAPIstandard (selection) {
   //Imageshare API
   const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
@@ -38,6 +34,32 @@ function runAPIstandard (selection) {
     .catch(error => console.error('On GET data error', error));
 }
 
+// run an advanced search
+function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
+      //Imageshare API
+      const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+      const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
+
+      //Send a GET request to API to determine if selection matches search results
+      fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(json => {
+          // console.log('Response from Imageshare: ' + json.data);
+          const results = json.data;
+
+          if (results.length === 0) {
+            console.log(`No results found for ${selection}`);
+
+          } else {
+          console.log(`${results.length} found for ${selection}`);
+          openImageshare(newURL);
+        }
+      })
+        .catch(error => console.error('On GET data error', error));
+}
+
 // The onClicked callback function.
 function onClickHandler(info, tab) {
     //Test receipt selection object
@@ -54,7 +76,10 @@ function onClickHandler(info, tab) {
 
     } if (option === "advanced selection") {
       console.log("Advanced Option: search " + selection); //works
-      // runAPIadvanced(selection);
+      // check local storage for criteria
+      // get criteria
+
+      // runAPIadvanced(selection, userSubject, userType, userAcc, userSrc);
 
       // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
     } else {
