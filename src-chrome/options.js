@@ -7,61 +7,90 @@ window.addEventListener("DOMContentLoaded",
     const accList = document.getElementById("accommodation");
     const srcList = document.getElementById("source");
 
-    fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const subjects = json.data
+    // run API calls
+    // ***consolidate
+    function getAdvOptions () {
+      fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
+        method: 'GET',
+      }).then(response => response.json())
+        .then (json => {
+        const subjects = json.data
 
-      subjects.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          subjList.prepend(option);
-      });
-    })
+        //save to storage
+      })
+      fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
+        method: 'GET',
+      }).then(response => response.json())
+        .then (json => {
+        const types = json.data
 
-    fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const types = json.data
+        //save to storage
+      })
+      fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
+        method: 'GET',
+      }).then(response => response.json())
+        .then (json => {
+        const accommodations = json.data
 
-      types.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          typeList.prepend(option);
-      });
-    })
+        //save to storage
+      })
+      fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
+        method: 'GET',
+      }).then(response => response.json())
+        .then (json => {
+        const sources = json.data
 
-    fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const accommodations = json.data
+        //save to storage
+      })
+    }
 
-      accommodations.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          accList.prepend(option);
-      });
-    })
+    function createOptions (optionsObj) {
+      // run foreach on saved lists
+          optionsObj.subjects.forEach(element => {
+            const option = document.createElement('option');
+              option.innerText = element.attributes.name;
+              option.value = element.id;
+              subjList.prepend(option);
+          });
+          optionsObj.types.forEach(element => {
+            const option = document.createElement('option');
+              option.innerText = element.attributes.name;
+              option.value = element.id;
+              typeList.prepend(option);
+          });
+          optionsObj.accommodations.forEach(element => {
+            const option = document.createElement('option');
+              option.innerText = element.attributes.name;
+              option.value = element.id;
+              accList.prepend(option);
+          });
+          optionsObj.sources.forEach(element => {
+            const option = document.createElement('option');
+              option.innerText = element.attributes.name;
+              option.value = element.id;
+              srcList.prepend(option);
+          });
+    }
 
-    fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const sources = json.data
+    //check storage for advnaced search criteria lists
+    function getStorage () {
+      chrome.storage.sync.get(['key'],
+        function(result) {
+          console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
+          const advOptions = result.criteria;
+          const timeStamp = advOptions.timestamp;
 
-      sources.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          srcList.prepend(option);
-      });
-    })
+          if (advOptions === undefined) {
+            // run api calls and save to storage
+            getAdvOptions();
+            getStorage();
+
+          } else {
+            createOptions(advOptions);
+          }
+      })
+    }
+
 
     //GET search input
     // const stSearchButton = document.getElementById("standard-search");
@@ -91,8 +120,7 @@ window.addEventListener("DOMContentLoaded",
       console.log("Save clicked");
       //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
 
-      // save criteria to local storage
-      // storage cannot be accessed here so a message will need to be sent
+      // save user criteria to local storage
       chrome.storage.sync.set({
         'settings': {
           'subject': userSubject,
