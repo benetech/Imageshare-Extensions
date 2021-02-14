@@ -86,11 +86,22 @@ window.addEventListener("DOMContentLoaded",
        const userType = typeList.value;
        const userAcc = accList.value;
        const userSrc = srcList.value;
+       const timeStamp = Date.now();
 
-      //  console.log(userSearch + "advanced");
+      console.log("Save clicked");
       //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
 
       // save criteria to local storage
+      // storage cannot be accessed here so a message will need to be sent
+      chrome.storage.sync.set({
+        'settings': {
+          'subject': userSubject,
+          'type': userType,
+          'accommodation': userAcc,
+          'source': userSrc,
+          'timestamp': timeStamp
+        }
+      }, function () {console.log(`Storage set`)})
     }
    );
 

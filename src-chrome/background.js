@@ -41,6 +41,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
       const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
 
       //Send a GET request to API to determine if selection matches search results
+      // *** ERROR: this fetch is only checking the selection, without the added criteria
       fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
         method: 'GET',
       })
@@ -78,8 +79,24 @@ function onClickHandler(info, tab) {
       console.log("Advanced Option: search " + selection); //works
       // check local storage for criteria
       // get criteria
+      chrome.storage.sync.get(['settings'],
+        function(result) {
+          const criteria = result.settings;
+          console.log("Value is currently " + JSON.stringify(result))
 
-      // runAPIadvanced(selection, userSubject, userType, userAcc, userSrc);
+          // if criteria present then use, else alert user and redirect to options
+          // when criteria not yet set timestamp is undefined
+          console.log("Last storage SET: " + JSON.stringify(criteria.timestamp))
+
+          if (criteria.timestamp === undefined){
+            //alert user to go to options and set criteria
+            console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
+          } else {
+            runAPIadvanced(selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
+          }
+
+        })
+
 
       // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
     } else {
