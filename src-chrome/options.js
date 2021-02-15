@@ -8,15 +8,39 @@ window.addEventListener("DOMContentLoaded",
     const srcList = document.getElementById("source");
 
     // run API calls
-    // ***consolidate
     function getAdvOptions () {
+
+      // Promise.all([
+      //   fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
+      //     method: 'GET'
+      //   }).then(resp => resp.json()),
+      //   fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
+      //     method: 'GET'
+      //   }).then(resp => resp.json()),
+      //   fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
+      //     method: 'GET'
+      //   }).then(resp => resp.json()),
+      //   fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
+      //     method: 'GET',
+      //   })
+      // ]).then(resp => resp.json())
+      //   .then(json => {
+      //     const subjects = json.data
+      //     console.log("consolidated fetch running: " + JSON.stringify(subjects));
+      //     //save to storage
+      //   })
+
       fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
         method: 'GET',
       }).then(response => response.json())
         .then (json => {
         const subjects = json.data
 
-        //save to storage
+        chrome.storage.local.set({
+          'criteria': {
+            'subjects': subjects,
+          }
+        }, function () {console.log(`Subjects set to local storage`)})
       })
       fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
         method: 'GET',
@@ -24,7 +48,11 @@ window.addEventListener("DOMContentLoaded",
         .then (json => {
         const types = json.data
 
-        //save to storage
+        chrome.storage.local.set({
+          'criteria': {
+            'types': types,
+          }
+        }, function () {console.log(`Types set to local storage`)})
       })
       fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
         method: 'GET',
@@ -32,7 +60,11 @@ window.addEventListener("DOMContentLoaded",
         .then (json => {
         const accommodations = json.data
 
-        //save to storage
+        chrome.storage.local.set({
+          'criteria': {
+            'accommodations': accommodations,
+          }
+        }, function () {console.log(`Accommodations set to local storage`)})
       })
       fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
         method: 'GET',
@@ -40,9 +72,13 @@ window.addEventListener("DOMContentLoaded",
         .then (json => {
         const sources = json.data
 
-        //save to storage
+        chrome.storage.local.set({
+          'criteria': {
+            'sources': sources,
+          }
+        }, function () {console.log(`Sources set to local storage`)})
       })
-    }
+  }
 
     function createOptions (optionsObj) {
       // run foreach on saved lists
@@ -74,16 +110,18 @@ window.addEventListener("DOMContentLoaded",
 
     //check storage for advnaced search criteria lists
     function getStorage () {
-      chrome.storage.sync.get(['key'],
+      chrome.storage.local.get(['criteria'],
         function(result) {
           console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
           const advOptions = result.criteria;
-          const timeStamp = advOptions.timestamp;
+          // const timeStamp = advOptions.timestamp;
 
           if (advOptions === undefined) {
             // run api calls and save to storage
             getAdvOptions();
+
             getStorage();
+            /// NOTES: get storage apears to be running too quickly before all our apis are called and stored. Also the seperate calls may be over riding each other as all that has stayed in storage is our TYPES object.
 
           } else {
             createOptions(advOptions);
@@ -91,7 +129,7 @@ window.addEventListener("DOMContentLoaded",
       })
     }
 
-
+    getStorage();
     //GET search input
     // const stSearchButton = document.getElementById("standard-search");
     // const searchInput = document.getElementById("search");
