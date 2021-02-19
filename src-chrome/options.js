@@ -8,99 +8,68 @@ window.addEventListener("DOMContentLoaded",
     const srcList = document.getElementById("source");
 
     // run API calls
-    function getAdvOptions () {
+    function getAdvOptions (_callback) {
 
-      // Promise.all([
-      //   fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
-      //     method: 'GET'
-      //   }).then(resp => resp.json()),
-      //   fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
-      //     method: 'GET'
-      //   }).then(resp => resp.json()),
-      //   fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
-      //     method: 'GET'
-      //   }).then(resp => resp.json()),
-      //   fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
-      //     method: 'GET',
-      //   })
-      // ]).then(resp => resp.json())
-      //   .then(json => {
-      //     const subjects = json.data
-      //     console.log("consolidated fetch running: " + JSON.stringify(subjects));
-      //     //save to storage
-      //   })
+      Promise.all([
+        fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
+          method: 'GET'
+        }).then(resp => resp.json())
+      ]).then(resp => {
+          //response here is an array of objects
+          // console.log("Array 0: " + JSON.stringify(resp[0]));
+          // console.log("Array 1: " + JSON.stringify(resp[1]));
+          // console.log("Array 2: " + JSON.stringify(resp[2]));
+          console.log("Array 3: " + JSON.stringify(resp[3]));
+          const subjects = resp[0];
+          const types = resp[1];
+          const accommodations = resp[2];
+          //sources is coming back an empty obj
+          const sources = resp[3];
 
-      fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
-        method: 'GET',
-      }).then(response => response.json())
-        .then (json => {
-        const subjects = json.data
-
-        chrome.storage.local.set({
-          'criteria': {
-            'subjects': subjects,
-          }
-        }, function () {console.log(`Subjects set to local storage`)})
-      })
-      fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
-        method: 'GET',
-      }).then(response => response.json())
-        .then (json => {
-        const types = json.data
-
-        chrome.storage.local.set({
-          'criteria': {
-            'types': types,
-          }
-        }, function () {console.log(`Types set to local storage`)})
-      })
-      fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
-        method: 'GET',
-      }).then(response => response.json())
-        .then (json => {
-        const accommodations = json.data
-
-        chrome.storage.local.set({
-          'criteria': {
-            'accommodations': accommodations,
-          }
-        }, function () {console.log(`Accommodations set to local storage`)})
-      })
-      fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
-        method: 'GET',
-      }).then(response => response.json())
-        .then (json => {
-        const sources = json.data
-
-        chrome.storage.local.set({
-          'criteria': {
-            'sources': sources,
-          }
-        }, function () {console.log(`Sources set to local storage`)})
-      })
-  }
+          //save to storage
+          chrome.storage.local.set({
+            'criteria': {
+              'subjects': subjects,
+              'types': types,
+              'accommodations': accommodations,
+              'sources': sources
+            }
+          }, function () {console.log(`Criteria set to local storage`)})
+        })
+        .then(_callback())
+   }
 
     function createOptions (optionsObj) {
+      console.log("optionsObj: " + JSON.stringify(optionsObj));
       // run foreach on saved lists
-          optionsObj.subjects.forEach(element => {
+          optionsObj.subjects.data.forEach(element => {
             const option = document.createElement('option');
               option.innerText = element.attributes.name;
               option.value = element.id;
               subjList.prepend(option);
           });
-          optionsObj.types.forEach(element => {
+          optionsObj.types.data.forEach(element => {
             const option = document.createElement('option');
               option.innerText = element.attributes.name;
               option.value = element.id;
               typeList.prepend(option);
           });
-          optionsObj.accommodations.forEach(element => {
+          optionsObj.accommodations.data.forEach(element => {
             const option = document.createElement('option');
               option.innerText = element.attributes.name;
               option.value = element.id;
               accList.prepend(option);
           });
-          optionsObj.sources.forEach(element => {
+          optionsObj.sources.data.forEach(element => {
             const option = document.createElement('option');
               option.innerText = element.attributes.name;
               option.value = element.id;
@@ -113,15 +82,15 @@ window.addEventListener("DOMContentLoaded",
       chrome.storage.local.get(['criteria'],
         function(result) {
           console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
-          const advOptions = result.criteria;
+          const advOptions = result.criteria;;
           // const timeStamp = advOptions.timestamp;
 
           if (advOptions === undefined) {
             // run api calls and save to storage
-            getAdvOptions();
+            getAdvOptions(getStorage);
 
-            getStorage();
-            /// NOTES: get storage apears to be running too quickly before all our apis are called and stored. Also the seperate calls may be over riding each other as all that has stayed in storage is our TYPES object.
+            // getStorage();
+            /// NOTES: The seperate calls are over riding each other as all that has stayed in storage is our sources object.
 
           } else {
             createOptions(advOptions);
