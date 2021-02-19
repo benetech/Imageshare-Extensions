@@ -25,15 +25,13 @@ window.addEventListener("DOMContentLoaded",
         }).then(resp => resp.json())
       ]).then(resp => {
           //response here is an array of objects
-          // console.log("Array 0: " + JSON.stringify(resp[0]));
-          // console.log("Array 1: " + JSON.stringify(resp[1]));
-          // console.log("Array 2: " + JSON.stringify(resp[2]));
-          console.log("Array 3: " + JSON.stringify(resp[3]));
           const subjects = resp[0];
           const types = resp[1];
           const accommodations = resp[2];
-          //sources is coming back an empty obj
           const sources = resp[3];
+          const timeStamp = new Date().getTime()
+
+          console.log("Time:" + timeStamp);
 
           //save to storage
           chrome.storage.local.set({
@@ -41,7 +39,8 @@ window.addEventListener("DOMContentLoaded",
               'subjects': subjects,
               'types': types,
               'accommodations': accommodations,
-              'sources': sources
+              'sources': sources,
+              'updated': timeStamp
             }
           }, function () {console.log(`Criteria set to local storage`)})
         })
@@ -82,18 +81,28 @@ window.addEventListener("DOMContentLoaded",
       chrome.storage.local.get(['criteria'],
         function(result) {
           console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
-          const advOptions = result.criteria;;
-          // const timeStamp = advOptions.timestamp;
+          const advOptions = result.criteria;
+          const now = new Date().getTime();
 
+          // if there is nothing in storage
+          // run api calls and save to storage
           if (advOptions === undefined) {
-            // run api calls and save to storage
             getAdvOptions(getStorage);
 
-            // getStorage();
-            /// NOTES: The seperate calls are over riding each other as all that has stayed in storage is our sources object.
+          }
+          if (advOptions !== undefined){
+            const timeStamp = advOptions.updated;
+            console.log(timeStamp + 1209600);
 
-          } else {
-            createOptions(advOptions);
+            // if it's been longer than 2 weeks since last update
+            // run api calls and save to storage
+            if (timeStamp + 1209600 < now) {
+              getAdvOptions(getStorage);
+
+            // otherwise create our dropdown options with stored data
+            } else {
+              createOptions(advOptions);
+            }
           }
       })
     }
