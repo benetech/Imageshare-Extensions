@@ -82,16 +82,14 @@ function onClickHandler(info, tab) {
       chrome.storage.sync.get(['settings'],
         function(result) {
           const criteria = result.settings;
-          console.log("Value is currently " + JSON.stringify(result))
+          // console.log("Value is currently " + JSON.stringify(result))
 
           // if criteria present then use, else alert user and redirect to options
-          // when criteria not yet set timestamp is undefined
-          console.log("Last storage SET: " + JSON.stringify(criteria.timestamp))
-
-          if (criteria.timestamp === undefined){
+          if (criteria === undefined){
             //alert user to go to options and set criteria
             console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
           } else {
+            console.log(JSON.stringify(criteria))
             runAPIadvanced(selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
           }
 

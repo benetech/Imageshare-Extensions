@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded",
           const sources = resp[3];
           const timeStamp = new Date().getTime()
 
-          console.log("Time:" + timeStamp);
+          // console.log("Time:" + timeStamp);
 
           //save to storage
           chrome.storage.local.set({
@@ -80,7 +80,7 @@ window.addEventListener("DOMContentLoaded",
     function getStorage () {
       chrome.storage.local.get(['criteria'],
         function(result) {
-          console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
+          // console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
           const advOptions = result.criteria;
           const now = new Date().getTime();
 
@@ -92,15 +92,17 @@ window.addEventListener("DOMContentLoaded",
           }
           if (advOptions !== undefined){
             const timeStamp = advOptions.updated;
-            console.log(timeStamp + 1209600);
+            const apiWait = timeStamp + 1209600;
+            // console.log(apiWait);
 
             // if it's been longer than 2 weeks since last update
             // run api calls and save to storage
-            if (timeStamp + 1209600 < now) {
+            if (apiWait < now) {
               getAdvOptions(getStorage);
 
             // otherwise create our dropdown options with stored data
             } else {
+              // console.log(apiWait + " is not < " + now + " so createOptions with storage")
               createOptions(advOptions);
             }
           }
@@ -131,7 +133,7 @@ window.addEventListener("DOMContentLoaded",
        const userType = typeList.value;
        const userAcc = accList.value;
        const userSrc = srcList.value;
-       const timeStamp = Date.now();
+       const timeStamp = new Date().getTime();
 
       console.log("Save clicked");
       //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
