@@ -147,7 +147,10 @@ window.addEventListener("DOMContentLoaded",
           'source': userSrc,
           'timestamp': timeStamp
         }
-      }, function () {console.log(`Storage set`)})
+      }, function () {
+         console.log(`Storage set`);
+         alert("Thank you. Your Advanced Search settings have been saved.");
+         })
     }
    );
 

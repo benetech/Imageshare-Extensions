@@ -108,10 +108,10 @@ chrome.contextMenus.onClicked.addListener(onClickHandler);
 chrome.runtime.onInstalled.addListener(function() {
 
   // Create one menu item for each context type.
-  // available contexts = "page","selection","link","editable","image","video","audio"
-  var contexts = [ "selection", "link", "image", "video", "audio"];
-  for (var i = 0; i < contexts.length; i++) {
-    var context = contexts[i];
+  // NOTE: available contexts = "page","selection","link","editable","image","video","audio". Code is set up ready for the future addition of contexts via the contexts veriable.
+  var contexts = "selection";
+
+    var context = contexts;
     var title = "Imageshare Search";
     var id = "context" + context;
 
@@ -121,5 +121,5 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard " + context});
     chrome.contextMenus.create(
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
-  }
+
 });
