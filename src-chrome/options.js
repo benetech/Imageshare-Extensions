@@ -152,8 +152,8 @@ window.addEventListener("DOMContentLoaded",
          chrome.runtime.sendMessage('', {
           type: 'notification',
           options: {
-            title: 'Just wanted to notify you',
-            message: 'How great it is!',
+            title: 'Success!',
+            message: 'Your advanced search criteria have been saved.',
             iconUrl: '/screenshot.jpg',
             type: 'basic'
           }
