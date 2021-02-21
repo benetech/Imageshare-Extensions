@@ -149,7 +149,17 @@ window.addEventListener("DOMContentLoaded",
         }
       }, function () {
          console.log(`Storage set`);
-         alert("Thank you. Your Advanced Search settings have been saved.");
+         chrome.runtime.sendMessage('', {
+          type: 'notification',
+          options: {
+            title: 'Just wanted to notify you',
+            message: 'How great it is!',
+            iconUrl: '/screenshot.jpg',
+            type: 'basic'
+          }
+        });
+
+
          })
     }
    );

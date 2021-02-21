@@ -121,5 +121,12 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard " + context});
     chrome.contextMenus.create(
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
+});
 
+// Notifications
+chrome.runtime.onMessage.addListener(data => {
+  if (data.type === 'notification') {
+    console.log("message received " + JSON.stringify(data.options));
+    chrome.notifications.create('', data.options);
+  }
 });
