@@ -1,4 +1,4 @@
-console.log("Service-worker has loaded via background.js.");
+console.log("Background has loaded via background.js.");
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {

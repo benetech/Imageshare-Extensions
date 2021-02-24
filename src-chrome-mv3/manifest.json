@@ -6,8 +6,7 @@
     "service_worker" : "background.js"
   },
   "action": {
-    "default_icon": "screenshot.jpg",
-    "default_popup": "popup.html"
+    "default_icon": "screenshot.jpg"
   },
   "options_ui": {
     "page": "options.html",
@@ -15,6 +14,8 @@
   },
   "permissions": [
     "contextMenus",
+    "notifications",
+    "storage",
     "tabs",
     "scripting"
   ],
@@ -25,6 +26,10 @@
       "matches": ["*://*/*"]
     }
   ],
+  "icons":{
+    "16": "screenshot.jpg",
+    "128": "screenshot.jpg"
+    },
 
   "manifest_version": 3
 
