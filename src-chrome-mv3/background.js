@@ -27,28 +27,30 @@ function runAPIstandard (selection) {
 
       if (results.length === 0) {
         console.log(`No results found for ${selection}`);
-        // chrome.notifications.create('', {
-        //   title: `No results found for ${selection}`,
-        //   message: 'Please try another selection',
-        //   iconUrl: '/screenshot.jpg',
-        //   type: 'basic'
-        // });
-        chrome.runtime.sendMessage({foo: 'bar'}, response => {
-          // process the response
-          console.log("response: " + response);
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {
+            title: `No results found for ${selection}`,
+            message: 'Please try another selection',
+            icon: '/screenshot.jpg'
+          }, function(response) {
+            console.log('response', response);
+          });
         });
-        // notifyMe();
 
       } else {
         console.log(`${results.length} found for ${selection}`);
         openImageshare(newURL);
-        // chrome.notifications.create('', {
-        //   title: `${results.length} results found for ${selection}`,
-        //   message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-        //   iconUrl: '/screenshot.jpg',
-        //   type: 'basic'
-        // });
-        notifyMe();
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {
+            title: `${results.length} results found for ${selection}`,
+            message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+            icon: '/screenshot.jpg'
+          }, function(response) {
+            console.log('response', response);
+          });
+        });
       }
     })
       .catch(error => console.error('On GET data error', error));
@@ -72,25 +74,31 @@ function runAPIstandard (selection) {
 
             if (results.length === 0) {
               console.log(`No results found for ${selection}`);
-              // chrome.notifications.create('', {
-              //   title: `No results found for ${selection}`,
-              //   message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
-              //   iconUrl: '/screenshot.jpg',
-              //   type: 'basic'
-              // });
-              notifyMe();
+
+              chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                  title: `No results found for ${selection}`,
+                  message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
+                  icon: '/screenshot.jpg'
+                }, function(response) {
+                  console.log('response', response);
+                });
+              });
 
 
             } else {
             console.log(`${results.length} found for ${selection}`);
-        openImageshare(newURL);
-        // chrome.notifications.create('', {
-        //   title: `${results.length} results found for ${selection}`,
-        //   message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-        //   iconUrl: '/screenshot.jpg',
-        //   type: 'basic'
-        // });
-        notifyMe();
+            openImageshare(newURL);
+
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+              chrome.tabs.sendMessage(tabs[0].id, {
+                title: `${results.length} results found for ${selection}`,
+                message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+                icon: '/screenshot.jpg'
+              }, function(response) {
+                console.log('response', response);
+              });
+            });
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -124,13 +132,15 @@ function onClickHandler(info, tab) {
             //alert user to go to options and set criteria
             console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
 
-            // chrome.notifications.create('', {
-            //   title: 'You have not yet set criteria for advanced searching.',
-            //   message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
-            //   iconUrl: '/screenshot.jpg',
-            //   type: 'basic'
-            // });
-            notifyMe();
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+              chrome.tabs.sendMessage(tabs[0].id, {
+                title: 'You have not yet set criteria for advanced searching.',
+                message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
+                icon: '/screenshot.jpg'
+              }, function(response) {
+                console.log('response', response);
+              });
+            });
 
           } else {
             console.log(JSON.stringify(criteria))
@@ -168,7 +178,7 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
     });
 
-    // User Settings Notification
+  //   // User Settings Notification
     chrome.runtime.onMessage.addListener(data => {
       if (data.type === 'notification') {
         console.log("message received " + JSON.stringify(data.options));

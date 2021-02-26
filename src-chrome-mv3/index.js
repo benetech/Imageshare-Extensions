@@ -7,24 +7,33 @@ chrome.storage.local.clear();
 //Notifications from Background
 function notifyMe (msg) {
   console.log("msg: " + JSON.stringify(msg));
-  // Let's check whether notification permissions have already been granted
-  if (Notification.permission === "granted") {
-    // If it's okay let's create a notification
-    var notification = new Notification("Hi there!");
-  }
+  const title = msg.title;
+  var options = {
+       body: msg.message,
+       icon: msg.icon
+       }
 
-  // Otherwise, we need to ask the user for permission
-  else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(function (permission) {
-      // If the user accepts, let's create a notification
-      if (permission === "granted") {
-        var notification = new Notification("Hi there!");
-      }
-    });
-  }
+  // Let's check whether notification permissions have already been granted
+    if (Notification.permission === "granted") {
+      // If it's okay let's create a notification
+      var notification = new Notification(title, options);
+
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification(title, options);
+
+        }
+      });
+    }
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  notifyMe(msg).then(sendResponse);
+  notifyMe(msg);
+  sendResponse('Hello from index!');
   return true; // keep the channel open
 });
