@@ -150,17 +150,12 @@ function () {
       }
     }, function () {
        console.log(`Storage set`);
-       chrome.runtime.sendMessage('', {
-        type: 'notification',
-        options: {
-          title: 'Success!',
-          message: 'Your advanced search criteria have been saved.',
-          iconUrl: '/screenshot.jpg',
-          type: 'basic'
+       const title = "Success!"
+       var options = {
+        body: 'Your advanced search criteria have been saved.',
+        icon: '/screenshot.jpg'
         }
-      });
-
-
+       var notification = new Notification(title, options);
        })
   }
  );

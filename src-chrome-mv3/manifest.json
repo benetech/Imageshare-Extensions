@@ -17,13 +17,14 @@
     "notifications",
     "storage",
     "tabs",
-    "scripting"
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {
-      "js": ["index.js"],
-      "matches": ["*://*/*"]
+      "matches": ["*://*/*"],
+      "js": ["index.js"]
     }
   ],
   "icons":{
