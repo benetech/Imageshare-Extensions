@@ -179,10 +179,10 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 
   //   // User Settings Notification
-    chrome.runtime.onMessage.addListener(data => {
-      if (data.type === 'notification') {
-        console.log("message received " + JSON.stringify(data.options));
-        // chrome.notifications.create('', data.options);
-        notifyMe();
-  }
-});
+//     chrome.runtime.onMessage.addListener(data => {
+//       if (data.type === 'notification') {
+//         console.log("message received " + JSON.stringify(data.options));
+//         // chrome.notifications.create('', data.options);
+//         notifyMe();
+//   }
+// });
