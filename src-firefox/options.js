@@ -47,34 +47,24 @@ window.addEventListener("DOMContentLoaded",
         .then(_callback())
    }
 
-    function createOptions (optionsObj) {
-      console.log("optionsObj: " + JSON.stringify(optionsObj));
-      // run foreach on saved lists
-          optionsObj.subjects.data.forEach(element => {
-            const option = document.createElement('option');
-              option.innerText = element.attributes.name;
-              option.value = element.id;
-              subjList.prepend(option);
-          });
-          optionsObj.types.data.forEach(element => {
-            const option = document.createElement('option');
-              option.innerText = element.attributes.name;
-              option.value = element.id;
-              typeList.prepend(option);
-          });
-          optionsObj.accommodations.data.forEach(element => {
-            const option = document.createElement('option');
-              option.innerText = element.attributes.name;
-              option.value = element.id;
-              accList.prepend(option);
-          });
-          optionsObj.sources.data.forEach(element => {
-            const option = document.createElement('option');
-              option.innerText = element.attributes.name;
-              option.value = element.id;
-              srcList.prepend(option);
-          });
-    }
+   function addOptions(list, target) {
+    list.forEach(item => {
+      const option = document.createElement('option');
+      option.innerText = item.attributes.name;
+      option.value = item.id;
+      target.prepend(option);
+    });
+  }
+
+  function createOptions (optionsObj) {
+    // console.log("optionsObj: " + JSON.stringify(optionsObj));
+
+    // run foreach on saved lists
+        addOptions(optionsObj.subjects.data, subjList);
+        addOptions(optionsObj.types.data, typeList);
+        addOptions(optionsObj.accommodations.data, accList);
+        addOptions(optionsObj.sources.data, srcList);
+  }
 
     //check storage for advnaced search criteria lists
     function getStorage () {
