@@ -1,14 +1,138 @@
-console.log('Background script has loaded via background.js.');
-// hot reload cannot be run on service worker
-// import "crx-hotreload";
+console.log("Service-worker has loaded via background.js.");
+
+// open Imageshare in new tab with selection search results
+function openImageshare (newURL) {
+    chrome.tabs.create({
+      url: newURL,
+         active: false
+      });
+}
+
+// run a standard search
+function runAPIstandard (selection) {
+  //Imageshare API
+  const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+  const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
+
+  //Send a GET request to API to determine if selection matches search results
+  fetch(`${IMGS_API_URL}filter/?query=${selection}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(json => {
+      // console.log('Response from Imageshare: ' + json.data);
+      const results = json.data;
+
+      if (results.length === 0) {
+        console.log(`No results found for ${selection}`);
+        chrome.notifications.create('', {
+          title: `No results found for ${selection}`,
+          message: 'Please try another selection',
+          iconUrl: '/screenshot.jpg',
+          type: 'basic'
+        });
+
+      } else {
+      console.log(`${results.length} found for ${selection}`);
+      openImageshare(newURL);
+      chrome.notifications.create('', {
+        title: `${results.length} results found for ${selection}`,
+        message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+        iconUrl: '/screenshot.jpg',
+        type: 'basic'
+      });
+    }
+  })
+    .catch(error => console.error('On GET data error', error));
+}
+
+// run an advanced search
+function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
+      //Imageshare API
+      const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+      const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
+
+      //Send a GET request to API to determine if selection matches search results
+      // *** ERROR: this fetch is only checking the selection, without the added criteria
+      fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(json => {
+          // console.log('Response from Imageshare: ' + json.data);
+          const results = json.data;
+
+          if (results.length === 0) {
+            console.log(`No results found for ${selection}`);
+            chrome.notifications.create('', {
+              title: `No results found for ${selection}`,
+              message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
+              iconUrl: '/screenshot.jpg',
+              type: 'basic'
+            });
+
+
+          } else {
+          console.log(`${results.length} found for ${selection}`);
+          openImageshare(newURL);
+          chrome.notifications.create('', {
+            title: `${results.length} results found for ${selection}`,
+            message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+            iconUrl: '/screenshot.jpg',
+            type: 'basic'
+          });
+        }
+      })
+        .catch(error => console.error('On GET data error', error));
+}
 
 // The onClicked callback function.
 function onClickHandler(info, tab) {
+    //Test receipt selection object
+    console.log("Selection Object: " + JSON.stringify(info.selectionText));
 
-    console.log("item " + info.menuItemId + " was clicked");
-    console.log("info: " + JSON.stringify(info));
-    console.log("tab: " + JSON.stringify(tab));
+    //Extract selection
+    let selection = info.selectionText;
+    let option = info.menuItemId;
 
+    //Initiate standard search
+    if (option === "standard selection"){
+      console.log("Standard Option: search " + selection); //works
+      runAPIstandard(selection);
+
+    } if (option === "advanced selection") {
+      console.log("Advanced Option: search " + selection); //works
+      // check local storage for criteria
+      // get criteria
+      chrome.storage.sync.get(['settings'],
+        function(result) {
+          const criteria = result.settings;
+          // console.log("Value is currently " + JSON.stringify(result))
+
+          // if criteria present then use, else alert user and redirect to options
+          if (criteria === undefined){
+            //alert user to go to options and set criteria
+            console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
+
+            chrome.notifications.create('', {
+              title: 'You have not yet set criteria for advanced searching.',
+              message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
+              iconUrl: '/screenshot.jpg',
+              type: 'basic'
+            });
+
+          } else {
+            console.log(JSON.stringify(criteria))
+            runAPIadvanced(selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
+          }
+
+        })
+
+
+      // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
+    } else {
+        console.log("Error handling");
+    }
 }
 
 chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -17,23 +141,25 @@ chrome.contextMenus.onClicked.addListener(onClickHandler);
 chrome.runtime.onInstalled.addListener(function() {
 
   // Create one menu item for each context type.
-  // available contexts = "page","selection","link","editable","image","video","audio"
-  var contexts = [ "selection", "link", "image", "video", "audio"];
-  for (var i = 0; i < contexts.length; i++) {
-    var context = contexts[i];
+  // NOTE: available contexts = "page","selection","link","editable","image","video","audio". Code is set up ready for the future addition of contexts via the contexts veriable.
+  var contexts = "selection";
+
+    var context = contexts;
     var title = "Imageshare Search";
     var id = "context" + context;
 
      // Create a parent item and two children.
     chrome.contextMenus.create({"title": title, "contexts":[context],"id": "parent " + context});
     chrome.contextMenus.create(
-      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "child1 " + context});
+      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard " + context});
     chrome.contextMenus.create(
-      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "child2 " + context});
+      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
+});
 
-    // Testing menu item creation
-    // console.log("'" + context + "' item:" + id);
+// User Settings Notification
+chrome.runtime.onMessage.addListener(data => {
+  if (data.type === 'notification') {
+    console.log("message received " + JSON.stringify(data.options));
+    chrome.notifications.create('', data.options);
   }
-
-
 });

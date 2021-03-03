@@ -1,14 +1,65 @@
-console.log('Background script has loaded via background.js.');
-// hot reload cannot be run on service worker
-// import "crx-hotreload";
+console.log("Service-worker has loaded via background.js.");
+
+// open Imageshare in new tab with selection search results
+function openImageshare (newURL) {
+    browser.tabs.create({
+      url: newURL,
+         active: false
+
+      },function (tab) {
+          // for dev only, removed for production
+          console.log("Tab Object: " + JSON.stringify(tab));
+      }
+    );
+}
+
+function runAPIstandard (selection) {
+  //Imageshare API
+  const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+  const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
+
+  //Send a GET request to API to determine if selection matches search results
+  fetch(`${IMGS_API_URL}filter/?query=${selection}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(json => {
+      // console.log('Response from Imageshare: ' + json.data);
+      const results = json.data;
+
+      if (results.length === 0) {
+        console.log(`No results found for ${selection}`);
+
+      } else {
+      console.log(`${results.length} found for ${selection}`);
+      openImageshare(newURL);
+    }
+  })
+    .catch(error => console.error('On GET data error', error));
+}
 
 // The onClicked callback function.
 function onClickHandler(info, tab) {
+    //Test receipt selection object
+    console.log("Selection Object: " + JSON.stringify(info.selectionText));
 
-    console.log("item " + info.menuItemId + " was clicked");
-    console.log("info: " + JSON.stringify(info));
-    console.log("tab: " + JSON.stringify(tab));
+    //Extract selection
+    let selection = info.selectionText;
+    let option = info.menuItemId;
 
+    //Initiate standard search
+    if (option === "standard selection"){
+      console.log("Standard Option: search " + selection); //works
+      runAPIstandard(selection);
+
+    } if (option === "advanced selection") {
+      console.log("Advanced Option: search " + selection); //works
+      // runAPIadvanced(selection);
+
+      // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
+    } else {
+        console.log("Error handling");
+    }
 }
 
 browser.contextMenus.onClicked.addListener(onClickHandler);
@@ -27,13 +78,8 @@ browser.runtime.onInstalled.addListener(function() {
      // Create a parent item and two children.
     browser.contextMenus.create({"title": title, "contexts":[context],"id": "parent " + context});
     browser.contextMenus.create(
-      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "child1 " + context});
+      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard " + context});
     browser.contextMenus.create(
-      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "child2 " + context});
-
-    // Testing menu item creation
-    // console.log("'" + context + "' item:" + id);
+      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
   }
-
-
 });

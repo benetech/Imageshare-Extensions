@@ -6,10 +6,17 @@
     "service_worker" : "background.js"
   },
   "action": {
-    "default_icon": "screenshot.jpg"
+    "default_icon": "screenshot.jpg",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
   },
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "tabs",
+    "scripting"
   ],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
