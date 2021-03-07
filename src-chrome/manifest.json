@@ -7,7 +7,7 @@
   },
   "browser_action": {
     "default_icon": "screenshot.jpg",
-    "default_popup": "index.html"
+    "default_popup": "popup.html"
   },
   "options_ui": {
     "page": "options.html",
@@ -17,6 +17,7 @@
     "contextMenus",
     "notifications",
     "storage",
+    "activeTab",
     "*://*/*"
   ],
   "content_scripts": [
