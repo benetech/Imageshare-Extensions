@@ -157,9 +157,15 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 // User Settings Notification
-chrome.runtime.onMessage.addListener(data => {
+chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   if (data.type === 'notification') {
     console.log("message received " + JSON.stringify(data.options));
     chrome.notifications.create('', data.options);
   }
+
+  if (data.type === 'search') {
+    console.log("message received " + JSON.stringify(data.selection)); //working
+  }
+
+  sendResponse();
 });
