@@ -42,7 +42,6 @@ advSearchButton.addEventListener("click",
 );
 
 // Run search from popup with input
-
 stInputButton.addEventListener("click",
  function () {
   console.log("Standard Search button clicked");
@@ -63,10 +62,6 @@ advInputButton.addEventListener("click",
   //Send a message to background to run
   console.log(userSearch);
   chrome.runtime.sendMessage({type: 'input', subtype: 'advanced', selection: userSearch})
-
-
  }
 );
-
-
 })
