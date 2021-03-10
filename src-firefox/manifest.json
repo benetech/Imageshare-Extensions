@@ -6,7 +6,8 @@
     "scripts" : ["background.js"]
   },
   "browser_action": {
-    "default_icon": "screenshot.jpg"
+    "default_icon": "screenshot.jpg",
+    "default_popup": "popup.html"
   },
   "options_ui": {
     "page": "options.html",
