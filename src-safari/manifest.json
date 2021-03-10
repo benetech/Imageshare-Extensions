@@ -14,9 +14,10 @@
   },
   "permissions": [
     "contextMenus",
-    "*://*/*",
+    "notifications",
     "storage",
-    "activeTab"
+    "activetab",
+    "*://*/*"
   ],
   "content_scripts": [
     {

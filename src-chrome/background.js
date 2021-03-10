@@ -1,4 +1,4 @@
-console.log("Service-worker has loaded via background.js.");
+console.log("Background has loaded via background.js.");
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
@@ -53,7 +53,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
       const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
 
       //Send a GET request to API to determine if selection matches search results
-      // *** ERROR: this fetch is only checking the selection, without the added criteria
+      // *** ERROR: this fetch is only checking the selection, without the added criteria. Awating API's ability to manage this kind of call
       fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
         method: 'GET',
       })

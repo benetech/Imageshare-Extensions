@@ -7,158 +7,150 @@ window.addEventListener("DOMContentLoaded",
     const accList = document.getElementById("accommodation");
     const srcList = document.getElementById("source");
 
-    fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const subjects = json.data
+    // run API calls
+    function getAdvOptions (_callback) {
 
-      subjects.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          subjList.prepend(option);
-      });
-    })
+      Promise.all([
+        fetch(`https://imgsdev.wpengine.com/json-api/subjects/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
+          method: 'GET'
+        }).then(resp => resp.json()),
+        fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
+          method: 'GET'
+        }).then(resp => resp.json())
+      ]).then(resp => {
+          //response here is an array of objects
+          const subjects = resp[0];
+          const types = resp[1];
+          const accommodations = resp[2];
+          const sources = resp[3];
+          const timeStamp = new Date().getTime()
 
-    fetch(`https://imgsdev.wpengine.com/json-api/types/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const types = json.data
+          // console.log("Time:" + timeStamp);
 
-      types.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          typeList.prepend(option);
-      });
-    })
-
-    fetch(`https://imgsdev.wpengine.com/json-api/accommodations/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const accommodations = json.data
-
-      accommodations.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          accList.prepend(option);
-      });
-    })
-
-    fetch(`https://imgsdev.wpengine.com/json-api/sources/`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then (json => {
-      const sources = json.data
-
-      sources.forEach(element => {
-        const option = document.createElement('option');
-          option.innerText = element.attributes.name;
-          option.value = element.id;
-          srcList.prepend(option);
-      });
-    })
-
-    //GET search input
-    const stSearchButton = document.getElementById("standard-search");
-    const searchInput = document.getElementById("search");
-
-    //Code duplicated in Background.js
-    //Recommend creating a shared access version for cleaner code
-
-    function openImageshare (newURL) {
-      chrome.tabs.create({
-        url: newURL,
-           active: false
-        });
-    }
-
-    function runAPIstandard (selection) {
-          //Imageshare API
-          const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
-          const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection;
-
-          //Send a GET request to API to determine if selection matches search results
-          fetch(`${IMGS_API_URL}filter/?query=${selection}`, {
-            method: 'GET',
-          })
-            .then(response => response.json())
-            .then(json => {
-              // console.log('Response from Imageshare: ' + json.data);
-              const results = json.data;
-
-              if (results.length === 0) {
-                console.log(`No results found for ${selection}`);
-
-              } else {
-              console.log(`${results.length} found for ${selection}`);
-              openImageshare(newURL);
+          //save to storage
+          chrome.storage.local.set({
+            'criteria': {
+              'subjects': subjects,
+              'types': types,
+              'accommodations': accommodations,
+              'sources': sources,
+              'updated': timeStamp
             }
-          })
-            .catch(error => console.error('On GET data error', error));
+          }, function () {console.log(`Criteria set to local storage`)})
+        })
+        .then(_callback())
+   }
+
+   function addOptions(list, target) {
+    list.forEach(item => {
+      const option = document.createElement('option');
+      option.innerText = item.attributes.name;
+      option.value = item.id;
+      target.prepend(option);
+    });
+  }
+
+  function createOptions (optionsObj) {
+    // console.log("optionsObj: " + JSON.stringify(optionsObj));
+
+    // run foreach on saved lists
+        addOptions(optionsObj.subjects.data, subjList);
+        addOptions(optionsObj.types.data, typeList);
+        addOptions(optionsObj.accommodations.data, accList);
+        addOptions(optionsObj.sources.data, srcList);
+  }
+
+    //check storage for advnaced search criteria lists
+    function getStorage () {
+      chrome.storage.local.get(['criteria'],
+        function(result) {
+          // console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
+          const advOptions = result.criteria;
+          const now = new Date().getTime();
+
+          // if there is nothing in storage
+          // run api calls and save to storage
+          if (advOptions === undefined) {
+            getAdvOptions(getStorage);
+
+          }
+          if (advOptions !== undefined){
+            const timeStamp = advOptions.updated;
+            const apiWait = timeStamp + 1209600;
+            // console.log(apiWait);
+
+            // if it's been longer than 2 weeks since last update
+            // run api calls and save to storage
+            if (apiWait < now) {
+              getAdvOptions(getStorage);
+
+            // otherwise create our dropdown options with stored data
+            } else {
+              // console.log(apiWait + " is not < " + now + " so createOptions with storage")
+              createOptions(advOptions);
+            }
+          }
+      })
     }
 
-    //Advance search function
-    //Consider combining search functions for cleaner code
-
-    function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
-      //Imageshare API
-      const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
-      const newURL = "https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc;
-
-      //Send a GET request to API to determine if selection matches search results
-      fetch(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`, {
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then(json => {
-          // console.log('Response from Imageshare: ' + json.data);
-          const results = json.data;
-
-          if (results.length === 0) {
-            console.log(`No results found for ${selection}`);
-
-          } else {
-          console.log(`${results.length} found for ${selection}`);
-          openImageshare(newURL);
-        }
-      })
-        .catch(error => console.error('On GET data error', error));
-}
+    getStorage();
+    //GET search input
+    // const stSearchButton = document.getElementById("standard-search");
+    // const searchInput = document.getElementById("search");
 
     // Run standard search from popup input
-    stSearchButton.addEventListener("click",
-     function () {
-        let userSearch = searchInput.value;
-        console.log(userSearch);
-        runAPIstandard(userSearch);
-     }
-    );
+    // stSearchButton.addEventListener("click",
+    //  function () {
+    //     let userSearch = searchInput.value;
+    //     console.log(userSearch);
+    //     runAPIstandard(userSearch);
+    //  }
+    // );
 
     // Advanced Search
-    const advSearchButton = document.getElementById("advanced-search")
+    const advSaveButton = document.getElementById("advanced-criteria-save")
 
-    advSearchButton.addEventListener("click",
+    advSaveButton.addEventListener("click",
     function () {
-       let userSearch = searchInput.value;
+      //  let userSearch = searchInput.value;
        const userSubject = subjList.value;
        const userType = typeList.value;
        const userAcc = accList.value;
        const userSrc = srcList.value;
+       const timeStamp = new Date().getTime();
 
-       console.log(userSearch + "advanced");
-       runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
+      console.log("Save clicked");
+      //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
+
+      // save user criteria to local storage
+      chrome.storage.sync.set({
+        'settings': {
+          'subject': userSubject,
+          'type': userType,
+          'accommodation': userAcc,
+          'source': userSrc,
+          'timestamp': timeStamp
+        }
+      }, function () {
+         console.log(`Storage set`);
+         const title = "Success!"
+         var options = {
+          body: 'Your advanced search criteria have been saved.',
+          icon: '/screenshot.jpg'
+          }
+         var notification = new Notification(title, options);
+
+
+         })
     }
    );
 
 
   }
 )
-
-
-
-
