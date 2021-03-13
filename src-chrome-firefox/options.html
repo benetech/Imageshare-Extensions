@@ -5,11 +5,16 @@
     <style>
       li { white-space: nowrap }
     </style>
-    <script src="options.js"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>Imageshare Search</h1>
     <h2>Advanced Search Criteria</h2>
+
+    <div class="spinner"></div>
+    <div class="loading-spinner js-loading-spinner" role="alert" aria-live="assertive">
+      <p class="vh js-loading-spinner-copy">Content is loading...</p>
+    </div>
 
     <fieldset>
       <ul>
@@ -33,7 +38,6 @@
     </fieldset>
     <button id="advanced-criteria-save">Save Your Settings</button>
 
-    <!-- <p>Would you like to save these settings?</p> -->
-
+    <script src="options.js"></script>
   </body>
 </html>

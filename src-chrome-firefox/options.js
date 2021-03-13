@@ -1,6 +1,12 @@
 window.addEventListener("DOMContentLoaded",
   function () {
 
+    //load handling
+    const spinner = document.querySelector('.js-loading-spinner');
+    const copy    = spinner.querySelector('.js-loading-spinner-copy');
+    if(spinner.classList.contains("-loaded")) {
+        copy.innerHTML = "Content has loaded.";
+}
     //GET advanced search criteria lists and populate them to drop-down
     const subjList = document.getElementById("subject");
     const typeList = document.getElementById("type");
