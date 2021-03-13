@@ -2,11 +2,17 @@ window.addEventListener("DOMContentLoaded",
   function () {
 
     //load handling
-    const spinner = document.querySelector('.js-loading-spinner');
-    const copy    = spinner.querySelector('.js-loading-spinner-copy');
-    if(spinner.classList.contains("-loaded")) {
-        copy.innerHTML = "Content has loaded.";
-}
+    const spinner = document.getElementById('loading-container');
+    function showSpinner () {
+      spinner.style.display = "block";
+    }
+    function hideSpinner () {
+      spinner.style.display = "none";
+    }
+//     const copy    = spinner.querySelector('.js-loading-spinner-copy');
+//     if(spinner.classList.contains("-loaded")) {
+//         copy.innerHTML = "Content has loaded.";
+// }
     //GET advanced search criteria lists and populate them to drop-down
     const subjList = document.getElementById("subject");
     const typeList = document.getElementById("type");
@@ -70,10 +76,13 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
         addOptions(optionsObj.sources.data, srcList);
+
+        hideSpinner();
   }
 
     //check storage for advnaced search criteria lists
     function getStorage () {
+
       chrome.storage.local.get(['criteria'],
         function(result) {
           // console.log("Storage check from options.js: " + JSON.stringify(result.criteria));
@@ -106,6 +115,7 @@ window.addEventListener("DOMContentLoaded",
     }
 
     getStorage();
+    showSpinner();
     //GET search input
     // const stSearchButton = document.getElementById("standard-search");
     // const searchInput = document.getElementById("search");

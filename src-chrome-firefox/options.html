@@ -4,6 +4,7 @@
     <title>Options</title>
     <style>
       li { white-space: nowrap }
+      #loading-container { display: none }
     </style>
     <link rel="stylesheet" href="style.css">
   </head>
@@ -11,9 +12,15 @@
     <h1>Imageshare Search</h1>
     <h2>Advanced Search Criteria</h2>
 
-    <div class="spinner"></div>
-    <div class="loading-spinner js-loading-spinner" role="alert" aria-live="assertive">
-      <p class="vh js-loading-spinner-copy">Content is loading...</p>
+    <div id="loading-container">
+      <div class="sr-only loadingMsg" role="alert">loading...</div>
+      <div class="spinner" aria-hidden="true">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
 
     <fieldset>
