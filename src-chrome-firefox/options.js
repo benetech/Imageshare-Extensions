@@ -70,12 +70,10 @@ window.addEventListener("DOMContentLoaded",
       }
       target.prepend(option);
     });
-
   }
 
-
   function createOptions (optionsObj) {
-//*** get the users pre-existing settings and populate options with their choices in view
+    //get the users pre-existing settings and populate options with their choices in dropdown
     chrome.storage.sync.get(['settings'],
     function(result) {
       const criteria = result.settings;
@@ -96,14 +94,11 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.sources.data, srcList);
       }
     });
-
-
     hideSpinner();
   }
 
     //check storage for advnaced search criteria lists
     function getStorage () {
-
       chrome.storage.local.get(['criteria'],
         function(result) {
           // console.log("Storage check from options.js: " + JSON.stringify(result.criteria));

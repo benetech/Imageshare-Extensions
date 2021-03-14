@@ -61,24 +61,40 @@ function () {
       .then(_callback())
  }
 
-  function addOptions(list, target) {
+  function addOptions(list, target, criteriaId) {
     list.forEach(item => {
       const option = document.createElement('option');
       option.innerText = item.attributes.name;
       option.value = item.id;
+      if (criteriaId === item.id) {
+        option.selected = "selected";
+      }
       target.prepend(option);
     });
   }
 
   function createOptions (optionsObj) {
-    // console.log("optionsObj: " + JSON.stringify(optionsObj));
+        //get the users pre-existing settings and populate options with their choices in dropdown
+    chrome.storage.sync.get(['settings'],
+    function(result) {
+      const criteria = result.settings;
+      // return criteria;
 
-    // run foreach on saved lists
+
+      if (criteria !== undefined) {
+        // run foreach on saved lists with defaults
+        addOptions(optionsObj.subjects.data, subjList, criteria.subject);
+        addOptions(optionsObj.types.data, typeList, criteria.type);
+        addOptions(optionsObj.accommodations.data, accList, criteria.accommodation);
+        addOptions(optionsObj.sources.data, srcList, criteria.source);
+      } else {
+        // run foreach on saved lists without defaults
         addOptions(optionsObj.subjects.data, subjList);
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
         addOptions(optionsObj.sources.data, srcList);
-
+      }
+    });
         hideSpinner();
   }
 
