@@ -133,18 +133,7 @@ function () {
 
   getStorage();
   showSpinner();
-  //GET search input
-  // const stSearchButton = document.getElementById("standard-search");
-  // const searchInput = document.getElementById("search");
 
-  // Run standard search from popup input
-  // stSearchButton.addEventListener("click",
-  //  function () {
-  //     let userSearch = searchInput.value;
-  //     console.log(userSearch);
-  //     runAPIstandard(userSearch);
-  //  }
-  // );
 
   // Advanced Search
   const advSaveButton = document.getElementById("advanced-criteria-save")
@@ -178,6 +167,8 @@ function () {
         icon: '/screenshot.jpg'
         }
        var notification = new Notification(title, options);
+
+       window.close()
        })
   }
  );

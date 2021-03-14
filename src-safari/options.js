@@ -167,7 +167,7 @@ window.addEventListener("DOMContentLoaded",
           }
          var notification = new Notification(title, options);
 
-
+         window.close()
          })
     }
    );
