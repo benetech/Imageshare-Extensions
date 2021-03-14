@@ -1,6 +1,19 @@
 window.addEventListener("DOMContentLoaded",
   function () {
 
+    //load handling
+    const spinner = document.getElementById('loading-container');
+    const copy    = spinner.getElementsByClassName('loadingMsg');
+
+    function showSpinner () {
+      copy.innerHTML = "loading...";
+      spinner.style.display = "block";
+    }
+    function hideSpinner () {
+      spinner.style.display = "none";
+      copy.innerHTML = "Content has loaded.";
+    }
+
     //GET advanced search criteria lists and populate them to drop-down
     const subjList = document.getElementById("subject");
     const typeList = document.getElementById("type");
@@ -47,23 +60,41 @@ window.addEventListener("DOMContentLoaded",
         .then(_callback())
    }
 
-   function addOptions(list, target) {
+   function addOptions(list, target, criteriaId) {
     list.forEach(item => {
       const option = document.createElement('option');
       option.innerText = item.attributes.name;
       option.value = item.id;
+      if (criteriaId === item.id) {
+        option.selected = "selected";
+      }
       target.prepend(option);
     });
   }
 
   function createOptions (optionsObj) {
-    // console.log("optionsObj: " + JSON.stringify(optionsObj));
+    //get the users pre-existing settings and populate options with their choices in dropdown
+    chrome.storage.sync.get(['settings'],
+    function(result) {
+      const criteria = result.settings;
+      // return criteria;
 
-    // run foreach on saved lists
+
+      if (criteria !== undefined) {
+        // run foreach on saved lists with defaults
+        addOptions(optionsObj.subjects.data, subjList, criteria.subject);
+        addOptions(optionsObj.types.data, typeList, criteria.type);
+        addOptions(optionsObj.accommodations.data, accList, criteria.accommodation);
+        addOptions(optionsObj.sources.data, srcList, criteria.source);
+      } else {
+        // run foreach on saved lists without defaults
         addOptions(optionsObj.subjects.data, subjList);
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
         addOptions(optionsObj.sources.data, srcList);
+      }
+    });
+    hideSpinner();
   }
 
     //check storage for advnaced search criteria lists
@@ -100,18 +131,8 @@ window.addEventListener("DOMContentLoaded",
     }
 
     getStorage();
-    //GET search input
-    // const stSearchButton = document.getElementById("standard-search");
-    // const searchInput = document.getElementById("search");
+    showSpinner();
 
-    // Run standard search from popup input
-    // stSearchButton.addEventListener("click",
-    //  function () {
-    //     let userSearch = searchInput.value;
-    //     console.log(userSearch);
-    //     runAPIstandard(userSearch);
-    //  }
-    // );
 
     // Advanced Search
     const advSaveButton = document.getElementById("advanced-criteria-save")
@@ -149,7 +170,7 @@ window.addEventListener("DOMContentLoaded",
           }
         });
 
-
+         window.close()
          })
     }
    );

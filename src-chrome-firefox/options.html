@@ -4,16 +4,25 @@
     <title>Options</title>
     <style>
       li { white-space: nowrap }
+      #loading-container { display: none }
     </style>
-    <script src="options.js"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>Imageshare Search</h1>
     <h2>Advanced Search Criteria</h2>
-    <!-- <input type="search" id="search" name="imgs"
-    aria-label="Search for resource matches in Imageshare">
-    <label for="search">Search</label>
-    <button id="standard-search">Run Standard Search</button> -->
+
+    <div id="loading-container">
+      <div class="sr-only loadingMsg" role="alert">loading...</div>
+      <div class="spinner" aria-hidden="true">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
     <fieldset>
       <ul>
         <li><label for="subject">Subject: </label>
@@ -36,11 +45,6 @@
     </fieldset>
     <button id="advanced-criteria-save">Save Your Settings</button>
 
-    <!-- <p>Would you like to save these settings?</p> -->
-    <!-- <div>
-      <input type="checkbox" id="save-advanced" name="save-advanced"
-             unchecked>
-      <label for="save-advanced">Check the box to save.</label>
-    </div> -->
+    <script src="options.js"></script>
   </body>
 </html>

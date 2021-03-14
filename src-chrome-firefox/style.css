@@ -7,11 +7,6 @@
   display: none;
 }
 
-/* loading spinner */
-#loading-container {
-
-}
-
 .sr-only {
   position: absolute;
   width: 1px;

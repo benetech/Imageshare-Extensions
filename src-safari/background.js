@@ -4,7 +4,7 @@ console.log("Background has loaded via background.js.");
 function openImageshare (newURL) {
     chrome.tabs.create({
       url: newURL,
-         active: false
+         active: true
       });
 }
 
@@ -27,6 +27,7 @@ function runAPIstandard (selection) {
         console.log(`No results found for ${selection}`);
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           chrome.tabs.sendMessage(tabs[0].id, {
+            type: 'notification',
             title: `No results found for ${selection}`,
             message: 'Please try another selection',
             icon: '/screenshot.jpg'
@@ -40,6 +41,7 @@ function runAPIstandard (selection) {
       openImageshare(newURL);
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {
+          type: 'notification',
           title: `${results.length} results found for ${selection}`,
           message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
           icon: '/screenshot.jpg'
@@ -72,6 +74,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
             console.log(`No results found for ${selection}`);
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
               chrome.tabs.sendMessage(tabs[0].id, {
+                type: 'notification',
                 title: `No results found for ${selection}`,
                 message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
                 icon: '/screenshot.jpg'
@@ -84,9 +87,10 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
           } else {
           console.log(`${results.length} found for ${selection}`);
           openImageshare(newURL);
-
+//
           chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {
+              type: 'notification',
               title: `${results.length} results found for ${selection}`,
               message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
               icon: '/screenshot.jpg'
@@ -99,36 +103,25 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
         .catch(error => console.error('On GET data error', error));
 }
 
-// The onClicked callback function.
-function onClickHandler(info, tab) {
-    //Test receipt selection object
-    console.log("Selection Object: " + JSON.stringify(info.selectionText));
+// seperating standard from advanced calls
+function subtypeHandling (data) {
+    if (data.subtype=== "standard"){
+      runAPIstandard(data.selection);
 
-    //Extract selection
-    let selection = info.selectionText;
-    let option = info.menuItemId;
-
-    //Initiate standard search
-    if (option === "standard selection"){
-      console.log("Standard Option: search " + selection); //works
-      runAPIstandard(selection);
-
-    } if (option === "advanced selection") {
-      console.log("Advanced Option: search " + selection); //works
-      // check local storage for criteria
+    } if (data.subtype === "advanced") {
       // get criteria
       chrome.storage.sync.get(['settings'],
         function(result) {
           const criteria = result.settings;
-          // console.log("Value is currently " + JSON.stringify(result))
 
-          // if criteria present then use, else alert user and redirect to options
+          // if criteria present then use, otherwise alert user and redirect to options
           if (criteria === undefined){
             //alert user to go to options and set criteria
             console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
 
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
               chrome.tabs.sendMessage(tabs[0].id, {
+                type: 'notification',
                 title: 'You have not yet set criteria for advanced searching.',
                 message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
                 icon: '/screenshot.jpg'
@@ -139,16 +132,30 @@ function onClickHandler(info, tab) {
 
           } else {
             console.log(JSON.stringify(criteria))
-            runAPIadvanced(selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
+            runAPIadvanced(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
           }
 
         })
 
-
-      // get advanced settings from user preferences, open Imageshare in new tab with selection plus advanced criteria search results
-    } else {
-        console.log("Error handling");
     }
+
+
+}
+
+// The onClicked callback function.
+function onClickHandler(info, tab) {
+    //Test receipt selection object
+    console.log("Selection Object: " + JSON.stringify(info.selectionText));
+
+    //Extract selection
+    let selection = info.selectionText;
+    let option = info.menuItemId;
+
+    let data = {subtype: option, selection: selection}
+
+    //Initiate search by subtype
+    subtypeHandling(data);
+
 }
 
 chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -161,21 +168,32 @@ chrome.contextMenus.onClicked.addListener(onClickHandler);
 
     var context = contexts;
     var title = "Imageshare Search";
-    var id = "context" + context;
 
      // Create a parent item and two children.
     chrome.contextMenus.create({"title": title, "contexts":[context],"id": "parent " + context});
     chrome.contextMenus.create(
-      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard " + context});
+      {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard"});
     chrome.contextMenus.create(
-      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced " + context});
+      {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
 
 
 // User Settings Notification
-chrome.runtime.onMessage.addListener(data => {
-  if (data.type === 'notification') {
-    console.log("message received " + JSON.stringify(data.options));
+chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
+//  if (data.type === 'notification') {
+//    console.log("message received " + JSON.stringify(data.options));
     //chrome.notifications.create('', data.options);
-    notifyMe();
+//    notifyMe();
+//  }
+
+  // Search innitiated from popup.js
+  if (data.type === 'search') {
+    subtypeHandling(data);
   }
+
+  // Search innitiated from popup.js input
+  if (data.type === 'input') {
+    subtypeHandling(data);
+  }
+
+  sendResponse();
 });
