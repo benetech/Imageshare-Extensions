@@ -10,9 +10,18 @@
   <body>
     <h1>Imageshare Search</h1>
     <h2>Advanced Search Criteria</h2>
-    <!-- <input type="search" id="search resources" name="imgs">
-    <label for="search resources">Search</label>
-    <button id="standard-search">Run Standard Search</button> -->
+
+    <div id="loading-container">
+      <div class="sr-only loadingMsg" role="alert">loading...</div>
+      <div class="spinner" aria-hidden="true">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
     <fieldset>
       <ul>
         <li><label for="subject">Subject: </label>

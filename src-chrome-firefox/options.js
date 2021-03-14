@@ -3,16 +3,17 @@ window.addEventListener("DOMContentLoaded",
 
     //load handling
     const spinner = document.getElementById('loading-container');
+    const copy    = spinner.getElementsByClassName('loadingMsg');
+
     function showSpinner () {
+      copy.innerHTML = "loading...";
       spinner.style.display = "block";
     }
     function hideSpinner () {
       spinner.style.display = "none";
+      copy.innerHTML = "Content has loaded.";
     }
-//     const copy    = spinner.querySelector('.js-loading-spinner-copy');
-//     if(spinner.classList.contains("-loaded")) {
-//         copy.innerHTML = "Content has loaded.";
-// }
+
     //GET advanced search criteria lists and populate them to drop-down
     const subjList = document.getElementById("subject");
     const typeList = document.getElementById("type");

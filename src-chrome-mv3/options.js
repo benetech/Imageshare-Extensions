@@ -2,6 +2,19 @@
 window.addEventListener("DOMContentLoaded",
 function () {
 
+      //load handling
+      const spinner = document.getElementById('loading-container');
+      const copy    = spinner.getElementsByClassName('loadingMsg');
+
+      function showSpinner () {
+        copy.innerHTML = "loading...";
+        spinner.style.display = "block";
+      }
+      function hideSpinner () {
+        spinner.style.display = "none";
+        copy.innerHTML = "Content has loaded.";
+      }
+
   //GET advanced search criteria lists and populate them to drop-down
   const subjList = document.getElementById("subject");
   const typeList = document.getElementById("type");
@@ -65,6 +78,8 @@ function () {
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
         addOptions(optionsObj.sources.data, srcList);
+
+        hideSpinner();
   }
 
   //check storage for advnaced search criteria lists
@@ -101,6 +116,7 @@ function () {
   }
 
   getStorage();
+  showSpinner();
   //GET search input
   // const stSearchButton = document.getElementById("standard-search");
   // const searchInput = document.getElementById("search");
