@@ -4,7 +4,7 @@ console.log("Background has loaded via background.js.");
 function openImageshare (newURL) {
     chrome.tabs.create({
       url: newURL,
-         active: false
+         active: true
       });
 }
 
