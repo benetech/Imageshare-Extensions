@@ -116,3 +116,39 @@ p {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* option styles */
+body {
+  font: 16px Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  color: #222222;
+}
+
+.advanced-criteria-wrapper {
+  display: none;
+  clear: both;
+  justify-content: space-between;
+  padding: 20px 0 0 0;
+}
+
+.submit-btn {
+  font-size: 22px;
+  color: white;
+  border: 1px solid #737369;
+  border-radius: 10px;
+  background-color: #0c4471;
+  height: 60px;
+  padding: 0 10px;
+  white-space: nowrap;
+  border: 1px solid #00275c;
+}
+
+.criteria {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}

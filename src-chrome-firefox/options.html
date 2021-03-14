@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Options</title>
     <style>
@@ -23,28 +23,29 @@
       </div>
     </div>
 
-    <fieldset>
-      <ul>
-        <li><label for="subject">Subject: </label>
+    <fieldset class="adv-criteria-wrapper">
+      <ul class="adv-criteria" role="list">
+        <li class="criteria"><label for="subject">Subject: </label>
         <select id="subject" enabled>
         </select></li>
 
-        <li><label for="type">Type: </label>
+        <li class="criteria"><label for="type">Type: </label>
         <select id="type" enabled>
         </select></li>
 
-        <li><label for="accommodation">Accommodation: </label>
+        <li class="criteria"><label for="accommodation">Accommodation: </label>
         <select id="accommodation" enabled>
         </select></li>
 
-        <li><label for="source">Source: </label>
+        <li class="criteria"><label for="source">Source: </label>
         <select id="source" enabled>
         </select></li>
 
       </ul>
     </fieldset>
-    <button id="advanced-criteria-save">Save Your Settings</button>
-
+    <div class="submit-btn-wrapper">
+      <button type="submit" class="submit-btn" id="advanced-criteria-save"><span>Save Your Settings</span></button>
+    </div>
     <script src="options.js"></script>
   </body>
 </html>
