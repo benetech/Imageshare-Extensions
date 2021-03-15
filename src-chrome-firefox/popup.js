@@ -19,7 +19,9 @@ stSearchButton.addEventListener("click",
       if (response === 'run input') {
         //switch views from 1 to 2
         document.getElementById("view-one").style.display = "none";
+        // .style.aria-hidden= "true"
         document.getElementById("view-two").style.display = "block";
+        // .style.aria-hidden= "false"
       }
     });
   });
