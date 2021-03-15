@@ -10,15 +10,16 @@
   <body>
     <h1>Imageshare Search</h1>
 
-    <form id="view-one" role="search" aria-hidden="false">
+    <!-- aria-hidden="false" ? -->
+    <form id="view-one" role="search">
       <section>
         <button class="submit-btn" id="standard-search"><span>Run Standard Search</span></button>
         <button class="submit-btn" id="advanced-search"><span>Run Advanced Search</span></button>
     </section>
     </form>
 
-
-    <form id="view-two" role="search" aria-describedby="no-search-desc" aria-hidden="true">
+    <!-- aria-hidden="true" ?-->
+    <form id="view-two" role="search" aria-describedby="no-search-desc" >
       <div class="sr-only changeMsg" role="alert" aria-live="assertive" aria-atomic="true">Attention:</div>
       <section>
         <legend>No Selection Found</legend>
