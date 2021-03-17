@@ -1,25 +1,11 @@
-module.exports = {
-	getBrowser: () => {
-		if (chrome !== undefined) {
-    		return chrome;
-  		}
-  
-  		if (browser !== undefined) {
-    		return browser;
-  		}
-  
-  		throw new ReferenceError('Unable to obtain browser object');
-	},
+export const openImageshare = (browser, target) => {
+    browser.tabs.create({
+        url: target,
+        active: false
+    });
+};
 
-	openImageshare: (browser, target) => {
-    	browser.tabs.create({
-      		url: target,
-         	active: false
-      	});
-	},
-
-	getUserSelection: () => {
-		const selection = window.getSelection;
-		return selection ? selection.toString : null;
-	}
-}
+export const getUserSelection = () => {
+    const selection = window.getSelection;
+    return selection ? selection.toString : null;
+};

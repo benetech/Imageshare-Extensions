@@ -1,6 +1,9 @@
 // import notifications
 // import sendMessage
 
+import './style.css';
+import browser from 'get-browser';
+
 window.addEventListener('DOMContentLoaded', () => {
 	const byId = document.getElementById;
 

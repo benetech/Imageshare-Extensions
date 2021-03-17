@@ -7,33 +7,29 @@ const RESPONSE_SELECTION_EXPECTED = '__selection_expected__';
 const PERMISSION_GRANTED = 'granted';
 const PERMISSION_DENIED = 'denied';
 
-// import getSelection
+import browser from 'get-browser';
+import notification from 'show-notification';
+import { getUserSelection } from './util';
 
-const displayNotification(message) {
-	const title = message.title;
-	const options = {
-		body: message.message,
-       	icon: message.icon
-    };
-
+const displayNotification = message => {
   	// Let's check whether notification permissions have already been granted
     if (Notification.permission === PERMISSION_GRANTED) {
 		// If it's okay let's create a notification
-      	const notification = new Notification(title, options);
+		notification(message.title, message.message);
     }
 
     // Otherwise, we need to ask the user for permission
     else if (Notification.permission !== PERMISSION_DENIED) {
-		Notification.requestPermission().then(function (permission) {
+		Notification.requestPermission().then(permission => {
         	// If the user accepts, let's create a notification
         	if (permission === PERMISSION_GRANTED) {
-				const notification = new Notification(title, options);
+				notification(message.title, message.message);
         	}
       	});
     }
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.debug('[index.js] incoming message', message);
 
 	if (message.type && message.type === NOTIFICATION_MESSAGE) {
@@ -41,10 +37,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	}
 
 	if (message.type && message.type === SEARCH_MESSAGE) {
-		const selection = getSelection();
+		const selection = getUserSelection();
 
 		if (selection !== null && selection.length) {
-			chrome.runtime.sendMessage({
+			browser.runtime.sendMessage({
 				type: msg.type,
 				subtype: msg.subtype,
 				selection: userSelection

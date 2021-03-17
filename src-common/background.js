@@ -1,12 +1,7 @@
-background.jsconsole.log("Background has loaded via background.js.");
+import { openImageshare } from './util';
+import notification from 'show-notification';
 
-// open Imageshare in new tab with selection search results
-function openImageshare (newURL) {
-    chrome.tabs.create({
-      url: newURL,
-         active: false
-      });
-}
+background.jsconsole.log("Background has loaded via background.js.");
 
 const doStandardSearch = selection => doSearch(
 	'https://imgsdev.wpengine.com/json-api/resources/',
@@ -18,7 +13,7 @@ const doAdvancedSearch = (selection, subject, type, accommodation, source) => do
 	'https://imageshare.benetech.org/?page=search&q=' + encodeURIComponent(selection)
 );
 
-const doSearch(requestUrl, resultsUrl) => {
+const doSearch = (requestUrl, resultsUrl) => {
 	fetch(requestUrl)
 		.then(response => response.json())
 		.then(json => {
