@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Imageshare Search</title>
     <link rel="stylesheet" href="style.css">
+
   </head>
   <body>
     <h1>Imageshare Search</h1>
@@ -13,9 +14,9 @@
     <!-- aria-hidden="false" ? -->
     <form id="view-one" role="search">
       <section>
-        <button class="submit-btn" id="standard-search"><span>Run Standard Search</span></button>
-        <button class="submit-btn" id="advanced-search"><span>Run Advanced Search</span></button>
-    </section>
+        <button type="button" class="submit-btn" id="standard-search">Run Standard Search</button>
+        <button type="button" class="submit-btn" id="advanced-search">Run Advanced Search</button>
+      </section>
     </form>
 
     <!-- aria-hidden="true" ?-->
@@ -26,17 +27,15 @@
         <p id="no-search-desc">It seems there is no text selected. Please input your desired search term(s) in the input below:</p>
 
         <div>
-          <label class="sr-only" for="search">Search Term:</label>
-          <input type="search" id="search" name="imgs" aria-label="Search for resource matches in Imageshare">
+          <label for="search">Search Term:</label>
+          <input type="search" id="search" name="imgs">
         </div>
 
-        <button class="submit-btn" id="standard-search-input"><span>Run Standard Search</span></button>
-        <button class="submit-btn" id="advanced-search-input"><span>Run Advanced Search</span></button>
+        <button type="button" class="submit-btn" id="standard-search-input">Run Standard Search</button>
+        <button type="button" class="submit-btn" id="advanced-search-input">Run Advanced Search</button>
     </section>
     </form>
 
-
     <script src="popup.js"></script>
-
   </body>
 </html>

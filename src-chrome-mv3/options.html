@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Options</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Imageshare Search Options</title>
     <style>
-      dt { white-space: nowrap }
+      li { white-space: nowrap }
+      #loading-container { display: none }
     </style>
-    <script src="options.js"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Imageshare Search</h1>
-    <h2>Advanced Search Criteria</h2>
-
+    <h1>Imageshare Search Options</h1>
     <div id="loading-container">
-      <div class="sr-only loadingMsg" role="alert">loading...</div>
+      <div class="sr-only loadingMsg" role="alert" aria-live="assertive" aria-atomic="true">loading...</div>
       <div class="spinner" aria-hidden="true">
         <div></div>
         <div></div>
@@ -22,32 +24,34 @@
       </div>
     </div>
 
-    <fieldset>
-      <ul>
-        <li><label for="subject">Subject: </label>
-        <select id="subject" enabled>
-        </select></li>
+      <form role="search">
+        <fieldset class="adv-criteria-wrapper">
+          <legend>Advanced Search Criteria</legend>
 
-        <li><label for="type">Type: </label>
-        <select id="type" enabled>
-        </select></li>
 
-        <li><label for="accommodation">Accommodation: </label>
-        <select id="accommodation" enabled>
-        </select></li>
+        <!-- <ul class="adv-criteria" > -->
+            <div class="criteria"><label for="subject">Subject: </label>
+            <select id="subject" enabled>
+            </select></div>
 
-        <li><label for="source">Source: </label>
-        <select id="source" enabled>
-        </select></li>
+            <div class="criteria"><label for="type">Type: </label>
+            <select id="type" enabled>
+            </select></div>
 
-      </ul>
-    </fieldset>
-    <button id="advanced-criteria-save">Save Your Settings</button>
+            <div class="criteria"><label for="accommodation">Accommodation: </label>
+            <select id="accommodation" enabled>
+            </select></div>
 
-    <!-- <p>Would you like to save these settings?</p> -->
-    <!-- <div>
-      <input type="checkbox" id="save-advanced" name="save-advanced">
-      <label for="save-advanced">Check the box to save.</label>
-    </div> -->
+            <div class="criteria"><label for="source">Source: </label>
+            <select id="source" enabled>
+            </select></div>
+
+          <!-- </ul> -->
+          <div class="submit-btn-wrapper">
+            <button type="submit" class="submit-btn" id="advanced-criteria-save"><span>Save Your Settings</span></button>
+          </div>
+      </fieldset>
+    </form>
+    <script src="options.js"></script>
   </body>
 </html>
