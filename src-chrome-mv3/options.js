@@ -21,6 +21,8 @@ function () {
   const accList = document.getElementById("accommodation");
   const srcList = document.getElementById("source");
 
+  const activeTab = document.getElementById('active-tab');
+
   // run API calls
   function getAdvOptions (_callback) {
 
@@ -147,6 +149,9 @@ function () {
      const userSrc = srcList.value;
      const timeStamp = new Date().getTime();
 
+     const activeChoice = activeTab.value;
+     console.log(activeChoice);
+
     console.log("Save clicked");
     //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
 
@@ -168,7 +173,7 @@ function () {
         }
        var notification = new Notification(title, options);
 
-       window.close()
+      //  window.close()
        })
   }
  );

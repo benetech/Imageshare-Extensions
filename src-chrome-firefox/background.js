@@ -2,10 +2,13 @@ console.log("Background has loaded via background.js.");
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
+  chrome.storage.sync.get(['active'],
+  function(result) {
     chrome.tabs.create({
       url: newURL,
-         active: true
+         active: result.active
       });
+  });
 }
 
 // run a standard search

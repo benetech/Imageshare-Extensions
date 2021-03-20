@@ -20,6 +20,8 @@ window.addEventListener("DOMContentLoaded",
     const accList = document.getElementById("accommodation");
     const srcList = document.getElementById("source");
 
+    const activeTab = document.getElementById('active-tab');
+
     // run API calls
     function getAdvOptions (_callback) {
 
@@ -146,17 +148,23 @@ window.addEventListener("DOMContentLoaded",
        const userSrc = srcList.value;
        const timeStamp = new Date().getTime();
 
+       const activeChoice = activeTab.checked;
+       console.log(`active? ${activeChoice}`);
+
       console.log("Save clicked");
       //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
 
       // save user criteria to local storage
+      chrome.storage.sync.set({
+        'active': activeChoice
+      })
       chrome.storage.sync.set({
         'settings': {
           'subject': userSubject,
           'type': userType,
           'accommodation': userAcc,
           'source': userSrc,
-          'timestamp': timeStamp
+          'timestamp': timeStamp,
         }
       }, function () {
          console.log(`Storage set`);
@@ -170,7 +178,7 @@ window.addEventListener("DOMContentLoaded",
           }
         });
 
-         window.close()
+        //  window.close()
          })
     }
    );
