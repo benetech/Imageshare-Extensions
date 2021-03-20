@@ -149,13 +149,16 @@ function () {
      const userSrc = srcList.value;
      const timeStamp = new Date().getTime();
 
-     const activeChoice = activeTab.value;
-     console.log(activeChoice);
+     const activeChoice = activeTab.checked;
+     console.log(`active? ${activeChoice}`);
 
     console.log("Save clicked");
     //  runAPIadvanced(userSearch, userSubject, userType, userAcc, userSrc);
 
     // save user criteria to local storage
+    chrome.storage.sync.set({
+      'active': activeChoice
+    })
     chrome.storage.sync.set({
       'settings': {
         'subject': userSubject,

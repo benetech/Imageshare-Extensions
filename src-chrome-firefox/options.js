@@ -164,7 +164,7 @@ window.addEventListener("DOMContentLoaded",
           'type': userType,
           'accommodation': userAcc,
           'source': userSrc,
-          'timestamp': timeStamp,
+          'timestamp': timeStamp
         }
       }, function () {
          console.log(`Storage set`);
