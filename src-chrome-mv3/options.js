@@ -158,7 +158,7 @@ function () {
     // save user criteria to local storage
     chrome.storage.sync.set({
       'active': activeChoice
-    })
+    });
     chrome.storage.sync.set({
       'settings': {
         'subject': userSubject,
