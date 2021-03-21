@@ -164,7 +164,7 @@ function () {
        const title = "Success!"
        var options = {
         body: 'Your advanced search criteria have been saved.',
-        icon: '/screenshot.jpg'
+        icon: './icons/Imageshare-logo-no-text.png'
         }
        var notification = new Notification(title, options);
 

@@ -165,7 +165,7 @@ window.addEventListener("DOMContentLoaded",
           options: {
             title: 'Success!',
             message: 'Your advanced search criteria have been saved.',
-            iconUrl: '/screenshot.jpg',
+            iconUrl: './icons/Imageshare-logo-no-text.png',
             type: 'basic'
           }
         });
