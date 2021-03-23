@@ -179,6 +179,12 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
 });
 
+// Firefox only bookmark menu edit
+// if firefox
+// create bookmark context menu item Options
+// create listener for this item that launches Options page onClick
+
+//message handling
 chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   // User Settings Notification
   if (data.type === 'notification') {
