@@ -178,7 +178,7 @@ window.addEventListener("DOMContentLoaded",
           }
         });
 
-        //  window.close()
+         window.close()
          })
     }
    );

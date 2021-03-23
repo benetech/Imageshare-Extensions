@@ -25,7 +25,6 @@ function runAPIstandard (selection) {
     .then(json => {
       // console.log('Response from Imageshare: ' + json.data);
       const results = json.data;
-      console.log(results)
 
       if (results.length === 0) {
         console.log(`No results found for ${selection}`);
@@ -76,7 +75,6 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
         .then(json => {
           // console.log('Response from Imageshare: ' + json.data);
           const results = json.data;
-          console.log(results);
 
           if (results.length === 0) {
             console.log(`No results found for ${selection}`);
@@ -89,14 +87,16 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
 
 
           } else if (results.length === 1) {
-            console.log(`${results.length} found for ${selection}`);
-            openImageshare(newURL);
-            chrome.notifications.create('', {
-              title: `${results.length} result found for ${selection}`,
-              message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-              iconUrl: '/screenshot.jpg',
-              type: 'basic'
-            });
+              console.log(`${results.length} found for ${selection}`);
+              let resultURL = results[0].permalink;
+              console.log(resultURL)
+              openImageshare(resultURL);
+              chrome.notifications.create('', {
+                title: `${results.length} result found for ${selection}`,
+                message: 'Your Imageshare result has been opened for you in a new tab.',
+                iconUrl: '/screenshot.jpg',
+                type: 'basic'
+              });
           } else {
             console.log(`${results.length} found for ${selection}`);
             openImageshare(newURL);
