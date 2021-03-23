@@ -6,7 +6,7 @@
     "service_worker" : "background.js"
   },
   "action": {
-    "default_icon": "screenshot.jpg",
+    "default_icon": "./icons/Imageshare-logo-no-text-white.png",
     "default_popup": "popup.html"
   },
   "options_ui": {
@@ -29,8 +29,11 @@
     }
   ],
   "icons":{
-    "16": "screenshot.jpg",
-    "128": "screenshot.jpg"
+    "16": "./icons/Imageshare-logo-no-text-white.png",
+    "48": "./icons/Imageshare-logo-no-text-white.png",
+    "128": "./icons/Imageshare-logo-no-text-white.png",
+    "512": "./icons/Imageshare-logo-no-text-white.png",
+    "1024": "./icons/Imageshare-logo-no-text-white.png"
     },
 
   "manifest_version": 3
