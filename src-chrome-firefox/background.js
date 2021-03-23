@@ -38,10 +38,12 @@ function runAPIstandard (selection) {
 
       } else if (results.length === 1) {
         console.log(`${results.length} found for ${selection}`);
-        openImageshare(newURL);
+        let resultURL = results[0].permalink;
+        console.log(resultURL)
+        openImageshare(resultURL);
         chrome.notifications.create('', {
           title: `${results.length} result found for ${selection}`,
-          message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+          message: 'Your Imageshare result has been opened for you in a new tab.',
           iconUrl: '/screenshot.jpg',
           type: 'basic'
         });
