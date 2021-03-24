@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded",
           const sources = resp[3];
           const timeStamp = new Date().getTime()
 
-          // console.log("Time:" + timeStamp);
+          console.log(types);
 
           //save to storage
           chrome.storage.local.set({
@@ -67,10 +67,21 @@ window.addEventListener("DOMContentLoaded",
       const option = document.createElement('option');
       option.innerText = item.attributes.name;
       option.value = item.id;
+      option.id = item.id;
       if (criteriaId === item.id) {
         option.selected = "selected";
       }
+      // if (item.relationships.parent){
+      //   option.innerText = `${item.relationships.parent.data.id} - ${item.attributes.name}`
+      // }
       target.prepend(option);
+      if (item.attributes.thumbnail) {
+        let iconItem = document.getElementById(item.id);
+        const icon = document.createElement('img');
+        icon.src = item.attributes.thumbnail;
+        icon.alt = "";
+        iconItem.prepend(icon);
+      }
     });
   }
 

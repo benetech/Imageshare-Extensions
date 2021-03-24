@@ -184,6 +184,9 @@ const getBrowser = () => {
   function onCreated () {
     console.log("menu item created successfully")
 ;  }
+  if (browser === undefined) {
+    return
+  }
   if (browser !== undefined) {
     // create bookmark context menu item Options
     browser.menus.create({
