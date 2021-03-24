@@ -21,6 +21,7 @@
     "nativeMessaging",
     "activeTab",
     "bookmarks",
+    "menus",
     "*://*/*"
   ],
   "browser_specific_settings": {

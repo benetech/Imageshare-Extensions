@@ -177,12 +177,38 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard"});
     chrome.contextMenus.create(
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
+
+  // Firefox only bookmark menu edit
+// if firefox
+const getBrowser = () => {
+  function onCreated () {
+    console.log("menu item created successfully")
+;  }
+  if (browser !== undefined) {
+    // create bookmark context menu item Options
+    browser.menus.create({
+      id: "Options",
+      type: "normal",
+      title: "Options",
+      contexts: ["bookmark"],
+    }, onCreated);
+
+    // create listener for this item that launches Options page onClick
+    browser.menus.onClicked.addListener(() => {
+      if (browser.runtime.openOptionsPage) {
+        browser.runtime.openOptionsPage();
+      } else {
+        window.open(browser.runtime.getURL('options.html'));
+      }
+    })
+  }
+  else {throw new ReferenceError('Unable to obtain browser object')}
+
+}; getBrowser();
+
 });
 
-// Firefox only bookmark menu edit
-// if firefox
-// create bookmark context menu item Options
-// create listener for this item that launches Options page onClick
+
 
 //message handling
 chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
