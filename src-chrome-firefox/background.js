@@ -179,35 +179,40 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
 
   // Firefox only bookmark menu edit
-// if firefox
-const getBrowser = () => {
-  function onCreated () {
-    console.log("menu item created successfully")
-;  }
-  if (browser === undefined) {
-    return
-  }
-  if (browser !== undefined) {
-    // create bookmark context menu item Options
-    browser.menus.create({
-      id: "Options",
-      type: "normal",
-      title: "Options",
-      contexts: ["bookmark"],
-    }, onCreated);
-
-    // create listener for this item that launches Options page onClick
-    browser.menus.onClicked.addListener(() => {
-      if (browser.runtime.openOptionsPage) {
-        browser.runtime.openOptionsPage();
+  // if firefox
+  const getBrowser = () => {
+    function onCreated () {
+      if (browser.runtime.lastError) {
+        console.log("error creating item:" + browser.runtime.lastError);
       } else {
-        window.open(browser.runtime.getURL('options.html'));
+        console.log("item created successfully");
       }
-    })
-  }
-  else {throw new ReferenceError('Unable to obtain browser object')}
+    }
 
-}; getBrowser();
+    if (browser === undefined) {
+      return
+    }
+    if (browser !== undefined) {
+      // create bookmark context menu item Options
+      browser.menus.create({
+        id: "Options",
+        type: "normal",
+        title: "Options",
+        contexts: ["browser_action"],
+      }, onCreated);
+
+      // create listener for this item that launches Options page onClick
+      browser.menus.onClicked.addListener(() => {
+        if (browser.runtime.openOptionsPage) {
+          browser.runtime.openOptionsPage();
+        } else {
+          window.open(browser.runtime.getURL('options.html'));
+        }
+      })
+    }
+    else {throw new ReferenceError('Unable to obtain browser object')}
+
+  }; getBrowser();
 
 });
 
