@@ -62,8 +62,8 @@ window.addEventListener("DOMContentLoaded",
 
    function addOptions(list, target, criteriaId) {
     list.forEach(item => {
-      const option = document.createElement('option');
-
+      const option = document.createElement('li');
+      option.role = "option";
       option.innerText = item.attributes.name;
       option.value = item.id;
       option.id = item.id;
@@ -85,7 +85,8 @@ window.addEventListener("DOMContentLoaded",
 
   function addSubjOptions (list, target, criteriaId) {
     list.forEach(item => {
-      const option = document.createElement('option');
+      const option = document.createElement('li');
+      option.role = "option";
       option.innerText = item.name;
       option.value = item.id;
       option.id = item.id;
