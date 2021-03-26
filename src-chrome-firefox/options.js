@@ -222,10 +222,12 @@ window.addEventListener("DOMContentLoaded",
     advSaveButton.addEventListener("click",
     function () {
       //  let userSearch = searchInput.value;
-       const userSubject = subjList.value;
-       const userType = typeList.value;
-       const userAcc = accList.value;
-       const userSrc = srcList.value;
+      //$("ul").find(".selected").data("value"));
+      //$(.dropdown-menu li a).text();
+       const userSubject = subjList.find(".focused").data("value");
+       const userType = typeList.find(".focused").data("value");
+       const userAcc = accList.find(".focused").data("value");
+       const userSrc = srcList.find(".focused").data("value");
        const timeStamp = new Date().getTime();
        console.log(userSubject, userType, userAcc, userSrc);
 
