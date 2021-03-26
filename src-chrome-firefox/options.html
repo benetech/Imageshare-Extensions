@@ -29,32 +29,69 @@
         <fieldset class="adv-criteria-wrapper">
           <legend>Advanced Search Criteria</legend>
 
-            <div class="criteria">
-              <label for="subject">Subject: </label>
-              <ul id="subject" enabled>
-                <li id="choose-a-subject">--choose a subject--</li>
-              </ul>
+            <div class="refinement">
+              <input type="hidden" id="subject" name="subject" value="0">
+              <span class="aria-listbox" id="search-subject">Subject:</span>
+              <div>
+                <button type="button" aria-haspopup="listbox" aria-labelledby="search-subject search-subject-button" id="search-subject-button" class="listbox-button">
+                  <span class="content">
+                    --choose a subject--
+                  </span>
+                  <span class="glyph expand" aria-hidden="true">⌄</span>
+                  <span class="glyph collapse" aria-hidden="true">⌃</span>
+                </button>
+
+                <ul id="search-subject-list" tabindex="-1" role="listbox" aria-labelledby="search-subject" class=" hidden" aria-activedescendant="search-subject-0" data-choice-store="subject">
+                  <li role="option" id="search-subject-0" value="0" aria-selected="true" class="focused">--choose a subject--</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="criteria">
-              <label for="type">Type: </label>
-              <ul id="type" enabled>
-                <li role="li" id="choose-a-type">--choose a type--</li>
-              </ul>
+            <div class="refinement">
+              <input type="hidden" id="type" name="type" value="0">
+              <span class="aria-listbox" id="search-type">Type:</span>
+              <div>
+                <button type="button" aria-haspopup="listbox" aria-labelledby="search-type search-type-button" id="search-type-button" class="listbox-button">
+                  <span class="content">
+                    --choose a type--
+                  </span>
+                  <span class="glyph expand" aria-hidden="true">⌄</span>
+                  <span class="glyph collapse" aria-hidden="true">⌃</span>
+                </button>
+                <ul id="search-type-list" tabindex="-1" role="listbox" aria-labelledby="search-type" class=" hidden" aria-activedescendant="search-type-0" data-choice-store="type">
+                  <li role="option" id="search-type-0" value="0" aria-selected="true" class="focused">--choose a type--</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="criteria">
-              <label for="accommodation">Accommodation: </label>
-              <ul id="accommodation" enabled>
-                <li id="choose-an-accommodation">--choose an accommodation--</li>
-              </ul>
+            <div class="refinement">
+              <input type="hidden" id="acc" name="acc" value="">
+              <span class="aria-listbox" id="search-acc">Accommodation:</span>
+              <div>
+                <button type="button" aria-haspopup="listbox" aria-labelledby="search-acc search-acc-button" id="search-acc-button" class="listbox-button">
+                  <span class="content">--choose an accommodation--</span>
+                  <span class="glyph expand" aria-hidden="true">⌄</span>
+                  <span class="glyph collapse" aria-hidden="true">⌃</span>
+                </button>
+                <ul id="search-acc-list" tabindex="-1" role="listbox" aria-labelledby="search-acc" class="hidden" aria-activedescendant="search-acc-0" data-choice-store="acc">
+                  <li role="option" id="search-acc-0" value="0">--choose an accommodation--</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="criteria">
-              <label for="source">Source: </label>
-              <ul id="source" enabled>
-                <li id="choose-a-source">--choose a source--</li>
-              </ul>
+            <div class="refinement">
+              <input type="hidden" id="source" name="src" value="">
+              <span class="aria-listbox" id="search-source">Source:</span>
+              <div>
+                <button type="button" aria-haspopup="listbox" aria-labelledby="search-source search-source-button" id="search-source-button" class="listbox-button">
+                  <span class="content">--choose a source--</span>
+                  <span class="glyph expand" aria-hidden="true">⌄</span>
+                  <span class="glyph collapse" aria-hidden="true">⌃</span>
+                </button>
+                <ul  id="search-source-list" tabindex="-1" role="listbox" aria-labelledby="search-source" class="hidden" aria-activedescendant="search-source-0" data-choice-store="source">
+                  <li role="option" id="search-source-0" value="0">--choose a source--</li>
+                </ul>
+              </div>
             </div>
 
             <p>When a new Imageshare search is opened, would you like the new tab to be opened in the foreground making this new tab your Active Tab?</p>
@@ -69,5 +106,8 @@
       </fieldset>
     </form>
     <script src="options.js"></script>
+    <script src="aria-utils.js"></script>
+    <script src="aria-listbox.js"></script>
+    <script src="aria-listbox-expandable.js"></script>
   </body>
 </html>

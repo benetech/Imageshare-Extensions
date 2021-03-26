@@ -15,10 +15,10 @@ window.addEventListener("DOMContentLoaded",
     }
 
     //GET advanced search criteria lists and populate them to drop-down
-    const subjList = document.getElementById("subject");
-    const typeList = document.getElementById("type");
-    const accList = document.getElementById("accommodation");
-    const srcList = document.getElementById("source");
+    const subjList = document.getElementById("search-subject-list");
+    const typeList = document.getElementById("search-type-list");
+    const accList = document.getElementById("search-acc-list");
+    const srcList = document.getElementById("search-source-list");
 
     const activeTab = document.getElementById('active-tab');
 
