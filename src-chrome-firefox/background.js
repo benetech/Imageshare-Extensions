@@ -182,10 +182,19 @@ chrome.runtime.onInstalled.addListener(function() {
   // if firefox
   const getBrowser = () => {
     function onCreated () {
-      if (browser.runtime.lastError) {
+      if (browser.runtime.lastError || chrome.runtime.lastError) {
         console.log("error creating item:" + browser.runtime.lastError);
       } else {
         console.log("item created successfully");
+
+        // create listener for this item that launches Options page onClick
+        browser.menus.onClicked.addListener(() => {
+          if (browser.runtime.openOptionsPage) {
+            browser.runtime.openOptionsPage();
+          } else {
+            window.open(browser.runtime.getURL('options.html'));
+          }
+        })
       }
     }
 
@@ -201,14 +210,6 @@ chrome.runtime.onInstalled.addListener(function() {
         contexts: ["browser_action"],
       }, onCreated);
 
-      // create listener for this item that launches Options page onClick
-      browser.menus.onClicked.addListener(() => {
-        if (browser.runtime.openOptionsPage) {
-          browser.runtime.openOptionsPage();
-        } else {
-          window.open(browser.runtime.getURL('options.html'));
-        }
-      })
     }
     else {throw new ReferenceError('Unable to obtain browser object')}
 

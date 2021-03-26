@@ -128,6 +128,24 @@ button {
   cursor: pointer;
 }
 
+.submit-btn:focus, .submit-btn:hover {
+  outline: 2px solid darkblue;
+}
+.submit-btn {
+  font-size: 22px;
+  color: white;
+  border: 1px solid #737369;
+  border-radius: 10px;
+  background-color: #0c4471;
+  height: 60px;
+  padding: 0 10px;
+  white-space: nowrap;
+  border: 1px solid #00275c;
+}
+button, [type="button"], [type="reset"], [type="submit"] {
+  -webkit-appearance: button;
+}
+
 [role="listbox"] {
   margin: 1em 0 0;
   padding: 0;

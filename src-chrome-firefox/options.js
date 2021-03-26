@@ -227,6 +227,7 @@ window.addEventListener("DOMContentLoaded",
        const userAcc = accList.value;
        const userSrc = srcList.value;
        const timeStamp = new Date().getTime();
+       console.log(userSubject, userType, userAcc, userSrc);
 
        const activeChoice = activeTab.checked;
 
@@ -256,7 +257,7 @@ window.addEventListener("DOMContentLoaded",
           }
         });
 
-         window.close()
+        //  window.close()
          })
     }
    );
