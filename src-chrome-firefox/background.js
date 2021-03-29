@@ -31,7 +31,7 @@ function runAPIstandard (selection) {
         chrome.notifications.create('', {
           title: `No results found for ${selection}`,
           message: 'Please try another selection',
-          iconUrl: '/screenshot.jpg',
+          iconUrl: './icons/Imageshare-logo-no-text.png',
           type: 'basic'
         });
 
@@ -47,14 +47,14 @@ function runAPIstandard (selection) {
           type: 'basic'
         });
       } else {
-        console.log(`${results.length} found for ${selection}`);
-        openImageshare(newURL);
-        chrome.notifications.create('', {
-          title: `${results.length} results found for ${selection}`,
-          message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-          iconUrl: '/screenshot.jpg',
-          type: 'basic'
-        });
+      console.log(`${results.length} found for ${selection}`);
+      openImageshare(newURL);
+      chrome.notifications.create('', {
+        title: `${results.length} results found for ${selection}`,
+        message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+        iconUrl: './icons/Imageshare-logo-no-text.png',
+        type: 'basic'
+      });
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -81,7 +81,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
             chrome.notifications.create('', {
               title: `No results found for ${selection}`,
               message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
-              iconUrl: '/screenshot.jpg',
+              iconUrl: './icons/Imageshare-logo-no-text.png',
               type: 'basic'
             });
 
@@ -98,14 +98,15 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
                 type: 'basic'
               });
           } else {
-            console.log(`${results.length} found for ${selection}`);
-            openImageshare(newURL);
-            chrome.notifications.create('', {
-              title: `${results.length} results found for ${selection}`,
-              message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-              iconUrl: '/screenshot.jpg',
-              type: 'basic'
-            });
+
+          console.log(`${results.length} found for ${selection}`);
+          openImageshare(newURL);
+          chrome.notifications.create('', {
+            title: `${results.length} results found for ${selection}`,
+            message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
+            iconUrl: './icons/Imageshare-logo-no-text.png',
+            type: 'basic'
+          });
         }
       })
         .catch(error => console.error('On GET data error', error));
@@ -130,7 +131,7 @@ function subtypeHandling (data) {
           chrome.notifications.create('', {
             title: 'You have not yet set criteria for advanced searching.',
             message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
-            iconUrl: '/screenshot.jpg',
+            iconUrl: './icons/Imageshare-logo-no-text.png',
             type: 'basic'
           });
 

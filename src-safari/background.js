@@ -33,7 +33,7 @@ function runAPIstandard (selection) {
             type: 'notification',
             title: `No results found for ${selection}`,
             message: 'Please try another selection',
-            icon: '/screenshot.jpg'
+            icon: './icons/Imageshare-logo-no-text.png'
           }, function(response) {
             console.log('response', response);
           });
@@ -63,7 +63,7 @@ function runAPIstandard (selection) {
           type: 'notification',
           title: `${results.length} results found for ${selection}`,
           message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-          icon: '/screenshot.jpg'
+          icon: './icons/Imageshare-logo-no-text.png'
         }, function(response) {
           console.log('response', response);
         });
@@ -96,7 +96,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
                 type: 'notification',
                 title: `No results found for ${selection}`,
                 message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
-                icon: '/screenshot.jpg'
+                icon: './icons/Imageshare-logo-no-text.png'
               }, function(response) {
                 console.log('response', response);
               });
@@ -128,7 +128,7 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
               type: 'notification',
               title: `${results.length} results found for ${selection}`,
               message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-              icon: '/screenshot.jpg'
+              icon: './icons/Imageshare-logo-no-text.png'
             }, function(response) {
               console.log('response', response);
             });
@@ -159,7 +159,7 @@ function subtypeHandling (data) {
                 type: 'notification',
                 title: 'You have not yet set criteria for advanced searching.',
                 message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
-                icon: '/screenshot.jpg'
+                icon: './icons/Imageshare-logo-no-text.png'
               }, function(response) {
                 console.log('response', response);
               });
