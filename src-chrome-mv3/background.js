@@ -3,10 +3,12 @@ console.log("Service-worker has loaded via background.js.");
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
+  chrome.storage.sync.get(['active'],
+  function(result) {
     chrome.tabs.create({
       url: newURL,
-         active: true
-
+         active: result.active
+      });
       });
 }
 
@@ -39,6 +41,22 @@ function runAPIstandard (selection) {
           });
         });
 
+      } else if (results.length === 1) {
+        console.log(`${results.length} found for ${selection}`);
+        let resultURL = results[0].permalink;
+        console.log(resultURL)
+        openImageshare(resultURL);
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: 'notification',
+            title: `${results.length} result found for ${selection}`,
+            message: 'Your Imageshare result has been opened for you in a new tab.',
+            icon: '/screenshot.jpg'
+          }, function(response) {
+            console.log('response', response);
+          });
+        });
       } else {
         console.log(`${results.length} found for ${selection}`);
 
@@ -89,7 +107,23 @@ function runAPIstandard (selection) {
               });
 
 
-            } else {
+            } else if (results.length === 1) {
+              console.log(`${results.length} found for ${selection}`);
+              let resultURL = results[0].permalink;
+              console.log(resultURL)
+              openImageshare(resultURL);
+
+              chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                  type: 'notification',
+                  title: `${results.length} result found for ${selection}`,
+                  message: 'Your Imageshare result has been opened for you in a new tab.',
+                  icon: '/screenshot.jpg'
+                }, function(response) {
+                  console.log('response', response);
+                });
+              });
+          } else {
             console.log(`${results.length} found for ${selection}`);
 
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {

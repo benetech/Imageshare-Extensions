@@ -15,11 +15,14 @@ stSearchButton.addEventListener("click",
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'standard'}, function(response) {
       //response may indicate no selection found
-      // console.log(response);
+      console.log(`response from index: ${response}`);
       if (response === 'run input') {
         //switch views from 1 to 2
         document.getElementById("view-one").style.display = "none";
+        // .style.aria-hidden= "true"
         document.getElementById("view-two").style.display = "block";
+        // .style.aria-hidden= "false"
+        console.log("after view change code")
       }
     });
   });

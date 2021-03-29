@@ -2,10 +2,13 @@ console.log("Background has loaded via background.js.");
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
+  chrome.storage.sync.get(['active'],
+  function(result) {
     chrome.tabs.create({
       url: newURL,
-         active: true
+         active: result.active
       });
+  });
 }
 
 // run a standard search
@@ -32,6 +35,17 @@ function runAPIstandard (selection) {
           type: 'basic'
         });
 
+      } else if (results.length === 1) {
+        console.log(`${results.length} found for ${selection}`);
+        let resultURL = results[0].permalink;
+        console.log(resultURL)
+        openImageshare(resultURL);
+        chrome.notifications.create('', {
+          title: `${results.length} result found for ${selection}`,
+          message: 'Your Imageshare result has been opened for you in a new tab.',
+          iconUrl: '/screenshot.jpg',
+          type: 'basic'
+        });
       } else {
       console.log(`${results.length} found for ${selection}`);
       openImageshare(newURL);
@@ -72,7 +86,19 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
             });
 
 
+          } else if (results.length === 1) {
+              console.log(`${results.length} found for ${selection}`);
+              let resultURL = results[0].permalink;
+              console.log(resultURL)
+              openImageshare(resultURL);
+              chrome.notifications.create('', {
+                title: `${results.length} result found for ${selection}`,
+                message: 'Your Imageshare result has been opened for you in a new tab.',
+                iconUrl: '/screenshot.jpg',
+                type: 'basic'
+              });
           } else {
+
           console.log(`${results.length} found for ${selection}`);
           openImageshare(newURL);
           chrome.notifications.create('', {
@@ -152,8 +178,49 @@ chrome.runtime.onInstalled.addListener(function() {
       {"title": "Run Standard Search", "contexts":[context], "parentId": "parent " + context, "id": "standard"});
     chrome.contextMenus.create(
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
+
+  // Firefox only bookmark menu edit
+  // if firefox
+  const getBrowser = () => {
+    function onCreated () {
+      if (browser.runtime.lastError || chrome.runtime.lastError) {
+        console.log("error creating item:" + browser.runtime.lastError);
+      } else {
+        console.log("item created successfully");
+
+        // create listener for this item that launches Options page onClick
+        browser.menus.onClicked.addListener(() => {
+          if (browser.runtime.openOptionsPage) {
+            browser.runtime.openOptionsPage();
+          } else {
+            window.open(browser.runtime.getURL('options.html'));
+          }
+        })
+      }
+    }
+
+    if (browser === undefined) {
+      return
+    }
+    if (browser !== undefined) {
+      // create bookmark context menu item Options
+      browser.menus.create({
+        id: "Options",
+        type: "normal",
+        title: "Options",
+        contexts: ["browser_action"],
+      }, onCreated);
+
+    }
+    else {throw new ReferenceError('Unable to obtain browser object')}
+
+  }; getBrowser();
+
 });
 
+
+
+//message handling
 chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   // User Settings Notification
   if (data.type === 'notification') {

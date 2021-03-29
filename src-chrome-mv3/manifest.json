@@ -9,10 +9,7 @@
     "default_icon": "./icons/Imageshare-logo-no-text-white.png",
     "default_popup": "popup.html"
   },
-  "options_ui": {
-    "page": "options.html",
-    "browser_style": true
-  },
+  "options_page": "options.html",
   "permissions": [
     "contextMenus",
     "notifications",

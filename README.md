@@ -6,15 +6,15 @@ Imageshare Search is a web extension designed to make finding and retreiving res
 
 
 
+=======
 A note on Icons:
 
 Icons will work in Firefox but not MV2 Chrome. This is a known issue caused by a difference in browser requirements for icons that will be resolved when build targets are complete.
 
+=======
 For Safari Build:
 
 Must run converter on src-safari folder. App file will open in Xcode. Hit play icon to test in Safari.
-
-
 
 =======
 ** Developer instructions for viewing current feature progress.
