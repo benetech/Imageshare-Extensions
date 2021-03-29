@@ -62,12 +62,15 @@ window.addEventListener("DOMContentLoaded",
 
    function addOptions(list, target, criteriaId) {
     list.forEach(item => {
+      console.log(`criteriaId: ${criteriaId}`);
+      console.log(`Item.id: ${item.id}`);
       const option = document.createElement('li');
       option.role = "option";
       option.innerText = item.attributes.name;
       option.value = item.id;
       option.id = item.id;
       if (criteriaId === item.id) {
+
         option.selected = "selected";
       }
 
@@ -85,11 +88,14 @@ window.addEventListener("DOMContentLoaded",
 
   function addSubjOptions (list, target, criteriaId) {
     list.forEach(item => {
+      console.log(`criteriaId: ${criteriaId}`);
+      console.log(`Item.id: ${item.id}`);
       const option = document.createElement('li');
       option.role = "option";
       option.innerText = item.name;
       option.value = item.id;
       option.id = item.id;
+
       if (criteriaId === item.id) {
         option.selected = "selected";
       }
@@ -157,6 +163,7 @@ window.addEventListener("DOMContentLoaded",
     chrome.storage.sync.get(['settings'],
     function(result) {
       const userSettings = result.settings;
+      console.log(userSettings);
 
     //parse subjects list
     let subjectsParsed = parseSubjects(optionsObj.subjects);
