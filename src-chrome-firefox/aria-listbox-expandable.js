@@ -4,17 +4,7 @@
  * @desc Initialize the listbox example once the page has loaded
  */
 
-window.addEventListener('load', function () {
-  var custom_listboxes = ['search-type', 'search-acc', 'search-subject', 'search-source'];
 
-  for (var i = 0, j = custom_listboxes.length; i < j; i++) {
-    var prefix = custom_listboxes[i];
-    var button = document.getElementById(prefix + '-button');
-    var exListbox = new aria.Listbox(document.getElementById(prefix + '-list'));
-    var buttonContent = document.querySelector('#' + prefix + '-button .content');
-    var listboxButton = new aria.ListboxButton(button, exListbox, buttonContent);
-  }
-});
 
 var aria = aria || {};
 

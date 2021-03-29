@@ -61,6 +61,7 @@ window.addEventListener("DOMContentLoaded",
    }
 
    function addOptions(list, target, criteriaId) {
+
     list.forEach(item => {
       console.log(`criteriaId: ${criteriaId}`);
       console.log(`Item.id: ${item.id}`);
@@ -70,8 +71,9 @@ window.addEventListener("DOMContentLoaded",
       option.value = item.id;
       option.id = item.id;
       if (criteriaId === item.id) {
-
-        option.selected = "selected";
+        option.classList.add = "focused";
+        option.setAttribute("aria-selected", "true");
+        option.parentNode.setAttribute("activedescendant", item.id);
       }
 
       target.append(option);
@@ -84,6 +86,8 @@ window.addEventListener("DOMContentLoaded",
         iconItem.prepend(icon);
       }
     });
+
+
   }
 
   function addSubjOptions (list, target, criteriaId) {
@@ -97,7 +101,9 @@ window.addEventListener("DOMContentLoaded",
       option.id = item.id;
 
       if (criteriaId === item.id) {
-        option.selected = "selected";
+        option.classList.add = "focused";
+        option.setAttribute("aria-selected", "true");
+        option.parentNode.setAttribute("activedescendant", item.id);
       }
 
       target.append(option);
@@ -184,6 +190,17 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.accommodations.data, accList);
         addOptions(optionsObj.sources.data, srcList);
       }
+
+        var custom_listboxes = ['search-type', 'search-acc', 'search-subject', 'search-source'];
+
+        for (var i = 0, j = custom_listboxes.length; i < j; i++) {
+          var prefix = custom_listboxes[i];
+          var button = document.getElementById(prefix + '-button');
+          var exListbox = new aria.Listbox(document.getElementById(prefix + '-list'));
+          var buttonContent = document.querySelector('#' + prefix + '-button .content');
+          var listboxButton = new aria.ListboxButton(button, exListbox, buttonContent);
+        }
+
     });
     hideSpinner();
   }
