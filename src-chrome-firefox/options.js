@@ -20,6 +20,13 @@ window.addEventListener("DOMContentLoaded",
     const accList = document.getElementById("search-acc-list");
     const srcList = document.getElementById("search-source-list");
 
+    //GET default aria-activedescendants
+    const subjDefault = document.getElementById("search-subject-0");
+    const typeDefault = document.getElementById("search-type-0");
+    const accDefault = document.getElementById("search-acc-0");
+    const srcDefault = document.getElementById("search-source-");
+    console.log(subjDefault, typeDefault, accDefault, srcDefault);
+
     const activeTab = document.getElementById('active-tab');
 
     // run API calls
@@ -63,20 +70,21 @@ window.addEventListener("DOMContentLoaded",
    function addOptions(list, target, criteriaId) {
 
     list.forEach(item => {
-      console.log(`criteriaId: ${criteriaId}`);
-      console.log(`Item.id: ${item.id}`);
       const option = document.createElement('li');
       option.role = "option";
       option.innerText = item.attributes.name;
       option.value = item.id;
       option.id = item.id;
-      if (criteriaId === item.id) {
-        option.classList.add = "focused";
-        option.setAttribute("aria-selected", "true");
-        option.parentNode.setAttribute("activedescendant", item.id);
-      }
 
       target.append(option);
+
+      //criteriaId is a number and item.id is a string
+      if (criteriaId == item.id) {
+        console.log(`inside if statement`);
+        let focusItem = document.getElementById(criteriaId);
+        focusItem.classList.add = "focused";
+        focusItem.setAttribute("aria-selected", "true");
+      }
 
       if (item.attributes.thumbnail) {
         let iconItem = document.getElementById(item.id);
@@ -92,21 +100,20 @@ window.addEventListener("DOMContentLoaded",
 
   function addSubjOptions (list, target, criteriaId) {
     list.forEach(item => {
-      console.log(`criteriaId: ${criteriaId}`);
-      console.log(`Item.id: ${item.id}`);
       const option = document.createElement('li');
       option.role = "option";
       option.innerText = item.name;
       option.value = item.id;
       option.id = item.id;
 
-      if (criteriaId === item.id) {
-        option.classList.add = "focused";
-        option.setAttribute("aria-selected", "true");
-        option.parentNode.setAttribute("activedescendant", item.id);
-      }
-
       target.append(option);
+
+      if (criteriaId == item.id) {
+        console.log(`inside if statement`);
+        let focusItem = document.getElementById(criteriaId);
+        focusItem.classList.add = "focused";
+        focusItem.setAttribute("aria-selected", "true");
+      }
 
     });
   }
@@ -176,8 +183,24 @@ window.addEventListener("DOMContentLoaded",
     console.log("inside createOptions fx: ")
     console.log(subjectsParsed);
 
-
       if (userSettings !== undefined) {
+        // set new activedescendant
+        subjList.setAttribute("aria-activedescendant", userSettings.subject);
+        typeList.setAttribute("aria-activedescendant", userSettings.type);
+        accList.setAttribute("aria-activedescendant", userSettings.accommodation);
+        srcList.setAttribute("aria-activedescendant", userSettings.source);
+
+        // remove old descendant attributes
+        subjDefault.removeAttribute("aria-selected")
+        typeDefault.removeAttribute("aria-selected")
+        accDefault.removeAttribute("aria-selected")
+        srcDefault.removeAttribute("aria-selected")
+
+        subjDefault.removeAttribute("class")
+        typeDefault.removeAttribute("class")
+        accDefault.removeAttribute("class")
+        srcDefault.removeAttribute("class")
+
         // run foreach on saved lists with defaults
         addSubjOptions(subjectsParsed, subjList, userSettings.subject);
         addOptions(optionsObj.types.data, typeList, userSettings.type);
@@ -191,15 +214,16 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.sources.data, srcList);
       }
 
-        var custom_listboxes = ['search-type', 'search-acc', 'search-subject', 'search-source'];
+    //create listboxes
+    var custom_listboxes = ['search-type', 'search-acc', 'search-subject', 'search-source'];
 
-        for (var i = 0, j = custom_listboxes.length; i < j; i++) {
-          var prefix = custom_listboxes[i];
-          var button = document.getElementById(prefix + '-button');
-          var exListbox = new aria.Listbox(document.getElementById(prefix + '-list'));
-          var buttonContent = document.querySelector('#' + prefix + '-button .content');
-          var listboxButton = new aria.ListboxButton(button, exListbox, buttonContent);
-        }
+    for (var i = 0, j = custom_listboxes.length; i < j; i++) {
+      var prefix = custom_listboxes[i];
+      var button = document.getElementById(prefix + '-button');
+      var exListbox = new aria.Listbox(document.getElementById(prefix + '-list'));
+      var buttonContent = document.querySelector('#' + prefix + '-button .content');
+      var listboxButton = new aria.ListboxButton(button, exListbox, buttonContent);
+    }
 
     });
     hideSpinner();
