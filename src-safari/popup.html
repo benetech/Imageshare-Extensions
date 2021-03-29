@@ -9,7 +9,7 @@
 
   </head>
   <body>
-    <h1>Imageshare Search</h1>
+    <h1 class="main-heading">Imageshare Search</h1>
 
     <!-- aria-hidden="false" ? -->
     <form id="view-one" role="search">
@@ -21,14 +21,16 @@
 
     <!-- aria-hidden="true" ?-->
     <form id="view-two" role="search" aria-describedby="no-search-desc" >
-      <div class="sr-only changeMsg" role="alert" aria-live="assertive" aria-atomic="true">Attention:</div>
+      <div class="sr-only changeMsg" role="alert" aria-live="assertive" aria-atomic="true">Attention: No Selection Found</div>
       <section>
-        <legend>No Selection Found</legend>
-        <p id="no-search-desc">It seems there is no text selected. Please input your desired search term(s) in the input below:</p>
+        <div class="popup">
+          <legend>No Selection Found</legend>
+          <p id="no-search-desc">It seems there is no text selected. Please input your desired search term(s) in the input below:</p>
 
-        <div>
-          <label for="search">Search Term:</label>
-          <input type="search" id="search" name="imgs">
+          <div>
+            <label for="search">Search Term:</label>
+            <input type="search" id="search" name="imgs">
+          </div>
         </div>
 
         <button type="button" class="submit-btn" id="standard-search-input">Run Standard Search</button>
