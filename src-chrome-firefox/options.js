@@ -222,12 +222,11 @@ window.addEventListener("DOMContentLoaded",
     advSaveButton.addEventListener("click",
     function () {
       //  let userSearch = searchInput.value;
-      //$("ul").find(".selected").data("value"));
-      //$(.dropdown-menu li a).text();
-       const userSubject = subjList.find(".focused").data("value");
-       const userType = typeList.find(".focused").data("value");
-       const userAcc = accList.find(".focused").data("value");
-       const userSrc = srcList.find(".focused").data("value");
+      // var el = document.querySelector("div.user-panel.main input[name='login']");
+       const userSubject = document.querySelector("ul#search-subject-list li[aria-selected='true']").value;
+       const userType = document.querySelector("ul#search-type-list li[aria-selected='true']").value;
+       const userAcc = document.querySelector("ul#search-acc-list li[aria-selected='true']").value;
+       const userSrc = document.querySelector("ul#search-source-list li[aria-selected='true']").value;
        const timeStamp = new Date().getTime();
        console.log(userSubject, userType, userAcc, userSrc);
 
