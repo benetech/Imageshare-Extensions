@@ -25,8 +25,8 @@ window.addEventListener("DOMContentLoaded",
     const typeDefault = document.getElementById("search-type-0");
     const accDefault = document.getElementById("search-acc-0");
     const srcDefault = document.getElementById("search-source-");
-    console.log(subjDefault, typeDefault, accDefault, srcDefault);
 
+    //GET active tab radio button
     const activeTab = document.getElementById('active-tab');
 
     // run API calls
@@ -53,6 +53,7 @@ window.addEventListener("DOMContentLoaded",
           const sources = resp[3];
           const timeStamp = new Date().getTime()
 
+
           //save to storage
           chrome.storage.local.set({
             'criteria': {
@@ -64,7 +65,7 @@ window.addEventListener("DOMContentLoaded",
             }
           }, function () {console.log(`Criteria set to local storage`)})
         })
-        .then(_callback())
+        .then(setTimeout(_callback, 5000));
    }
 
    function addOptions(list, target, criteriaId) {
@@ -82,8 +83,8 @@ window.addEventListener("DOMContentLoaded",
       if (criteriaId == item.id) {
         console.log(`inside if statement`);
         let focusItem = document.getElementById(criteriaId);
-        focusItem.classList.add = "focused";
-        focusItem.setAttribute("aria-selected", "true");
+        focusItem.setAttribute("class", "focused"); //no working
+        focusItem.setAttribute("aria-selected", "true"); //working
       }
 
       if (item.attributes.thumbnail) {
@@ -110,8 +111,8 @@ window.addEventListener("DOMContentLoaded",
 
       if (criteriaId == item.id) {
         console.log(`inside if statement`);
-        let focusItem = document.getElementById(criteriaId);
-        focusItem.classList.add = "focused";
+        let focusItem = document.getElementById(item.id);
+        focusItem.setAttribute("class", "focused");
         focusItem.setAttribute("aria-selected", "true");
       }
 
@@ -211,6 +212,7 @@ window.addEventListener("DOMContentLoaded",
         addSubjOptions(subjectsParsed, subjList);
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
+        console.log(optionsObj.sources.data);
         addOptions(optionsObj.sources.data, srcList);
       }
 
@@ -249,7 +251,7 @@ window.addEventListener("DOMContentLoaded",
 
             // if it's been longer than 2 weeks since last update
             // run api calls and save to storage
-            if (apiWait < now) {
+            if (apiWait <= now) {
               getAdvOptions(getStorage);
 
             // otherwise create our dropdown options with stored data
@@ -274,9 +276,8 @@ window.addEventListener("DOMContentLoaded",
        const userSubject = document.querySelector("ul#search-subject-list li[aria-selected='true']").value;
        const userType = document.querySelector("ul#search-type-list li[aria-selected='true']").value;
        const userAcc = document.querySelector("ul#search-acc-list li[aria-selected='true']").value;
-       const userSrc = document.querySelector("ul#search-source-list li[aria-selected='true']").value;
+       const userSrc = document.querySelector("ul#search-source-list li[aria-selected='true']").id;
        const timeStamp = new Date().getTime();
-       console.log(userSubject, userType, userAcc, userSrc);
 
        const activeChoice = activeTab.checked;
 
