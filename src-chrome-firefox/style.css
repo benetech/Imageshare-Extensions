@@ -1,3 +1,4 @@
+
 ::selection {
   background: #b3d4fc;
   text-shadow: none;
@@ -72,11 +73,6 @@ a {
   padding: 0 10px;
   white-space: nowrap;
   border: 1px solid #00275c;
-}
-
-.submit-btn:focus,
-.submit-btn:hover {
-    outline: 2px solid darkblue;
 }
 
 .refinements-wrapper {
@@ -220,9 +216,15 @@ button {
   cursor: pointer;
 }
 
-.submit-btn:focus, .submit-btn:hover {
+.submit-btn:focus, .submit-btn:hover, .listbox-button:focus, .listbox-button:hover {
   outline: 2px solid darkblue;
+      /* add some space between the outline and the button for clearer focus indication */
+      outline-offset: 2px;
+      /* change the color of the button for added focus indication */
+      background-color: red;
+
 }
+
 .submit-btn {
   font-size: 22px;
   color: white;
@@ -262,6 +264,8 @@ button, [type="button"], [type="reset"], [type="submit"] {
 
 [role="option"].focused {
   background: #bde4ff;
+  /* add an underline here so indication is not by color alone */
+  border-bottom: 5px solid red;
 }
 
 button[aria-haspopup="listbox"] {
