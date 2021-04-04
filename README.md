@@ -26,6 +26,8 @@ To run main you will need:
 4) A current download of Chome Developer. This download can be found at the following URL: https://www.google.com/chrome/dev/
 5) Firefox Developer. This download can be found at the following URL: https://www.mozilla.org/en-US/firefox/developer/
 6) Safari
+7) Xcode
+8) Safari Extension Converter
 
 Loading main into Canary:
 1) Clone the branch locally
