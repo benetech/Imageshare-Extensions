@@ -216,7 +216,7 @@ button {
   cursor: pointer;
 }
 
-.submit-btn:focus, .submit-btn:hover, .listbox-button:focus, .listbox-button:hover {
+.submit-btn:focus, .submit-btn:hover, .listbox-button:focus, .listbox-button:hover, #search:focus, #search:hover {
   outline: 2px solid darkblue;
       /* add some space between the outline and the button for clearer focus indication */
       outline-offset: 2px;
