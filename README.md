@@ -32,7 +32,7 @@ As of 4.4.2021, the current feature branch is main. main can be found at the fol
 
 NOTE: To test MV2 use Chrome Developer and load src-chrome-firefox.
 
-Loading main into Firefox:
+### Loading main into Firefox:
 1) Clone the branch locally
 2) Go to about:debugging
 3) Click "Load Temporary Add On"
@@ -41,7 +41,7 @@ Loading main into Firefox:
 6) Open Imageshare "inspect" in about:debugging for background inspect. You may see a number of console.logs here tracking the progress and details of our call. If your selection yeilds search results Imageshare will open to those results. Inspect also available on Options and Popup.
 
 =======
-Loading into Safari:
+### Loading into Safari:
 
 1) Clone the branch locally
 2) Must run converter on src-safari folder. See the following article for details and downloads: https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_for_safari
