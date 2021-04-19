@@ -1,35 +1,27 @@
-# Imageshare-Extensions
+## Imageshare-Extensions
+This repository houses a browser extension written for Chrome, Firefox, and Safari.
 
-Imageshare Search
-
+### Imageshare Search
 Imageshare Search is a web extension designed to make finding and retreiving resources from Imageshare easier than ever.
 
-
-
-=======
-A note on Icons:
-
+#### A note on Icons:
 Icons will work in Firefox but not MV2 Chrome. This is a known issue caused by a difference in browser requirements for icons that will be resolved when build targets are complete.
 
-
-
-=======
-** Developer instructions for viewing current feature progress.
+## Developer instructions for viewing current feature progress.
 This document will be updated regularly, so be sure to check back accordingly.
 
-As of 4.4.2021
-The current feature branch is main. main can be found at the following URL: https://github.com/benetech/Imageshare-Extensions
+As of 4.4.2021, the current feature branch is main. main can be found at the following URL: [https://github.com/benetech/Imageshare-Extensions](https://github.com/benetech/Imageshare-Extensions)
 
-To run main you will need:
+### To run the extension you will need:
 1) A current download of Chrome Canary. This download can be found at the following URL: https://www.google.com/chrome/canary/
-3) Experimental Web Platform Features turned on. Go to chrome://flags/. Search Experimental Web Platform Features and move setting to "Enabled". Reload browser for change to take effect.
-4) A current download of Chome Developer. This download can be found at the following URL: https://www.google.com/chrome/dev/
-5) Firefox Developer. This download can be found at the following URL: https://www.mozilla.org/en-US/firefox/developer/
-6) Safari
-7) Xcode
-8) Safari Extension Converter
+2) Experimental Web Platform Features turned on. Go to chrome://flags/. Search Experimental Web Platform Features and move setting to "Enabled". Reload browser for change to take effect.
+3) A current download of Chome Developer. This download can be found at the following URL: https://www.google.com/chrome/dev/
+4) Firefox Developer. This download can be found at the following URL: https://www.mozilla.org/en-US/firefox/developer/
+5) Safari
+6) Xcode
+7) Safari Extension Converter
 
-Loading main into Canary:
+### Loading main into Canary:
 1) Clone the branch locally
 2) Go to chrome://extensions
 3) Click "Load Unpacked"
