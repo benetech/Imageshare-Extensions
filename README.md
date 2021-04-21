@@ -24,11 +24,12 @@ As of 4.4.2021, the current feature branch is main. main can be found at the fol
 ### Loading main into Canary:
 1) Clone the branch locally
 2) Go to chrome://extensions
-3) Click "Load Unpacked"
-4) Navigate to the extension's src-chrome-mv3 t file. Load the whole file.
-5) Give your Imageshare extension permissions for "on all sites". You can do this by clicking "details", scroll down to "Site Access" and choosing the "on all sites" radio.
-6) Once loaded you should be able to go to any other page, right click a selection and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search. You can also click the Imageshage icon in lue of right click and choose your search there. If you have made no selection or there is an error in selection passing, the Popup diolog will change, a notification announcement is made and the user is asked to manually input their search. In Options, accessed via right licking the Imageshare icon and selecting Options, the user can chose their Advanced Search criteria and choose if Imageshare should open as active of inactive tab. These settings can be saved. You should experience ntofications throughout. 
-7) Open service-worker for background inspect. Inspect also available on Options and Popup. 
+3) Turn on Developer mode
+4) Click "Load Unpacked"
+5) Navigate to the extension's src-chrome-mv3 t file. Load the whole file.
+6) Give your Imageshare extension permissions for "on all sites". You can do this by clicking "details", scroll down to "Site Access" and choosing the "on all sites" radio.
+7) Once loaded you should be able to go to any other page, right click a selection and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search. You can also click the Imageshage icon in lue of right click and choose your search there. If you have made no selection or there is an error in selection passing, the Popup diolog will change, a notification announcement is made and the user is asked to manually input their search. In Options, accessed via right licking the Imageshare icon and selecting Options, the user can chose their Advanced Search criteria and choose if Imageshare should open as active of inactive tab. These settings can be saved. You should experience ntofications throughout. 
+8) Open service-worker for background inspect. Inspect also available on Options and Popup. 
 
 NOTE: To test MV2 use Chrome Developer and load src-chrome-firefox.
 
