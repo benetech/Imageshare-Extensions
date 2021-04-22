@@ -36,10 +36,11 @@ NOTE: To test MV2 use Chrome Developer and load src-chrome-firefox.
 ### Loading main into Firefox:
 1) Clone the branch locally
 2) Go to about:debugging
-3) Click "Load Temporary Add On"
-4) Navigate to the extension's src-chrome-firefox file. For firefox chose manifest.json inside the file and firefox with do the rest.
-5) Once loaded you should be able to go to any other page, right click a selection and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search. You can also click the Imageshage icon in lue of right click and choose your search there. If you have made no selection or there is an error in selection passing, the Popup diolog will change, a notification announcement is made and the user is asked to manually input their search. In Options, accessed via right licking the Imageshare icon and selecting Options, the user can chose their Advanced Search criteria and choose if Imageshare should open as active of inactive tab. These settings can be saved.  You should experience ntofications throughout. 
-6) Open Imageshare "inspect" in about:debugging for background inspect. You may see a number of console.logs here tracking the progress and details of our call. If your selection yeilds search results Imageshare will open to those results. Inspect also available on Options and Popup.
+3) (May need to click on "This Firefox" to debug extensions and service workers on this version of Firefox)
+4) Click "Load Temporary Add On"
+5) Navigate to the extension's src-chrome-firefox file. For firefox chose manifest.json inside the file and firefox with do the rest.
+6) Once loaded you should be able to go to any other page, right click a selection and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search. You can also click the Imageshage icon in lue of right click and choose your search there. If you have made no selection or there is an error in selection passing, the Popup diolog will change, a notification announcement is made and the user is asked to manually input their search. In Options, accessed via right licking the Imageshare icon and selecting Options, the user can chose their Advanced Search criteria and choose if Imageshare should open as active of inactive tab. These settings can be saved.  You should experience ntofications throughout. 
+7) Open Imageshare "inspect" in about:debugging for background inspect. You may see a number of console.logs here tracking the progress and details of our call. If your selection yeilds search results Imageshare will open to those results. Inspect also available on Options and Popup.
 
 =======
 ### Loading into Safari:
