@@ -12,6 +12,15 @@ function openImageshare (newURL) {
       });
 }
 
+// open Options in a new tab
+function openOptions () {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage();
+  } else {
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+}
+
 // Standard Imageshare Search
 function runAPIstandard (selection) {
   //Imageshare API
@@ -163,12 +172,13 @@ function subtypeHandling (data) {
             chrome.tabs.sendMessage(tabs[0].id, {
               type: 'notification',
               title: 'You have not yet set criteria for advanced searching.',
-              message: 'Please navigate to this extensions "OPTIONS" page to set your Advance Search preferred search criteria. Extensions > Imageshearch - More Actions > Options',
+              message: 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.',
               icon: './icons/Imageshare-logo-no-text.png'
             }, function(response) {
               console.log('response', response);
             });
           });
+          openOptions();
 
         } else {
           console.log(JSON.stringify(criteria))
