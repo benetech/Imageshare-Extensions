@@ -10,8 +10,6 @@ Imageshare Search is a web extension designed to make finding and retreiving res
 Icons will work in MV2 Chrome but not Firefox. This is a known issue caused by a difference in browser requirements for icon color that will be resolved when build targets are complete.
 
 
-
-
 ### Developer instructions for viewing current feature progress.
 This document will be updated regularly, so be sure to check back accordingly.
 
@@ -61,5 +59,3 @@ Reading manifest: Warning processing background.persistent: Event pages are not 
 3. App file will open in Xcode.
 4. Hit play icon to test in Safari.
 5. Once loaded you should be able to go to any other page, right click a selection and find an Imageshare Search entry with 2 children, Run Standard Search and Run Advanced Search. You can also click the Imageshage icon in lue of right click and choose your search there. If you have made no selection or there is an error in selection passing, the Popup diolog will change, a notification announcement is made and the user is asked to manually input their search. In Options, accessed via right licking the Imageshare icon and selecting Options, the user can chose their Advanced Search criteria and choose if Imageshare should open as active of inactive tab. These settings can be saved. You should experience ntofications throughout.
-
-
