@@ -302,7 +302,7 @@ window.addEventListener("DOMContentLoaded",
           options: {
             title: 'Success!',
             message: 'Your advanced search criteria have been saved.',
-            iconUrl: './icons/Imageshare-logo-no-text.png',
+            iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
             type: 'basic'
           }
         });

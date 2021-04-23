@@ -34,7 +34,7 @@ advSearchButton.addEventListener("click",
   //Send a message to content script to get selection
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'advanced'}, function(response) {
-            //response may indicate no selection found
+      //response may indicate no selection found
       // console.log(response);
       if (response === 'run input') {
         //switch views from 1 to 2
