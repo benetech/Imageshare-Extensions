@@ -1,12 +1,4 @@
 console.log("Background has loaded via background.js.");
-// show or remove working cursor - does not work from here
-function working () {
-  document.body.style.cursor = "wait";
-}
-
-function reset () {
-  document.body.style.cursor = "default";
-}
 
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
@@ -17,7 +9,8 @@ function openImageshare (newURL) {
          active: result.active
       });
   });
-  reset();
+
+  // reset
 }
 
 // open Options in a new tab
@@ -170,7 +163,7 @@ function onClickHandler(info, tab) {
     console.log("Selection Object: " + JSON.stringify(info.selectionText));
 
     // change cursor
-    working();
+
 
     //Extract selection
     let selection = info.selectionText;
@@ -254,11 +247,13 @@ chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   // Search innitiated from popup.js
   if (data.type === 'search') {
     subtypeHandling(data);
+    //send response reset
   }
 
   // Search innitiated from popup.js input
   if (data.type === 'input') {
     subtypeHandling(data);
+    //send response reset
   }
 
   sendResponse();
