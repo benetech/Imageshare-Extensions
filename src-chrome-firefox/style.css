@@ -307,3 +307,8 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
   overflow-y: auto;
   z-index: 1;
 }
+
+/* options.html user settings*/
+/* .user-presets {
+  display: none;
+} */

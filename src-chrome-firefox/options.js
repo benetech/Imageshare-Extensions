@@ -10,8 +10,15 @@ window.addEventListener("DOMContentLoaded",
       spinner.style.display = "block";
     }
     function hideSpinner () {
-      spinner.style.display = "none";
       copy.innerHTML = "Content has loaded.";
+      spinner.style.display = "none";
+    }
+
+    //show current settings
+    const fieldset = document.getElementsByClassName('user-presets');
+
+    function showSettings () {
+      fieldset.style.display = "block";
     }
 
     //GET advanced search criteria lists and populate them to drop-down
@@ -172,6 +179,18 @@ window.addEventListener("DOMContentLoaded",
     return result;
   }
 
+  function populateSettings (userSettings) {
+    const userSub = document.getElementById('user-sub');
+    const userTyp = document.getElementById('user-typ');
+    const userAcc = document.getElementById('user-acc');
+    const userSrc = document.getElementById('user-src');
+    const userTab = document.getElementById('user-tab');
+
+    const dd = document.createElement('dd');
+
+    userSub.append(dd.appendChild(document.createTextNode(`${userSettings.subject}`)))
+  }
+
   function createOptions (optionsObj) {
     //get the users pre-existing settings and populate options with their choices in dropdown
     chrome.storage.sync.get(['settings'],
@@ -184,6 +203,7 @@ window.addEventListener("DOMContentLoaded",
     console.log("inside createOptions fx: ")
     console.log(subjectsParsed);
 
+      // If user settings are present -> make active item in dropdown and show user-presets fieldset
       if (userSettings !== undefined) {
         // set new activedescendant
         subjList.setAttribute("aria-activedescendant", userSettings.subject);
@@ -207,6 +227,11 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.types.data, typeList, userSettings.type);
         addOptions(optionsObj.accommodations.data, accList, userSettings.accommodation);
         addOptions(optionsObj.sources.data, srcList, userSettings.source);
+
+        //show user-preset and populate
+        populateSettings(userSettings);
+        showSettings();
+
       } else {
         // run foreach on saved lists without defaults
         addSubjOptions(subjectsParsed, subjList);
