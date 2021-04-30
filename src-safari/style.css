@@ -308,3 +308,13 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
   z-index: 1;
 }
 
+/* May provide alternate styles for dark mode below */
+/* This may not be supported outside of Safari just yet */
+@media (prefers-color-scheme: dark) {
+  img {
+    filter: invert(1);
+  }
+
+
+}
+
