@@ -76,7 +76,18 @@ window.addEventListener("DOMContentLoaded",
         .then(setTimeout(_callback, 5000));
    }
 
-   function addOptions(list, target, criteriaId) {
+   function populateSettings (itemName, userObj) {
+
+    let dd = document.createElement('dd');
+    dd.className = 'user-setting';
+    dd.innerText = itemName;
+    dd.value = itemName;
+    userObj.after(dd);
+
+
+  }
+
+   function addOptions(list, target, criteriaId, userObj) {
 
     list.forEach(item => {
       const option = document.createElement('li');
@@ -91,8 +102,11 @@ window.addEventListener("DOMContentLoaded",
       ///MAYBE here for creating user settings dds?
       if (criteriaId == item.id) {
         let focusItem = document.getElementById(criteriaId);
-        focusItem.setAttribute("class", "focused"); //no working
-        focusItem.setAttribute("aria-selected", "true"); //working
+        focusItem.setAttribute("class", "focused");
+        focusItem.setAttribute("aria-selected", "true");
+
+        //add criteriaId to user settings view
+        populateSettings(item.attributes.name, userObj);
       }
 
       if (item.attributes.thumbnail) {
@@ -107,7 +121,7 @@ window.addEventListener("DOMContentLoaded",
 
   }
 
-  function addSubjOptions (list, target, criteriaId) {
+  function addSubjOptions (list, target, criteriaId, userObj) {
     list.forEach(item => {
       const option = document.createElement('li');
       option.role = "option";
@@ -122,6 +136,9 @@ window.addEventListener("DOMContentLoaded",
         let focusItem = document.getElementById(item.id);
         focusItem.setAttribute("class", "focused");
         focusItem.setAttribute("aria-selected", "true");
+
+        //add criteriaId to user settings view
+        populateSettings(item.name, userObj);
       }
 
     });
@@ -180,40 +197,6 @@ window.addEventListener("DOMContentLoaded",
     return result;
   }
 
-  function populateSettings (userSettings) {
-    const userSub = document.getElementById('user-sub');
-    const userTyp = document.getElementById('user-typ');
-    const userAcc = document.getElementById('user-acc');
-    const userSrc = document.getElementById('user-src');
-    const userTab = document.getElementById('user-tab');
-
-    //consider replacing with a for each
-    let dd = document.createElement('dd');
-    dd.id = 'user-sub-dd';
-    dd.innerText = userSettings.subject;
-    dd.value = userSettings.subject;
-    userSub.after(dd);
-
-    let ddt = document.createElement('dd');
-    ddt.id = 'user-typ-dd';
-    ddt.innerText = userSettings.type;
-    ddt.value = userSettings.type;
-    userTyp.after(ddt);
-
-    let dda = document.createElement('dd');
-    dda.id = 'user-acc-dd';
-    dda.innerText = userSettings.accommodation;
-    dda.value = userSettings.accommodation;
-    userAcc.after(dda);
-
-    let dds = document.createElement('dd');
-    dds.id = 'user-src-dd';
-    dds.innerText = userSettings.source;
-    dds.value = userSettings.source;
-    userSrc.after(dds);
-
-  }
-
   function createOptions (optionsObj) {
     //get the users pre-existing settings and populate options with their choices in dropdown
     chrome.storage.sync.get(['settings'],
@@ -226,8 +209,9 @@ window.addEventListener("DOMContentLoaded",
     console.log("inside createOptions fx: ")
     console.log(subjectsParsed);
 
-      // If user settings are present -> make active item in dropdown and show user-presets fieldset
+      // If user settings are present -> make active item in dropdown and show user-presets fieldset and add the user setting to current setting list
       if (userSettings !== undefined) {
+
         // set new activedescendant
         subjList.setAttribute("aria-activedescendant", userSettings.subject);
         typeList.setAttribute("aria-activedescendant", userSettings.type);
@@ -245,11 +229,17 @@ window.addEventListener("DOMContentLoaded",
         accDefault.removeAttribute("class")
         srcDefault.removeAttribute("class")
 
+        //GET current setting list elements
+        const userSub = document.getElementById('user-sub');
+        const userTyp = document.getElementById('user-typ');
+        const userAcc = document.getElementById('user-acc');
+        const userSrc = document.getElementById('user-src');
+
         // run foreach on saved lists with defaults
-        addSubjOptions(subjectsParsed, subjList, userSettings.subject);
-        addOptions(optionsObj.types.data, typeList, userSettings.type);
-        addOptions(optionsObj.accommodations.data, accList, userSettings.accommodation);
-        addOptions(optionsObj.sources.data, srcList, userSettings.source);
+        addSubjOptions(subjectsParsed, subjList, userSettings.subject, userSub);
+        addOptions(optionsObj.types.data, typeList, userSettings.type, userTyp );
+        addOptions(optionsObj.accommodations.data, accList, userSettings.accommodation, userAcc);
+        addOptions(optionsObj.sources.data, srcList, userSettings.source, userSrc);
 
         //show user-preset and populate
         populateSettings(userSettings);
