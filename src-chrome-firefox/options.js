@@ -242,7 +242,6 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.sources.data, srcList, userSettings.source, userSrc);
 
         //show user-preset and populate
-        populateSettings(userSettings);
         showSettings();
 
       } else {
@@ -250,7 +249,6 @@ window.addEventListener("DOMContentLoaded",
         addSubjOptions(subjectsParsed, subjList);
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
-        console.log(optionsObj.sources.data);
         addOptions(optionsObj.sources.data, srcList);
       }
 
