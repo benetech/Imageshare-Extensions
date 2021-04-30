@@ -313,14 +313,13 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
   display: none;
 }
 
-.float-container {
-  border: 3px solid #fff;
-  padding: 20px;
-}
 
-.float-child {
-  width: 50%;
-  float: left;
-  padding: 20px;
-  border: 2px solid red;
+/* May provide alternate styles for dark mode below */
+/* This may not be supported outside of Safari just yet */
+@media (prefers-color-scheme: dark) {
+  img {
+    filter: invert(1);
+  }
+
+
 }
