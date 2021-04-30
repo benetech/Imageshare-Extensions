@@ -309,6 +309,6 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
 }
 
 /* options.html user settings*/
-/* .user-presets {
+.user-presets {
   display: none;
-} */
+}

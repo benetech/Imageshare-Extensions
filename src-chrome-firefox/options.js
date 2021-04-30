@@ -15,9 +15,10 @@ window.addEventListener("DOMContentLoaded",
     }
 
     //show current settings
-    const fieldset = document.getElementsByClassName('user-presets');
+    const fieldset = document.getElementById('user-presets');
 
     function showSettings () {
+      console.log(fieldset);
       fieldset.style.display = "block";
     }
 
@@ -186,9 +187,31 @@ window.addEventListener("DOMContentLoaded",
     const userSrc = document.getElementById('user-src');
     const userTab = document.getElementById('user-tab');
 
-    const dd = document.createElement('dd');
+    //consider replacing with a for each
+    let dd = document.createElement('dd');
+    dd.id = 'user-sub-dd';
+    dd.innerText = userSettings.subject;
+    dd.value = userSettings.subject;
+    userSub.after(dd);
 
-    userSub.append(dd.appendChild(document.createTextNode(`${userSettings.subject}`)))
+    let ddt = document.createElement('dd');
+    ddt.id = 'user-typ-dd';
+    ddt.innerText = userSettings.type;
+    ddt.value = userSettings.type;
+    userTyp.after(ddt);
+
+    let dda = document.createElement('dd');
+    dda.id = 'user-acc-dd';
+    dda.innerText = userSettings.accommodation;
+    dda.value = userSettings.accommodation;
+    userAcc.after(dda);
+
+    let dds = document.createElement('dd');
+    dds.id = 'user-src-dd';
+    dds.innerText = userSettings.source;
+    dds.value = userSettings.source;
+    userSrc.after(dds);
+
   }
 
   function createOptions (optionsObj) {
