@@ -1,5 +1,19 @@
 console.log("Background has loaded via background.js.");
 
+// notifications
+function notification (title, message) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {
+      type: 'notification',
+      title: title,
+      message: message,
+      icon: './icons/Imageshare-logo-no-text-2000x2000.png'
+    }, function(response) {
+      console.log('response', response);
+    });
+  });
+}
+
 // open Imageshare in new tab with selection search results
 function openImageshare (newURL) {
   chrome.storage.sync.get(['active'],
@@ -37,46 +51,19 @@ function runAPIstandard (selection) {
 
       if (results.length === 0) {
         console.log(`No results found for ${selection}`);
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: 'notification',
-            title: `No results found for ${selection}`,
-            message: 'Please try another selection',
-            icon: './icons/Imageshare-logo-no-text.png'
-          }, function(response) {
-            console.log('response', response);
-          });
-        });
+        notification(`No results found for ${selection}`, 'Please try another selection');
 
       } else if (results.length === 1) {
         console.log(`${results.length} found for ${selection}`);
         let resultURL = results[0].permalink;
         console.log(resultURL)
         openImageshare(resultURL);
+        notification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
 
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: 'notification',
-            title: `${results.length} result found for ${selection}`,
-            message: 'Your Imageshare result has been opened for you in a new tab.',
-            icon: '/screenshot.jpg'
-          }, function(response) {
-            console.log('response', response);
-          });
-        });
       } else {
       console.log(`${results.length} found for ${selection}`);
       openImageshare(newURL);
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: 'notification',
-          title: `${results.length} results found for ${selection}`,
-          message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-          icon: './icons/Imageshare-logo-no-text.png'
-        }, function(response) {
-          console.log('response', response);
-        });
-      });
+      notification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -100,48 +87,19 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
 
           if (results.length === 0) {
             console.log(`No results found for ${selection}`);
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, {
-                type: 'notification',
-                title: `No results found for ${selection}`,
-                message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
-                icon: './icons/Imageshare-logo-no-text.png'
-              }, function(response) {
-                console.log('response', response);
-              });
-            });
+            notification(`No results found for ${selection}`, 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page');
 
 
           } else if (results.length === 1) {
             console.log(`${results.length} found for ${selection}`);
             let resultURL = results[0].permalink;
-            console.log(resultURL)
             openImageshare(resultURL);
+            notification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
 
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, {
-                type: 'notification',
-                title: `${results.length} result found for ${selection}`,
-                message: 'Your Imageshare result has been opened for you in a new tab.',
-                icon: '/screenshot.jpg'
-              }, function(response) {
-                console.log('response', response);
-              });
-            });
         } else {
           console.log(`${results.length} found for ${selection}`);
           openImageshare(newURL);
-//
-          chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-              type: 'notification',
-              title: `${results.length} results found for ${selection}`,
-              message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-              icon: './icons/Imageshare-logo-no-text.png'
-            }, function(response) {
-              console.log('response', response);
-            });
-          });
+          notification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
         }
       })
         .catch(error => console.error('On GET data error', error));
@@ -162,29 +120,15 @@ function subtypeHandling (data) {
           if (criteria === undefined){
             //alert user to go to options and set criteria
             console.log(`You have not yet set criteria for advanced searching. Please go to options to enable Advanced Search`);
-
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, {
-                type: 'notification',
-                title: 'You have not yet set criteria for advanced searching.',
-                message: 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.',
-                icon: './icons/Imageshare-logo-no-text.png'
-              }, function(response) {
-                console.log('response', response);
-              });
-            });
+            notification('You have not yet set criteria for advanced searching.', 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.');
             openOptions();
 
           } else {
             console.log(JSON.stringify(criteria))
             runAPIadvanced(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
           }
-
         })
-
     }
-
-
 }
 
 // The onClicked callback function.
@@ -222,13 +166,7 @@ chrome.contextMenus.onClicked.addListener(onClickHandler);
       {"title": "Run Advanced Search", "contexts":[context], "parentId": "parent " + context, "id": "advanced"});
 
 
-// User Settings Notification
 chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
-//  if (data.type === 'notification') {
-//    console.log("message received " + JSON.stringify(data.options));
-    //chrome.notifications.create('', data.options);
-//    notifyMe();
-//  }
 
   // Search innitiated from popup.js
   if (data.type === 'search') {
