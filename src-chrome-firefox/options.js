@@ -88,8 +88,8 @@ window.addEventListener("DOMContentLoaded",
       target.append(option);
 
       //criteriaId is a number and item.id is a string
+      ///MAYBE here for creating user settings dds?
       if (criteriaId == item.id) {
-        console.log(`inside if statement`);
         let focusItem = document.getElementById(criteriaId);
         focusItem.setAttribute("class", "focused"); //no working
         focusItem.setAttribute("aria-selected", "true"); //working
