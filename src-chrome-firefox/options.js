@@ -242,7 +242,6 @@ window.addEventListener("DOMContentLoaded",
         addOptions(optionsObj.sources.data, srcList, userSettings.source, userSrc);
 
         //show user-preset and populate
-        populateSettings(userSettings);
         showSettings();
 
       } else {
