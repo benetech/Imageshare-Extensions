@@ -57,23 +57,12 @@ function runAPIstandard (selection) {
         let resultURL = results[0].permalink;
         openImageshare(resultURL);
         notification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
-        // chrome.notifications.create('', {
-        //   title: `${results.length} result found for ${selection}`,
-        //   message: 'Your Imageshare result has been opened for you in a new tab.',
-        //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-        //   type: 'basic'
-        // });
+
       } else {
       console.log(`${results.length} found for ${selection}`);
       openImageshare(newURL);
       notification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
 
-      // chrome.notifications.create('', {
-      //   title: `${results.length} results found for ${selection}`,
-      //   message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-      //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-      //   type: 'basic'
-      // });
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -92,20 +81,11 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
       })
         .then(response => response.json())
         .then(json => {
-          // console.log('Response from Imageshare: ' + json.data);
           const results = json.data;
 
           if (results.length === 0) {
             console.log(`No results found for ${selection}`);
             notification(`No results found for ${selection}`, 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page');
-
-            // chrome.notifications.create('', {
-            //   title: `No results found for ${selection}`,
-            //   message: 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page',
-            //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-            //   type: 'basic'
-            // });
-
 
           } else if (results.length === 1) {
               console.log(`${results.length} found for ${selection}`);
@@ -114,24 +94,12 @@ function runAPIadvanced (selection, userSubject, userType, userAcc, userSrc) {
               openImageshare(resultURL);
               notification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
 
-              // chrome.notifications.create('', {
-              //   title: `${results.length} result found for ${selection}`,
-              //   message: 'Your Imageshare result has been opened for you in a new tab.',
-              //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-              //   type: 'basic'
-              // });
           } else {
 
           console.log(`${results.length} found for ${selection}`);
           openImageshare(newURL);
           notification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
 
-          // chrome.notifications.create('', {
-          //   title: `${results.length} results found for ${selection}`,
-          //   message: 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.',
-          //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-          //   type: 'basic'
-          // });
         }
       })
         .catch(error => console.error('On GET data error', error));
@@ -154,12 +122,6 @@ function subtypeHandling (data) {
           console.log(`You have not yet set criteria.`);
           notification('You have not yet set criteria for advanced searching.', 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.');
 
-          // chrome.notifications.create('', {
-          //   title: 'You have not yet set criteria for advanced searching.',
-          //   message: 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.',
-          //   iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
-          //   type: 'basic'
-          // });
           openOptions();
 
 
@@ -266,6 +228,19 @@ chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   if (data.type === 'input') {
     subtypeHandling(data);
     //send response reset
+  }
+
+  //dark mode icon toggle
+  if (data.scheme === 'dark') {
+    chrome.browserAction.setIcon({
+      path : {
+        "16": "./icons/Imageshare-logo-no-text-white.png",
+        "48": "./icons/Imageshare-logo-no-text-white.png",
+        "128": "./icons/Imageshare-logo-no-text-white.png",
+        "512": "./icons/Imageshare-logo-no-text-white.png",
+        "1024": "./icons/Imageshare-logo-no-text-white.png"
+      }
+    })
   }
 
   sendResponse();
