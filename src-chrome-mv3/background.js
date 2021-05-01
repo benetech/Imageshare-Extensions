@@ -180,5 +180,18 @@ chrome.runtime.onInstalled.addListener(function() {
         subtypeHandling(data);
       }
 
+        //dark mode icon toggle
+      if (data.scheme === 'dark') {
+        chrome.browserAction.setIcon({
+          path : {
+            "16": "./icons/Imageshare-logo-no-text-white.png",
+            "48": "./icons/Imageshare-logo-no-text-white.png",
+            "128": "./icons/Imageshare-logo-no-text-white.png",
+            "512": "./icons/Imageshare-logo-no-text-white.png",
+            "1024": "./icons/Imageshare-logo-no-text-white.png"
+          }
+        })
+      }
+
       sendResponse();
     });
