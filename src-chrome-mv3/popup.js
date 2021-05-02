@@ -1,6 +1,7 @@
 window.addEventListener("DOMContentLoaded",
 function () {
 
+//Version 1: With seperate buttons for selection or input
 //GET search buttons
 const stSearchButton = document.getElementById("standard-search");
 const advSearchButton = document.getElementById("advanced-search");
