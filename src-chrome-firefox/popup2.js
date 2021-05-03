@@ -7,6 +7,10 @@ const stSearchButton = document.getElementById("standard-search");
 const advSearchButton = document.getElementById("advanced-search");
 const searchInput = document.getElementById("search");
 
+//GET user input
+let userSearch = searchInput.value;
+console.log(`userSearch in input BEFORE selection added as value: ${userSearch} `)
+
 //Is there a selection object present?
 //Send a message to index to get selection
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -24,21 +28,26 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     } else {
       //If so populate to input value
       searchInput.value = response
-
+      userSearch = searchInput.value;
+      console.log(`userSearch in input AFTERS selection added as value: ${userSearch}`)
     }
   });
 });
 
 
-//Define selection as input's value
-let userSearch = searchInput.value;
-console.log(`userSearch in input after selection added as value: ${userSearch} `) //empty???
+// //Define selection as input's value
+// let userSearch = searchInput.value;
+// console.log(`userSearch in input after selection added as value: ${userSearch} `) //empty???
 
 //Run search from popup
 stSearchButton.addEventListener("click",
  function () {
   console.log("Standard Search button clicked");
 
+  //check input for new value
+  userSearch = searchInput.value;
+
+  //send search request and selection to index
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'standard', selection: userSearch}, function(response) {
       console.log(response)
@@ -53,6 +62,10 @@ advSearchButton.addEventListener("click",
  function () {
   console.log("Advanced Search button clicked");
 
+  //check input for new value
+  userSearch = searchInput.value;
+
+  //send search request and selection to index
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'advanced', selection: userSearch}, function(response) {
       console.log(response)
