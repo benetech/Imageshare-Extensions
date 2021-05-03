@@ -44,6 +44,27 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     notifyMe(msg);
   }
 
+  //messages from popup2.js
+  if(msg.type === 'selection') {
+    let userSelection = selection()
+
+    if (userSelection) {
+      sendResponse(userSelection)
+    }
+    else {
+      sendResponse(false)
+    }
+  }
+
+  if (msg.type === 'search-only') {
+    //send search request to background for run
+    chrome.runtime.sendMessage({type: 'search', subtype: msg.subtype, selection: msg.selection});
+
+    sendResponse("Search request recieved by index and sent to background")
+  }
+
+  //messages from popup.js
+  // may delete after new popup2 config approved
   if (msg.type === 'search'){
     let userSelection = selection();
 
@@ -58,6 +79,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       //prompt user to input search criteria
     }
   }
-  sendResponse();
+
+
   return true; // keep the channel open
 });

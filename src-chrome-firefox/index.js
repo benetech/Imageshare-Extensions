@@ -12,6 +12,7 @@ function selection(){
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
+  //messages from popup2.js
   if(msg.type === 'selection') {
     let userSelection = selection()
 
@@ -31,6 +32,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   //messages from popup.js
+  // may delete after new popup2 config approved
   if (msg.type === 'search'){
     let userSelection = selection();
 

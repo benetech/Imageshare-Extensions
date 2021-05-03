@@ -20,7 +20,6 @@ function openImageshare (newURL) {
       });
   });
 
-  // reset
 }
 
 // open Options in a new tab
