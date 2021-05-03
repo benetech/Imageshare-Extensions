@@ -8,7 +8,7 @@
   },
   "browser_action": {
     "default_icon": "./icons/Imageshare-logo-no-text.png",
-    "default_popup": "popup.html"
+    "default_popup": "popup2.html"
   },
   "options_page": "options.html",
   "permissions": [
