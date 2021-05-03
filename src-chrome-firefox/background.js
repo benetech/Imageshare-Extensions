@@ -220,6 +220,7 @@ chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
 
   // Search innitiated from popup.js
   if (data.type === 'search') {
+    console.log(`data from index: ${data}`)
     subtypeHandling(data);
     //send response reset
   }
