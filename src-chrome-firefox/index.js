@@ -11,6 +11,7 @@ function selection(){
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  //messages from popup.js
   if (msg.type === 'search'){
     let userSelection = selection();
 
@@ -19,11 +20,22 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       //Send selection to background to run our search functions
       chrome.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
       sendResponse("to popup.js from index.js")
+
+
     } else {
       console.log('no user selection found');
       sendResponse('run input')
       //prompt user to input search criteria
     }
   }
+
+  if (msg.type === 'working') {
+    document.body.style.cursor = "wait";
+  }
+
+  if (msg.type === 'reset') {
+    document.body.style.cursor = "default";
+  }
+
   return true; // keep the channel open
 });

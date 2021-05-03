@@ -10,8 +10,16 @@ window.addEventListener("DOMContentLoaded",
       spinner.style.display = "block";
     }
     function hideSpinner () {
-      spinner.style.display = "none";
       copy.innerHTML = "Content has loaded.";
+      spinner.style.display = "none";
+    }
+
+    //show current settings
+    const fieldset = document.getElementById('user-presets');
+
+    function showSettings () {
+      console.log(fieldset);
+      fieldset.style.display = "block";
     }
 
     //GET advanced search criteria lists and populate them to drop-down
@@ -68,7 +76,18 @@ window.addEventListener("DOMContentLoaded",
         .then(setTimeout(_callback, 5000));
    }
 
-   function addOptions(list, target, criteriaId) {
+   function populateSettings (itemName, userObj) {
+
+    let dd = document.createElement('dd');
+    dd.className = 'user-setting';
+    dd.innerText = itemName;
+    dd.value = itemName;
+    userObj.after(dd);
+
+
+  }
+
+   function addOptions(list, target, criteriaId, userObj) {
 
     list.forEach(item => {
       const option = document.createElement('li');
@@ -80,11 +99,14 @@ window.addEventListener("DOMContentLoaded",
       target.append(option);
 
       //criteriaId is a number and item.id is a string
+      ///MAYBE here for creating user settings dds?
       if (criteriaId == item.id) {
-        console.log(`inside if statement`);
         let focusItem = document.getElementById(criteriaId);
-        focusItem.setAttribute("class", "focused"); //no working
-        focusItem.setAttribute("aria-selected", "true"); //working
+        focusItem.setAttribute("class", "focused");
+        focusItem.setAttribute("aria-selected", "true");
+
+        //add criteriaId to user settings view
+        populateSettings(item.attributes.name, userObj);
       }
 
       if (item.attributes.thumbnail) {
@@ -99,7 +121,7 @@ window.addEventListener("DOMContentLoaded",
 
   }
 
-  function addSubjOptions (list, target, criteriaId) {
+  function addSubjOptions (list, target, criteriaId, userObj) {
     list.forEach(item => {
       const option = document.createElement('li');
       option.role = "option";
@@ -114,6 +136,9 @@ window.addEventListener("DOMContentLoaded",
         let focusItem = document.getElementById(item.id);
         focusItem.setAttribute("class", "focused");
         focusItem.setAttribute("aria-selected", "true");
+
+        //add criteriaId to user settings view
+        populateSettings(item.name, userObj);
       }
 
     });
@@ -184,7 +209,9 @@ window.addEventListener("DOMContentLoaded",
     console.log("inside createOptions fx: ")
     console.log(subjectsParsed);
 
+      // If user settings are present -> make active item in dropdown and show user-presets fieldset and add the user setting to current setting list
       if (userSettings !== undefined) {
+
         // set new activedescendant
         subjList.setAttribute("aria-activedescendant", userSettings.subject);
         typeList.setAttribute("aria-activedescendant", userSettings.type);
@@ -202,17 +229,26 @@ window.addEventListener("DOMContentLoaded",
         accDefault.removeAttribute("class")
         srcDefault.removeAttribute("class")
 
+        //GET current setting list elements
+        const userSub = document.getElementById('user-sub');
+        const userTyp = document.getElementById('user-typ');
+        const userAcc = document.getElementById('user-acc');
+        const userSrc = document.getElementById('user-src');
+
         // run foreach on saved lists with defaults
-        addSubjOptions(subjectsParsed, subjList, userSettings.subject);
-        addOptions(optionsObj.types.data, typeList, userSettings.type);
-        addOptions(optionsObj.accommodations.data, accList, userSettings.accommodation);
-        addOptions(optionsObj.sources.data, srcList, userSettings.source);
+        addSubjOptions(subjectsParsed, subjList, userSettings.subject, userSub);
+        addOptions(optionsObj.types.data, typeList, userSettings.type, userTyp );
+        addOptions(optionsObj.accommodations.data, accList, userSettings.accommodation, userAcc);
+        addOptions(optionsObj.sources.data, srcList, userSettings.source, userSrc);
+
+        //show user-preset and populate
+        showSettings();
+
       } else {
         // run foreach on saved lists without defaults
         addSubjOptions(subjectsParsed, subjList);
         addOptions(optionsObj.types.data, typeList);
         addOptions(optionsObj.accommodations.data, accList);
-        console.log(optionsObj.sources.data);
         addOptions(optionsObj.sources.data, srcList);
       }
 
@@ -302,7 +338,7 @@ window.addEventListener("DOMContentLoaded",
           options: {
             title: 'Success!',
             message: 'Your advanced search criteria have been saved.',
-            iconUrl: './icons/Imageshare-logo-no-text-3000x2000.png',
+            iconUrl: './icons/Imageshare-logo-no-text-2000x2000.png',
             type: 'basic'
           }
         });

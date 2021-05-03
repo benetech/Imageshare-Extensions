@@ -6,7 +6,6 @@ chrome.storage.local.clear();
 
 //Notifications from Background
 function notifyMe (msg) {
-  console.log("msg: " + JSON.stringify(msg));
   const title = msg.title;
   var options = {
        body: msg.message,

@@ -14,6 +14,8 @@
   </head>
   <body>
     <h1>Options</h1>
+    <h2>Advanced Search Criteria</h2>
+
     <div id="loading-container">
       <div class="sr-only loadingMsg" role="alert" aria-live="assertive" aria-atomic="true">loading...</div>
       <div class="spinner" aria-hidden="true">
@@ -25,9 +27,19 @@
       </div>
     </div>
 
+    <fieldset id="user-presets">
+      <legend>Your Current Settings Are:</legend>
+      <dl>
+        <dt id="user-sub">Subject:</dt>
+        <dt id="user-typ">Type:</dt>
+        <dt id="user-acc">Accomodation:</dt>
+        <dt id="user-src">Source:</dt>
+      </dl>
+    </fieldset>
+
       <form role="search" class="refinements-wrapper">
         <fieldset class="adv-criteria-wrapper refinements">
-          <legend>Advanced Search Criteria</legend>
+          <legend>Choose Your Advanced Search Settings</legend>
 
             <div class="refinement">
               <input type="hidden" id="subject" name="subject" value="0">
