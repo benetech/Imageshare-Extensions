@@ -8,20 +8,25 @@ const advSearchButton = document.getElementById("advanced-search");
 const searchInput = document.getElementById("search");
 
 //Is there a selection object present?
-//Send a message to content script to get selection
+//Send a message to index to get selection
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'standard'}, function(response) {
+  chrome.tabs.sendMessage(tabs[0].id, {type: 'selection'}, function(response) {
+
     //response may indicate no selection found
-    // console.log(response);
-    if (response === 'run input') {
+    if (response === false) {
+
+      //Else leave blank and prompt to input a search term
       //switch views from 1 to 2
+      //Don't forget to edit HTML accordingly
       document.getElementById("view-one").style.display = "none";
       document.getElementById("view-two").style.display = "block";
+    } else {
+      //If so populate to input value
+      searchInput.value = response
     }
   });
-//If so populate to input value,
-searchInput.value =
-//Else leave blank and prompt to input a search term
+});
+
 
 //Define selection as input's value
 let userSearch = searchInput.value;
@@ -31,6 +36,12 @@ stSearchButton.addEventListener("click",
  function () {
   console.log("Standard Search button clicked");
 
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'standard', selection: userSearch}, function(response) {
+      console.log(response)
+
+    });
+  });
 
 
  })
@@ -39,8 +50,14 @@ advSearchButton.addEventListener("click",
  function () {
   console.log("Advanced Search button clicked");
 
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'advanced', selection: userSearch}, function(response) {
+      console.log(response)
 
- })
+    });
+  });
+
+ });
 
 
 

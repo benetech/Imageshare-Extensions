@@ -12,9 +12,12 @@ const advInputButton = document.getElementById("advanced-search-input");
 stSearchButton.addEventListener("click",
  function () {
   console.log("Standard Search button clicked");
-  //Send a message to content script to get selection
+
+  //Send a message to index to get selection
+  //Currently from there search is innititated to background
+  //Instead lets return a response then innitiate search seperately
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'standard'}, function(response) {
+    chrome.tabs.sendMessage(tabs[0].id, {type: 'selection'}, function(response) {
       //response may indicate no selection found
       // console.log(response);
       if (response === 'run input') {
