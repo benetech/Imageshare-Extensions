@@ -14,10 +14,8 @@
   </head>
   <body>
     <h1>Options</h1>
-    <h2>Advanced Search Criteria</h2>
-
     <div id="loading-container">
-      <div class="sr-only loadingMsg" role="alert" aria-live="assertive" aria-atomic="true">loading...</div>
+      <div id="loading-status" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true">loading...</div>
       <div class="spinner" aria-hidden="true">
         <div></div>
         <div></div>
@@ -27,19 +25,9 @@
       </div>
     </div>
 
-    <fieldset id="user-presets">
-      <legend>Your Current Settings Are:</legend>
-      <dl>
-        <dt id="user-sub">Subject:</dt>
-        <dt id="user-typ">Type:</dt>
-        <dt id="user-acc">Accomodation:</dt>
-        <dt id="user-src">Source:</dt>
-      </dl>
-    </fieldset>
-
-      <form role="search" class="refinements-wrapper">
+      <form id="search-form" hidden role="search" class="refinements-wrapper">
         <fieldset class="adv-criteria-wrapper refinements">
-          <legend>Choose Your Advanced Search Settings</legend>
+          <legend>Advanced Search Criteria</legend>
 
             <div class="refinement">
               <input type="hidden" id="subject" name="subject" value="0">
@@ -108,12 +96,12 @@
 
             <p tabindex="0">When a new Imageshare search is opened, would you like the new tab to be opened in the foreground making this new tab your Active Tab?</p>
             <div>
-              <input type="checkbox" id="active-tab" name="active-tab"checked>
+              <input type="checkbox" id="active-tab" name="active-tab" checked>
               <label for="active-tab">Imageshare as Active Tab</label>
             </div>
 
           <div class="submit-btn-wrapper">
-            <button type="button" class="submit-btn" id="advanced-criteria-save"><span>Save Your Settings</span></button>
+            <button type="button" class="submit-btn" id="save-advanced-settings"><span>Save Your Settings</span></button>
           </div>
       </fieldset>
     </form>
