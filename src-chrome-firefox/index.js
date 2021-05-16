@@ -1,41 +1,64 @@
-console.log('Content script has loaded via Manifest V2.');
+const ENV = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production'
+};
 
-//For dev only REMOVE FOR PRODUCTION
-chrome.storage.local.clear();
+const MESSAGE = {
+  SEARCH: 'search',
+  WORKING: 'working',
+  READY: 'reset'
+};
 
-//Find user selection
-function selection(){
-  if (window.getSelection) {
-         return window.getSelection().toString();
-  }
+const environment = 'development';
+
+const setMouseCursorBusy = () => document.body.style.cursor = 'wait';
+const setMouseCursorReady = () => document.body.style.cursor = 'default';
+
+if (environment === ENV.DEVELOPMENT) {
+  chrome.storage.local.clear();
 }
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  //messages from popup.js
-  if (msg.type === 'search'){
-    let userSelection = selection();
+const getUserSelection = () => {
+  return window.getSelection
+    ? window.getSelection().toString()
+    : undefined
+  ;
+};
 
-    if (userSelection) {
-      console.log('message received in index.js: ' + userSelection)
+const onExtensionMessage = (msg, _sender, sendResponse) => {
+  // messages from popup.js
+
+  if (msg.type === MESSAGE.SEARCH){
+    const userSelection = getUserSelection();
+
+    if (userSelection !== undefined) {
+      console.debug('message received in index.js: ' + userSelection)
       //Send selection to background to run our search functions
-      chrome.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
+      chrome.runtime.sendMessage({
+        type: msg.type,
+        subtype: msg.subtype,
+        selection: userSelection
+      });
+
       sendResponse("to popup.js from index.js")
-
-
     } else {
-      console.log('no user selection found');
+      console.debug('no user selection found');
+      // prompt user to input search criteria
       sendResponse('run input')
-      //prompt user to input search criteria
     }
   }
 
-  if (msg.type === 'working') {
-    document.body.style.cursor = "wait";
+  if (msg.type === MSG.WORKING) {
+    setMouseCursorBusy();
   }
 
-  if (msg.type === 'reset') {
-    document.body.style.cursor = "default";
+  if (msg.type === MSG.READY) {
+    setMouseCursorReady();
   }
 
   return true; // keep the channel open
-});
+};
+
+chrome.runtime.onMessage.addListener(onExtensionMessage);
+
+console.debug('Loaded extension - MV2');

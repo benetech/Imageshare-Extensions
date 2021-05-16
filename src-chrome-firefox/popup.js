@@ -1,87 +1,76 @@
-window.addEventListener("DOMContentLoaded",
-function () {
-
-// show or remove working cursor - works but blocks everything that comes after
-function working () {
-  document.body.style.cursor = "wait";
+const MESSAGE = {
+  STANDARD_SEARCH: {
+    type: 'search',
+    subtype: 'advanced'
+  },
+  ADVANCED_SEARCH: {
+    type: 'search',
+    subtype: 'advanced'
+  }
 }
 
-function reset () {
-  document.body.style.cursor = "default";
-}
+const RESPONSE = {
+  RUN_INPUT: 'run input'
+};
 
-//GET search buttons
-const stSearchButton = document.getElementById("standard-search");
-const advSearchButton = document.getElementById("advanced-search");
-const stInputButton = document.getElementById("standard-search-input");
-const advInputButton = document.getElementById("advanced-search-input");
+const el = id => document.getElementById(id);
 
-//Run search from popup with selection
-stSearchButton.addEventListener("click",
- function () {
-  console.log("Standard Search button clicked");
+const firstForm = el('view-one');
+const secondForm = el('view-two');
 
-  //Send a message to content script to get selection
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'standard'}, function(response) {
-      //response may indicate no selection found
-      console.log(`response from index: ${response}`);
-      if (response === 'run input') {
-        //switch views from 1 to 2
-        document.getElementById("view-one").style.display = "none";
-        // .style.aria-hidden= "true"
-        document.getElementById("view-two").style.display = "block";
-        // .style.aria-hidden= "false"
-        console.log("after view change code")
-      }
-    });
+const show = el => el.style.display = 'block';
+const hide = el => el.style.display = 'none';
+
+const showFirstForm = () => {
+  hide(secondForm);
+  show(firstForm);
+};
+
+const showSecondForm = () => {
+  hide(firstForm);
+  show(secondForm);
+};
+
+const withActiveTab = f => chrome.tabs.query({
+  active: true,
+  currentWindow: true
+}, tabs => f(tabs[0]));
+
+const doStandardSearch = () => withActiveTab(tab => {
+  chrome.tabs.sendMessage(tab.id, MESSAGE.STANDARD_SEARCH, response => {
+    if (response === RESPONSE.RUN_INPUT) {
+      showSecondForm();
+    }
+  })
+});
+
+const doAdvancedSearch = () => withActiveTab(tab => {
+  chrome.tabs.sendMessage(tab.id, MESSAGE.ADVANCED_SEARCH, response => {
+    if (response === RESPONSE.RUN_INPUT) {
+      showSecondForm();
+    }
   });
+});
 
- }
-);
+const doStandardInputSearch = () => chrome.runtime.sendMessage({
+  type: 'input',
+  subtype: 'standard',
+  selection: el('search').value
+});
 
-advSearchButton.addEventListener("click",
- function () {
-  console.log("Advanced Search button clicked");
+const doAdvancedInputSearch = () => chrome.runtime.sendMessage({
+  type: 'input',
+  subtype: 'advanced',
+  selection: el('search').value
+});
 
+const init = () => {
+  el('standard-search').addEventListener('click', doStandardSearch);
+  el('advanced-search').addEventListener('click', doAdvancedSearch);
+  el('standard-search-input').addEventListener('click', doStandardInputSearch);
+  el('advanced-search-input').addEventListener('click', doAdvancedInputSearch);
 
-  //Send a message to content script to get selection
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type: 'search', subtype: 'advanced'}, function(response) {
-      //response may indicate no selection found
-      // console.log(response);
-      if (response === 'run input') {
-        //switch views from 1 to 2
-        document.getElementById("view-one").style.display = "none";
-        document.getElementById("view-two").style.display = "block";
-      }
-    });
-  });
+  console.debug('Popup handler loaded');
+};
 
- }
-);
-
-// Run search from popup with input
-stInputButton.addEventListener("click",
- function () {
-  console.log("Standard Search button clicked");
-  const searchInput = document.getElementById("search");
-  let userSearch = searchInput.value;
-  //Send a message to background to run
-  console.log(userSearch);
-  chrome.runtime.sendMessage({type: 'input', subtype: 'standard', selection: userSearch})
-
- }
-);
-
-advInputButton.addEventListener("click",
- function () {
-  console.log("Advanced Search button clicked");
-  const searchInput = document.getElementById("search");
-  let userSearch = searchInput.value;
-  //Send a message to background to run
-  console.log(userSearch);
-  chrome.runtime.sendMessage({type: 'input', subtype: 'advanced', selection: userSearch})
- }
-);
-})
+window.addEventListener('load', init);
