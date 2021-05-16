@@ -66,8 +66,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   // may delete after new popup2 config approved
   if (msg.type === 'search'){
     let userSelection = selection();
+    console.log(userSelection)
 
-    if (userSelection) {
+    if (userSelection !== undefined) {
       console.log('message received in index.js: ' + userSelection)
       //Send selection to background to run our search functions
       chrome.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
