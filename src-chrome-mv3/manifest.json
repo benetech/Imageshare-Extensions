@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["index.js", "toggleIcon.js"]
+      "js": ["index.js"]
     }
   ],
   "icons":{

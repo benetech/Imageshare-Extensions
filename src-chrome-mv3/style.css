@@ -91,11 +91,11 @@ a {
 }
 
 /* popup.html views */
-#view-one {
+.view-one {
   display: block;
 }
 
-#view-two {
+.view-two {
   display: none;
 }
 

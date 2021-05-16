@@ -44,20 +44,24 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     notifyMe(msg);
   }
 
-  if (msg.type === 'search'){
-    let userSelection = selection();
+  //messages from popup.js
+  if(msg.type === 'selection') {
+    let userSelection = selection()
 
     if (userSelection) {
-      console.log('message received in index.js: ' + userSelection)
-      //Send selection to background to run our search functions
-      chrome.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
-      sendResponse("to popup.js from index.js")
-    } else {
-      console.log('no user selection found');
-      sendResponse('run input')
-      //prompt user to input search criteria
+      sendResponse(userSelection)
+    }
+    else {
+      sendResponse(false)
     }
   }
-  sendResponse();
+
+  if (msg.type === 'search-only') {
+    //send search request to background for run
+    chrome.runtime.sendMessage({type: 'search', subtype: msg.subtype, selection: msg.selection});
+
+    sendResponse("Search request recieved by index and sent to background")
+  }
+
   return true; // keep the channel open
 });
