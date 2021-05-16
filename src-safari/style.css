@@ -91,15 +91,6 @@ a {
 }
 
 /* popup.html views */
-#view-one {
-  display: block;
-}
-
-#view-two {
-  display: none;
-}
-
-/* popup2.html views */
 .view-one {
   display: block;
 }
