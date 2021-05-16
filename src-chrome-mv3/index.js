@@ -68,7 +68,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === 'search'){
     let userSelection = selection();
 
-    if (userSelection) {
+    if (userSelection !== undefined) {
       console.log('message received in index.js: ' + userSelection)
       //Send selection to background to run our search functions
       chrome.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
