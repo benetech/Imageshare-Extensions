@@ -99,6 +99,16 @@ a {
   display: none;
 }
 
+.no-entry {
+  border-color: red;
+}
+
+#required {
+  display: none;
+  color: red;
+  font-size: 12;
+}
+
 /* loading spinner */
 .sr-only {
   position: absolute;

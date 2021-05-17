@@ -47,7 +47,6 @@ stSearchButton.addEventListener("click",
 
   //check input for new value
   userSearch = searchInput.value;
-  console.log(`User input with trim: ${userSearch.trim()}` )
 
   //send search request and selection to index
   if (userSearch.length > 0) {
@@ -62,9 +61,6 @@ stSearchButton.addEventListener("click",
     searchInput.classList.add("no-entry");
     span.style.display = "block";
   }
-
-
-
  })
 
 advSearchButton.addEventListener("click",
