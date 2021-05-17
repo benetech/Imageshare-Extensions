@@ -6,6 +6,7 @@ function () {
 const stSearchButton = document.getElementById("standard-search");
 const advSearchButton = document.getElementById("advanced-search");
 const searchInput = document.getElementById("search");
+const span = document.getElementById("required");
 
 //GET user input
 let userSearch = searchInput.value;
@@ -58,6 +59,8 @@ stSearchButton.addEventListener("click",
   });
   } else {
     //highlight and box "no selection found" and alert for SRs
+    searchInput.classList.add("no-entry");
+    span.style.display = "block";
   }
 
 
@@ -81,6 +84,8 @@ advSearchButton.addEventListener("click",
     });
   } else {
     //highlight and box "no selection found" and alert for SRs
+    searchInput.classList.add("no-entry");
+    span.style.display = "block";
   }
  });
 })
