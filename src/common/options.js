@@ -1,6 +1,6 @@
 import { el, qs, fetchJson, parseSubjects } from './util';
 import { getStoredApiOptions, storeApiOptions, getStoredUserSettings, storeUserSettings } from './settings';
-import { displayNotification } from 'display-notification';
+import { sendNotificationMessage } from 'display-notification';
 import aria from './aria-listbox-expandable';
 
 import './style.css';
@@ -121,7 +121,7 @@ const setupMiscellaneousControls = userSettings => {
 
   saveButton.addEventListener('click', async function () {
     await storeSettings();
-    displayNotification('Success', 'Your advanced search criteria have been saved.');
+    sendNotificationMessage('Success', 'Settings saved.');
   });
 };
 

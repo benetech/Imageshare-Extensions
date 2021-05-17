@@ -6,6 +6,7 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { ProvidePlugin } = require('webpack');
 
 const isWebkitOrBlink = target => target !== 'firefox';
 const supportsManifestV3 = target => target === 'chrome-mv3';
@@ -14,18 +15,21 @@ const supportsExtensionNotifications = target => !supportsManifestV3(target);
 const getResolveConfig = target => { return {
 	alias: {
 		'get-browser$': isWebkitOrBlink(target)
-			? path.resolve(__dirname, './src-common/get-browser-chrome.js')
-			: path.resolve(__dirname, './src-common/get-browser-browser.js'),
+			? path.resolve(__dirname, './src/common/get-browser-chrome.js')
+			: path.resolve(__dirname, './src/common/get-browser-browser.js'),
 		'display-notification$': supportsExtensionNotifications(target)
-			? path.resolve(__dirname, './src-common/extension-notifications.js')
-			: path.resolve(__dirname, './src-common/browser-notifications.js')
+			? path.resolve(__dirname, './src/common/extension-notifications.js')
+			: path.resolve(__dirname, './src/common/browser-notifications.js'),
+    'create-context-menu$': isWebkitOrBlink(target)
+      ? path.resolve(__dirname, './src/chrome-mv2/create-context-menu.js')
+      : path.resolve(__dirname, './src/firefox/create-context-menu.js')
 	}
 } };
 
 const getManifestPath = target => {
 	return supportsManifestV3(target)
-		? './src-common/manifest-v3.json'
-		: './src-common/manifest-v2.json'
+		? './src/common/manifest-v3.json'
+		: './src/common/manifest-v2.json'
 	;
 }
 
@@ -33,6 +37,8 @@ module.exports = env => {
 	if (!env.build_target || !VALID_BUILD_TARGETS.includes(env.build_target)) {
 		throw new Error(`Invalid or no build target given. Expected one of: ${VALID_BUILD_TARGETS.join(', ')} - --env build_target=...`);
 	}
+
+  const mode = env.hasOwnProperty('environment') && env.environment === 'production' ? 'production' : 'development';
 
 	const generateExtensionManifest = content => {
 		const manifest = JSON.parse(content);
@@ -57,10 +63,10 @@ module.exports = env => {
     },
 		resolve: getResolveConfig(env.build_target),
 		entry: {
-			index: './src-common/index.js',
-			popup: './src-common/popup.js',
-			options: './src-common/options.js',
-			background: './src-common/background.js',
+			index: './src/common/index.js',
+			popup: './src/common/popup.js',
+			options: './src/common/options.js',
+			background: './src/common/background.js',
 		},
 		output: {
       filename: '[name].js',
@@ -68,17 +74,22 @@ module.exports = env => {
       clean: true
     },
 		plugins: [
+      new ProvidePlugin({
+        environment: mode === 'development'
+          ? [path.resolve(__dirname, './src/common/environment-development.js'), 'default']
+          : [path.resolve(__dirname, './src/common/environment-production.js'), 'default']
+      }),
       new HtmlWebpackPlugin({
         filename: 'options.html',
         minify: false,
         chunks: ['options'],
-        template: './src-common/options.html'
+        template: './src/common/options.html'
       }),
       new HtmlWebpackPlugin({
         filename: 'popup.html',
         minify: false,
         chunks: ['popup'],
-        template: './src-common/popup.html'
+        template: './src/common/popup.html'
       }),
       new CopyWebpackPlugin({
         patterns: [

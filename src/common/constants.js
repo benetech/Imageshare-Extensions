@@ -1,15 +1,10 @@
-export const ENV = {
-    DEVELOPMENT: 'development',
-    PRODUCTION: 'production'
-  };
-    
 export const MESSAGE = {
   SEARCH: 'search',
   WORKING: 'working',
   READY: 'reset'
 };
 
-export const ICON_PATHS = {
+export const LIGHT_ICON_PATHS = {
   "16": "./icons/Imageshare-logo-no-text-white.png",
   "48": "./icons/Imageshare-logo-no-text-white.png",
   "128": "./icons/Imageshare-logo-no-text-white.png",

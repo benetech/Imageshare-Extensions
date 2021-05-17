@@ -1,7 +1,8 @@
-import { ICON_PATHS, IMGS_API_URL } from './constants';
+import { LIGHT_ICON_PATHS, IMGS_API_URL } from './constants';
 import { getActiveTabSetting, getSettings } from './settings';
 import { fetchJson } from './util';
 import { displayNotification } from 'display-notification';
+import createContextMenu from 'create-context-menu';
 import browser from 'get-browser';
 
 const DARK_SCHEME = 'dark';
@@ -13,8 +14,8 @@ const MESSAGE_TYPE = {
 };
 
 const PAYLOAD_TYPE = {
-  STANDARD: 'standard',
-  ADVANCED: 'advanced'
+  STANDARD: 'imageshare-standard-search',
+  ADVANCED: 'imageshare-advanced-search'
 };
 
 const openImageshare = url => getActiveTabSetting().then(active => browser.tabs.create({url: url, active: active}));
@@ -90,8 +91,8 @@ const handleMessagePayload = data => {
       // if criteria present then use, otherwise alert user and redirect to options
       if (criteria === undefined){
         //alert user to go to options and set criteria
-        console.debug(`You have not yet set criteria.`);
-        displayNotification('You have not yet set criteria for advanced searching.', 'The Imageshare "OPTIONS" page has been opened for you and is now your active tab. Please set your Advanced Search preferred search criteria.');
+        console.debug(`No pre-existing criteria, notifying user.`);
+        displayNotification('No advanced search criteria.', 'Extension options opened as active browser tab. Please configure search criteria.');
         openOptionsPage();
       } else {
         doAdvancedSearch(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
@@ -101,106 +102,38 @@ const handleMessagePayload = data => {
 };
 
 const onContextMenuClick = (info, _tab) => {
-  //Test receipt selection object
-  console.debug("Selection Object: " + JSON.stringify(info.selectionText));
-
-  //Extract selection
   const selection = info.selectionText;
   const option = info.menuItemId;
 
-  const data = {subtype: option, selection: selection}
+  console.debug(`Menu item ${option} clicked with selection "${selection}"`);
 
-  //Initiate search by subtype
-  handleMessagePayload(data);
-};
-
-const createFirefoxBookmarkMenuItem = () => {
-  // Firefox only bookmark menu edit
-
-  const onBookmarkCreation = () => {
-    if (browser.runtime.lastError) {
-      return console.debug('error creating item:' + browser.runtime.lastError);
-    }
-
-    console.debug('item created successfully');
-
-    // create listener for this item that launches Options page onClick
-    browser.menus.onClicked.addListener(() => {
-      if (browser.runtime.openOptionsPage) {
-        browser.runtime.openOptionsPage();
-      } else {
-        window.open(browser.runtime.getURL('options.html'));
-      }
-    })
-  };
-
-  try {
-    // create bookmark context menu item Options
-    browser.menus.create({
-      id: 'Options',
-      type: 'normal',
-      title: 'Options',
-      contexts: ['browser_action'],
-    }, onBookmarkCreation);
-  } catch (e) {
-    // browser object is not available
-  }
-};
-
-const setupContextMenu = () => {
-  // Create one menu item for each context type.
-  // NOTE: available contexts = "page","selection","link","editable","image","video","audio". Code is set up ready for the future addition of contexts via the contexts veriable.
-  const context = 'selection';
-  const title = 'Imageshare Search';
-
-  const menuId = `parent ${context}`;
-
-  // Create a parent item and two children.
-  browser.contextMenus.create({
-    title: title,
-    contexts: [context],
-    id: menuId
-  });
-
-  browser.contextMenus.create({
-    title: 'Standard Search',
-    contexts: [context],
-    parentId: menuId,
-    id: 'standard'
-  });
-
-  browser.contextMenus.create({
-    title: 'Advanced Search',
-    contexts:[context],
-    parentId: menuId,
-    id: 'advanced'
-  });
-
-  createFirefoxBookmarkMenuItem();
+  // Initiate search by subtype
+  handleMessagePayload({subtype: option, selection: selection});
 };
 
 const onExtensionMessage = function(data, _sender, sendResponse) {
+  console.debug('Extension received message', data);
+
   // User Settings Notification
   if (data.type === MESSAGE_TYPE.NOTIFICATION) {
-    console.debug("message received " + JSON.stringify(data.options));
     displayNotification(data.title, data.message);
   }
 
-  // Search innitiated from popup.js
+  // Search initiated from popup.js
   if (data.type === MESSAGE_TYPE.SEARCH) {
     handleMessagePayload(data);
     //send response reset
   }
 
-  // Search innitiated from popup.js input
+  // Search initiated from popup.js input
   if (data.type === MESSAGE_TYPE.INPUT) {
     handleMessagePayload(data);
     //send response reset
   }
 
-  //dark mode icon toggle
+  // Adjust icon for dark color scheme contrast
   if (data.scheme === DARK_SCHEME) {
-    browser.browserAction.setIcon({ path : ICON_PATHS });
+    browser.browserAction.setIcon({ path : LIGHT_ICON_PATHS });
   }
 
   sendResponse();
@@ -209,11 +142,11 @@ const onExtensionMessage = function(data, _sender, sendResponse) {
 //message handling
 
 const init = () => {
-  browser.runtime.onInstalled.addListener(setupContextMenu);
+  createContextMenu();
   browser.contextMenus.onClicked.addListener(onContextMenuClick);
   browser.runtime.onMessage.addListener(onExtensionMessage);
 
-  console.debug("Background script loaded.");
+  console.debug('Background script loaded.');
 };
 
-window.addEventListener("load", init);
+window.addEventListener('load', init);

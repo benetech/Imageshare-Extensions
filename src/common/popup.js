@@ -1,4 +1,5 @@
 import { el, show, hide } from './util';
+import browser from 'get-browser';
 
 import './style.css';
 
@@ -25,13 +26,13 @@ const showSecondForm = () => {
   show(secondForm);
 };
 
-const withActiveTab = f => chrome.tabs.query({
+const withActiveTab = f =>  browser.tabs.query({
   active: true,
   currentWindow: true
 }, tabs => f(tabs[0]));
 
 const doStandardSearch = () => withActiveTab(tab => {
-  chrome.tabs.sendMessage(tab.id, MESSAGE.STANDARD_SEARCH, response => {
+  browser.tabs.sendMessage(tab.id, MESSAGE.STANDARD_SEARCH, response => {
     if (response === RESPONSE.RUN_INPUT) {
       showSecondForm();
     }
@@ -39,20 +40,20 @@ const doStandardSearch = () => withActiveTab(tab => {
 });
 
 const doAdvancedSearch = () => withActiveTab(tab => {
-  chrome.tabs.sendMessage(tab.id, MESSAGE.ADVANCED_SEARCH, response => {
+  browser.tabs.sendMessage(tab.id, MESSAGE.ADVANCED_SEARCH, response => {
     if (response === RESPONSE.RUN_INPUT) {
       showSecondForm();
     }
   });
 });
 
-const doStandardInputSearch = () => chrome.runtime.sendMessage({
+const doStandardInputSearch = () => browser.runtime.sendMessage({
   type: 'input',
   subtype: 'standard',
   selection: el('search').value
 });
 
-const doAdvancedInputSearch = () => chrome.runtime.sendMessage({
+const doAdvancedInputSearch = () => browser.runtime.sendMessage({
   type: 'input',
   subtype: 'advanced',
   selection: el('search').value

@@ -1,10 +1,10 @@
-import { ENV, MESSAGE } from './constants';
+import { MESSAGE } from './constants';
 import { setMouseCursorBusy, setMouseCursorReady } from './util';
 import browser from 'get-browser';
 
-const environment = 'development';
+console.debug(`Loading Imageshare extension in ${environment.name} mode`);
 
-if (environment === ENV.DEVELOPMENT) {
+if (environment.isDevelopment) {
   browser.storage.local.clear();
 }
 
