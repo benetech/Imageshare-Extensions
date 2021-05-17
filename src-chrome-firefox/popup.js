@@ -46,14 +46,20 @@ stSearchButton.addEventListener("click",
 
   //check input for new value
   userSearch = searchInput.value;
+  console.log(`User input with trim: ${userSearch.trim()}` )
 
   //send search request and selection to index
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  if (userSearch.length > 0) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'standard', selection: userSearch}, function(response) {
       console.log(response)
 
     });
   });
+  } else {
+    //highlight and box "no selection found" and alert for SRs
+  }
+
 
 
  })
@@ -65,16 +71,16 @@ advSearchButton.addEventListener("click",
   //check input for new value
   userSearch = searchInput.value;
 
-  //send search request and selection to index
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'advanced', selection: userSearch}, function(response) {
-      console.log(response)
+  if (userSearch.length > 0) {
+    //send search request and selection to index
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {type: 'search-only', subtype: 'advanced', selection: userSearch}, function(response) {
+        console.log(response)
 
+      });
     });
-  });
-
+  } else {
+    //highlight and box "no selection found" and alert for SRs
+  }
  });
-
-
-
 })
