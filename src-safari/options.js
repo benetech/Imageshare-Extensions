@@ -305,6 +305,7 @@ window.addEventListener("DOMContentLoaded",
           }
          var notification = new Notification(title, options);
 
+        //remove comment for production
         //  window.close()
          })
     }
