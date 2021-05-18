@@ -1,7 +1,9 @@
 export const MESSAGE = {
   SEARCH: 'search',
   WORKING: 'working',
-  READY: 'reset'
+  READY: 'reset',
+  NOTIFICATION: 'notification',
+  INPUT: 'input'
 };
 
 export const LIGHT_ICON_PATHS = {

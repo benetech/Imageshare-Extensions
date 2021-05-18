@@ -4,6 +4,14 @@ export const qs = q => document.querySelector(q);
 export const show = el => el.style.display = 'block';
 export const hide = el => el.style.display = 'none';
 
+export const getUserSelection = () => {
+  if (window.getSelection) {
+    return window.getSelection().toString();
+  }
+
+  return '';
+};
+
 export const setMouseCursorBusy = () => document.body.style.cursor = 'wait';
 export const setMouseCursorReady = () => document.body.style.cursor = 'default';
 
@@ -21,51 +29,51 @@ export const parseSubjects = subjects => {
 
   // create a id => name structure
   const toIdList = (list, subject) => {
-      list.push({
-          id: subject.id,
-          attributes: {
-              name: subject.attributes.name
-          }
-      });
+    list.push({
+      id: subject.id,
+      attributes: {
+        name: subject.attributes.name
+      }
+    });
 
-      subject.children.forEach(c => list.push({
-          id: c.id,
-          attributes: {
-              name: [subject.attributes.name, c.attributes.name].join(' - ')
-          }
-      }));
+    subject.children.forEach(c => list.push({
+      id: c.id,
+      attributes: {
+        name: [subject.attributes.name, c.attributes.name].join(' - ')
+      }
+    }));
 
-      return list;
+    return list;
   };
 
   // applicative functor sort
   const sortByName = f => (a, b) => {
-      a = f(a).toUpperCase();
-      b = f(b).toUpperCase();
+    a = f(a).toUpperCase();
+    b = f(b).toUpperCase();
 
-      return a < b ? -1 : a > b ? 1 : 0;
+    return a < b ? -1 : a > b ? 1 : 0;
   };
 
   // add children to a parent subject
   const amendChildren = children => parent => {
-      parent.children = children
-          .filter(c => c.relationships.parent.data.id === parent.id)
-          .sort(sortByName(i => i.attributes.name));
+    parent.children = children
+      .filter(c => c.relationships.parent.data.id === parent.id)
+      .sort(sortByName(i => i.attributes.name));
 
-      return parent;
+    return parent;
   };
 
   const result =
-      // all subjects
-      subjects
-      // only the parents
-      .filter(isParent)
-      // add the children, if any, sorted alphabetically by name
-      .map(amendChildren(subjects.filter(isChild)))
-      // map to id => name list
-      .reduce(toIdList, [])
-      // sort by parent name
-      .sort(sortByName(i => i.attributes.name));
+    // all subjects
+    subjects
+    // only the parents
+    .filter(isParent)
+    // add the children, if any, sorted alphabetically by name
+    .map(amendChildren(subjects.filter(isChild)))
+    // map to id => name list
+    .reduce(toIdList, [])
+    // sort by parent name
+    .sort(sortByName(i => i.attributes.name));
 
-      return result;
+    return result;
 };

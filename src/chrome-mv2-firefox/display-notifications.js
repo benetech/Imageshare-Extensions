@@ -17,3 +17,5 @@ export const sendNotificationMessage = (title, message) => {
     }
   });
 };
+
+export const backgroundNotification = sendNotificationMessage;

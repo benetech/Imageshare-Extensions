@@ -1,17 +1,11 @@
-import { LIGHT_ICON_PATHS, IMGS_API_URL } from './constants';
+import { MESSAGE, LIGHT_ICON_PATHS, IMGS_API_URL } from './constants';
 import { getActiveTabSetting, getSettings } from './settings';
 import { fetchJson } from './util';
-import { displayNotification } from 'display-notification';
-import createContextMenu from 'create-context-menu';
+import { backgroundNotification } from 'display-notification';
 import browser from 'get-browser';
+import startupBackgroundScript from 'startup-background-script';
 
 const DARK_SCHEME = 'dark';
-
-const MESSAGE_TYPE = {
-  SEARCH: 'search',
-  INPUT: 'input',
-  NOTIFICATION: 'notification'
-};
 
 const PAYLOAD_TYPE = {
   STANDARD: 'imageshare-standard-search',
@@ -39,18 +33,18 @@ const doStandardSearch = selection => {
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
-        return displayNotification(`No results found for ${selection}`, 'Please try another selection');
+        return backgroundNotification(`No results found for ${selection}`, 'Please try another selection');
       }
 
       if (results.length === 1) {
         console.debug(`One result found for ${selection}`);
         openImageshare(results[0].permalink);
-        return displayNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
+        return backgroundNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
       }
 
       console.debug(`${results.length} found for ${selection}`);
       openImageshare('https://imageshare.benetech.org/?page=search&q=' + selection);
-      displayNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
+      backgroundNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
     })
     .catch(e => console.error('Unable to fetch standard search query results from API', e));
 };
@@ -60,7 +54,7 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
-        return displayNotification(`No results found for ${selection}`, 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page');
+        return backgroundNotification(`No results found for ${selection}`, 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page');
       }
 
       if (results.length === 1) {
@@ -69,12 +63,12 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
         const resultURL = results[0].permalink;
         openImageshare(resultURL);
 
-        return displayNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
+        return backgroundNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
       }
 
       console.debug(`${results.length} found for ${selection}`);
       openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc);
-      displayNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
+      backgroundNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
     })
     .catch(e => console.error('Unable to fetch advanced search query results from API', e));
 };
@@ -92,7 +86,7 @@ const handleMessagePayload = data => {
       if (criteria === undefined){
         //alert user to go to options and set criteria
         console.debug(`No pre-existing criteria, notifying user.`);
-        displayNotification('No advanced search criteria.', 'Extension options opened as active browser tab. Please configure search criteria.');
+        backgroundNotification('No advanced search criteria.', 'Extension options opened as active browser tab. Please configure search criteria.');
         openOptionsPage();
       } else {
         doAdvancedSearch(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
@@ -111,22 +105,22 @@ const onContextMenuClick = (info, _tab) => {
   handleMessagePayload({subtype: option, selection: selection});
 };
 
-const onExtensionMessage = function(data, _sender, sendResponse) {
+const onExtensionMessage = (data, _sender, sendResponse) => {
   console.debug('Extension received message', data);
 
   // User Settings Notification
-  if (data.type === MESSAGE_TYPE.NOTIFICATION) {
+  if (data.type === MESSAGE.NOTIFICATION) {
     displayNotification(data.title, data.message);
   }
 
   // Search initiated from popup.js
-  if (data.type === MESSAGE_TYPE.SEARCH) {
+  if (data.type === MESSAGE.SEARCH) {
     handleMessagePayload(data);
     //send response reset
   }
 
   // Search initiated from popup.js input
-  if (data.type === MESSAGE_TYPE.INPUT) {
+  if (data.type === MESSAGE.INPUT) {
     handleMessagePayload(data);
     //send response reset
   }
@@ -139,14 +133,4 @@ const onExtensionMessage = function(data, _sender, sendResponse) {
   sendResponse();
 };
 
-//message handling
-
-const init = () => {
-  createContextMenu();
-  browser.contextMenus.onClicked.addListener(onContextMenuClick);
-  browser.runtime.onMessage.addListener(onExtensionMessage);
-
-  console.debug('Background script loaded.');
-};
-
-window.addEventListener('load', init);
+startupBackgroundScript(onContextMenuClick, onExtensionMessage);

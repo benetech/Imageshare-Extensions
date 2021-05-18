@@ -18,12 +18,18 @@ const getResolveConfig = target => { return {
 			? path.resolve(__dirname, './src/common/get-browser-chrome.js')
 			: path.resolve(__dirname, './src/common/get-browser-browser.js'),
 		'display-notification$': supportsExtensionNotifications(target)
-			? path.resolve(__dirname, './src/common/extension-notifications.js')
-			: path.resolve(__dirname, './src/common/browser-notifications.js'),
+			? path.resolve(__dirname, './src/chrome-mv2-firefox/display-notifications.js')
+			: path.resolve(__dirname, './src/chrome-mv3-safari/display-notifications.js'),
     'create-context-menu$': isWebkitOrBlink(target)
       ? path.resolve(__dirname, './src/chrome-mv2/create-context-menu.js')
-      : path.resolve(__dirname, './src/firefox/create-context-menu.js')
-	}
+      : path.resolve(__dirname, './src/firefox/create-context-menu.js'),
+    'setup-message-handling$': ['chrome-mv2', 'firefox'].includes(target)
+      ? path.resolve(__dirname, './src/chrome-mv2-firefox/setup-message-handling.js')
+      : path.resolve(__dirname, './src/chrome-mv3-safari/setup-message-handling.js'),
+    'startup-background-script$': ['chrome-mv2', 'firefox'].includes(target)
+    ? path.resolve(__dirname, './src/chrome-mv2-firefox/startup-background-script.js')
+    : path.resolve(__dirname, './src/chrome-mv3-safari/startup-background-script.js'),
+}
 } };
 
 const getManifestPath = target => {
