@@ -43,13 +43,11 @@ function runAPIstandard (selection) {
   })
     .then(response => response.json())
     .then(json => {
-      // console.log('Response from Imageshare: ' + json.data);
       const results = json.data;
 
       if (results.length === 0) {
         console.log(`No results found for ${selection}`);
         notification(`No results found for ${selection}`, 'Please try another selection');
-
       } else if (results.length === 1) {
         console.log(`${results.length} found for ${selection}`);
 
@@ -61,7 +59,6 @@ function runAPIstandard (selection) {
       console.log(`${results.length} found for ${selection}`);
       openImageshare(newURL);
       notification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
-
     }
   })
     .catch(error => console.error('On GET data error', error));
@@ -128,7 +125,6 @@ function subtypeHandling (data) {
           console.log(JSON.stringify(criteria))
           runAPIadvanced(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
         }
-
       })
   }
 }
@@ -176,15 +172,17 @@ chrome.runtime.onInstalled.addListener(function() {
         console.log("error creating item:" + browser.runtime.lastError);
       } else {
         console.log("item created successfully");
-
-        // create listener for this item that launches Options page onClick
-        browser.menus.onClicked.addListener(() => {
-          if (browser.runtime.openOptionsPage) {
-            browser.runtime.openOptionsPage();
-          } else {
-            window.open(browser.runtime.getURL('options.html'));
+        //create listener for this item that launches Options page onClick
+        browser.menus.onClicked.addListener((info, tab) => {
+          if (info.menuItemId == "Options") {
+            if (browser.runtime.openOptionsPage) {
+              browser.runtime.openOptionsPage();
+            } else {
+              window.open(browser.runtime.getURL('options.html'));
+            }
           }
         })
+
       }
     }
 

@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if(msg.type === 'selection') {
     let userSelection = selection()
 
-    if (userSelection) {
+    if (userSelection && userSelection !== undefined) {
       sendResponse(userSelection)
     }
     else {
