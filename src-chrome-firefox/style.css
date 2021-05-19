@@ -85,6 +85,16 @@ a {
   background-color: white;
 }
 
+.submit-btn:focus, .submit-btn:hover, .listbox-button:focus, .listbox-button:hover, #search:focus, #search:hover,
+input:hover, input:focus {
+  outline: 2px solid darkblue;
+      /* add some space between the outline and the button for clearer focus indication */
+      outline-offset: 2px;
+      /* change the color of the button for added focus indication */
+      /* background-color: red; */
+
+}
+
 .refinements-wrapper {
 
   clear: both;
