@@ -4,6 +4,11 @@ console.log("Content script has loaded via Manifest V3.");
 //For dev only REMOVE FOR PRODUCTION
 chrome.storage.local.clear();
 
+// Dark Mode Recognition
+if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  chrome.runtime.sendMessage({ scheme: "dark" })
+}
+
 //Notifications from Background
 function notifyMe (msg) {
   const title = msg.title;

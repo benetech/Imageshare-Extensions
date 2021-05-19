@@ -79,6 +79,12 @@ a {
     outline: 2px solid darkblue;
 }
 
+.submit-btn:focus,
+.submit-btn:active {
+  color: #0c4471;
+  background-color: white;
+}
+
 .refinements-wrapper {
 
   clear: both;
@@ -327,4 +333,3 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
 
 
 }
-
