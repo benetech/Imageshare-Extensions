@@ -32,12 +32,7 @@ const getResolveConfig = target => { return {
 }
 } };
 
-const getManifestPath = target => {
-	return supportsManifestV3(target)
-		? './src/common/manifest-v3.json'
-		: './src/common/manifest-v2.json'
-	;
-}
+const getManifestPath = target => supportsManifestV3(target) ? './src/common/manifest-v3.json' : './src/common/manifest-v2.json';
 
 module.exports = env => {
 	if (!env.build_target || !VALID_BUILD_TARGETS.includes(env.build_target)) {
