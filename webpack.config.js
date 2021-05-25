@@ -6,18 +6,18 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { ProvidePlugin } = require('webpack');
+const { DefinePlugin } = require('webpack');
 
 const isWebkitOrBlink = target => target !== 'firefox';
 const supportsManifestV3 = target => target === 'chrome-mv3';
-const supportsExtensionNotifications = target => !supportsManifestV3(target);
+const supportsExtensionNotifications = target => ['chrome-mv2', 'firefox'].includes(target);
 
 const getResolveConfig = target => { return {
 	alias: {
 		'get-browser$': isWebkitOrBlink(target)
 			? path.resolve(__dirname, './src/common/get-browser-chrome.js')
 			: path.resolve(__dirname, './src/common/get-browser-browser.js'),
-		'display-notification$': supportsExtensionNotifications(target)
+		'display-notifications$': supportsExtensionNotifications(target)
 			? path.resolve(__dirname, './src/chrome-mv2-firefox/display-notifications.js')
 			: path.resolve(__dirname, './src/chrome-mv3-safari/display-notifications.js'),
     'create-context-menu$': isWebkitOrBlink(target)
@@ -71,14 +71,19 @@ module.exports = env => {
 		},
 		output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'dist', env.build_target),
       clean: true
     },
 		plugins: [
-      new ProvidePlugin({
-        environment: mode === 'development'
-          ? [path.resolve(__dirname, './src/common/environment-development.js'), 'default']
-          : [path.resolve(__dirname, './src/common/environment-production.js'), 'default']
+      new DefinePlugin({
+        PACKAGE_NAME: JSON.stringify(package.name),
+        PACKAGE_VERSION: JSON.stringify(package.version),
+        BUILD_TARGET: JSON.stringify(env.build_target),
+        environment: JSON.stringify({
+          isDevelopment: mode === 'development',
+          isProduction: mode === 'production',
+          name: mode
+        })
       }),
       new HtmlWebpackPlugin({
         filename: 'options.html',

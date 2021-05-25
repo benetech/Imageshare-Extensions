@@ -1,8 +1,15 @@
+import browser from 'get-browser';
+
 export const el = id => document.getElementById(id);
 export const qs = q => document.querySelector(q);
 
 export const show = el => el.style.display = 'block';
 export const hide = el => el.style.display = 'none';
+
+export const withActiveTab = f => browser.tabs.query({
+  active: true,
+  currentWindow: true
+}, tabs => f(tabs[0]));
 
 export const getUserSelection = () => {
   if (window.getSelection) {

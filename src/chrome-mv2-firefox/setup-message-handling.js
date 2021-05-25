@@ -1,40 +1,34 @@
 import browser from 'get-browser';
 import { getUserSelection, setMouseCursorBusy, setMouseCursorReady } from '../common/util';
+import { COMMAND, KEEP_CHANNEL_OPEN, TARGET } from '../common/constants';
 
 const onExtensionMessage = (msg, _sender, sendResponse) => {
-  // messages from popup.js
+  console.debug('Index receiving message', msg);
 
-  if (msg.type === MESSAGE.SEARCH){
-    const userSelection = getUserSelection();
-
-    if (userSelection.trim().length) {
-      console.debug('message received in index.js: ' + userSelection)
-      //Send selection to background to run our search functions
-      browser.runtime.sendMessage({
-        type: msg.type,
-        subtype: msg.subtype,
-        selection: userSelection
-      });
-
-      sendResponse("to popup.js from index.js")
-    } else {
-      console.debug('no user selection found');
-      // prompt user to input search criteria
-      sendResponse('run input')
-    }
+  if (msg.target !== TARGET.CONTENT) {
+    return KEEP_CHANNEL_OPEN;
   }
 
-  if (msg.type === MSG.WORKING) {
+  if (msg.command === COMMAND.GET_SELECTION) {
+    const selection = getUserSelection().trim();
+
+    if (selection.length) {
+      sendResponse(selection)
+    }
+
+    sendResponse(null);
+  }
+
+  if (msg.command === COMMAND.WORKING) {
     setMouseCursorBusy();
   }
 
-  if (msg.type === MSG.READY) {
+  if (msg.command === COMMAND.READY) {
     setMouseCursorReady();
   }
 
-  return true; // keep the channel open
+  // keep the channel open
+  return KEEP_CHANNEL_OPEN;
 };
 
-export default () => {
-  browser.runtime.onMessage.addListener(onExtensionMessage);
-}
+export default () => browser.runtime.onMessage.addListener(onExtensionMessage);

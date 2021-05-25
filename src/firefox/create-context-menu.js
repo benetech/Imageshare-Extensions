@@ -1,8 +1,10 @@
 import browser from 'get-browser';
 
+const MENU_ID = "Options";
+
 const onMenuCreation = id => () => {
   if (browser.runtime.lastError) {
-    console.eerror(`Error creating menu item ${id}: ${browser.runtime.lastError}`);
+    console.error(`Error creating menu item ${id}: ${browser.runtime.lastError}`);
   } else {
     console.debug(`Menu item ${id} created successfully.`);
   }
@@ -19,7 +21,8 @@ const createFirefoxBookmarkMenuItem = () => {
     console.debug('Bookmark menu item created successfully');
 
     // create listener for this item that launches Options page onClick
-    browser.menus.onClicked.addListener(() => {
+    browser.menus.onClicked.addListener((info, _tab) => {
+      if (info.menuItemId === MENU_ID)
       if (browser.runtime.openOptionsPage) {
         browser.runtime.openOptionsPage();
       } else {
@@ -29,7 +32,7 @@ const createFirefoxBookmarkMenuItem = () => {
   };
 
   browser.menus.create({
-    id: 'Options',
+    id: MENU_ID,
     type: 'normal',
     title: 'Options',
     contexts: ['browser_action'],

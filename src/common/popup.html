@@ -9,33 +9,25 @@
   <body class="popup">
     <h1 class="main-heading">Imageshare Search</h1>
 
-    <!-- aria-hidden="false" ? -->
-    <form id="view-one" role="search">
-      <section>
-        <button type="button" class="submit-btn" id="standard-search">Run Standard Search</button>
-        <button type="button" class="submit-btn" id="advanced-search">Run Advanced Search</button>
-      </section>
-    </form>
-
-    <!-- aria-hidden="true" ?-->
-    <form id="view-two" role="search" aria-describedby="no-search-desc" >
-      <div class="sr-only changeMsg" role="alert" aria-live="assertive" aria-atomic="true">Attention: No Selection Found</div>
+    <form role="search">
       <section>
         <div class="popup">
-          <legend>No Selection Found</legend>
-          <p id="no-search-desc">It seems there is no text selected. Please input your desired search term(s) in the input below:</p>
+          <legend class="view-one">Selection Found</legend>
+          <p id="no-search-desc" class="view-one">Please check that your desired search term(s) is correct in the input below:</p>
+
+          <legend class="view-two" role="alert" aria-live="assertive" aria-atomic="true">No Selection Found</legend>
+          <p id="no-search-desc" class="view-two">It seems there is no text selected. Please input your desired search term(s) in the input below:</p>
 
           <div>
-            <label for="search">Search Term:</label>
-            <input type="search" id="search" name="imgs">
+            <label for="search">Search Term: <span id="required" class="sr-only">search term is </span>*required</span></label>
+            <input type="search" id="search" name="imgs" aria-required="true">
           </div>
         </div>
 
-        <button type="button" class="submit-btn" id="standard-search-input">Run Standard Search</button>
-        <button type="button" class="submit-btn" id="advanced-search-input">Run Advanced Search</button>
-    </section>
-    </form>
+        <button type="button" class="submit-btn" id="standard-search">Run Standard Search</button>
+        <button type="button" class="submit-btn" id="advanced-search">Run Advanced Search</button>
 
-    <script src="popup.js"></script>
+      </section>
+    </form>
   </body>
 </html>

@@ -1,24 +1,24 @@
-import Screenshot from '../../icons/Imageshare-logo-no-text-2000x2000.png';
 import browser from 'get-browser';
+import { withActiveTab } from '../common/util';
+import { COMMAND, TARGET } from '../common/constants';
 
-export const displayNotification = (title, message) => {
+const screenShot = browser.runtime.getURL('icons/Imageshare-logo-no-text.png');
+
+export const createNotification = (title, message) => {
 	new Notification(title, {
 		body: message,
-		icon: Screenshot
+		icon: screenShot
   });
 };
 
-export const sendNotificationMessage = displayNotification;
-
-export const backgroundNotification = (title, message) => {
-	browser.tabs.query({active: true, currentWindow: true}, tabs => {
-		browser.tabs.sendMessage(tabs[0].id, {
-		  type: 'notification',
-		  title: title,
-		  message: message,
-		  icon: Screenshot,
-		}, response => {
-		  console.debug('response', response);
-    });
-  });
+export const displayNotification = (title, message) => {
+	withActiveTab(tab => {
+		browser.tabs.sendMessage(tab.id, {
+			command: COMMAND.NOTIFICATION,
+			target: TARGET.CONTENT,
+			title: title,
+			message: message,
+			icon: screenShot,
+		  });
+	});
 }

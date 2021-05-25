@@ -1,22 +1,16 @@
 import browser from 'get-browser';
-import { MESSAGE } from '../common/constants';
+import { createNotification } from 'display-notifications';
+import { COMMAND, TARGET, KEEP_CHANNEL_OPEN } from '../common/constants';
 import { getUserSelection } from '../common/util';
 
 const PERMISSION_GRANTED = 'granted';
 const PERMISSION_DENIED = 'denied';
 
 const handleNotification = payload => {
-  const title = payload.title;
-
-  const options = {
-    body: payload.message,
-    icon: payload.icon
-  };
-  
   // Let's check whether notification permissions have already been granted
   if (Notification.permission === PERMISSION_GRANTED) {
     // If it's okay let's create a notification
-    return new Notification(title, options);
+    return createNotification(payload.title, payload.message);
   }
 
   // Otherwise, we need to ask the user for permission
@@ -24,35 +18,43 @@ const handleNotification = payload => {
     Notification.requestPermission().then(permission => {
       // If the user accepts, let's create a notification
       if (permission === PERMISSION_GRANTED) {
-        new Notification(title, options);
+        return createNotification(payload.title, payload.message);
       }
     });
   }
 };
 
 const onExtensionMessage = (msg, _sender, sendResponse) => {
-  if (msg.type === MESSAGE.NOTIFICATION) {
+  console.debug('Index receiving message', msg);
+
+  if (msg.target !== TARGET.CONTENT) {
+    return KEEP_CHANNEL_OPEN;
+  }
+
+  if (msg.command === COMMAND.GET_SELECTION) {
+    const selection = getUserSelection().trim();
+
+    if (selection.length) {
+      sendResponse(selection)
+    }
+
+    sendResponse(null);
+  }
+
+  if (msg.command === COMMAND.NOTIFICATION) {
     handleNotification(msg);
   }
 
-  else if (msg.type === MESSAGE.SEARCH){
-    const userSelection = getUserSelection();
-
-    if (userSelection.trim().length) {
-      console.log('message received in index.js: ' + userSelection)
-      //Send selection to background to run our search functions
-      browser.runtime.sendMessage({type: msg.type, subtype: msg.subtype,selection: userSelection});
-      sendResponse("to popup.js from index.js")
-    } else {
-      console.log('no user selection found');
-      sendResponse('run input')
-      //prompt user to input search criteria
-    }
+  if (msg.command === COMMAND.SEARCH) {
+    browser.runtime.sendMessage({
+      command: COMMAND.BACKGROUND_SEARCH,
+      type: msg.type,
+      selection: msg.selection
+    });
   }
-
-  sendResponse();
-
-  return true; // keep the channel open
+ 
+  // keep the channel open
+  return KEEP_CHANNEL_OPEN;
 }
 
 export default () => browser.runtime.onMessage.addListener(onExtensionMessage);
