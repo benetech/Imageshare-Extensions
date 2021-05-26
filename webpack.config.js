@@ -41,6 +41,11 @@ module.exports = env => {
 
   const mode = env.hasOwnProperty('environment') && env.environment === 'production' ? 'production' : 'development';
 
+  const destPath = mode == 'production'
+    ? path.resolve(__dirname, ['build', env.build_target, package.version].join('-'))
+    : path.resolve(__dirname, 'dist', env.build_target)
+  ;
+
 	const generateExtensionManifest = content => {
 		const manifest = JSON.parse(content);
 
@@ -60,7 +65,7 @@ module.exports = env => {
 	return {
 		mode: 'production',
     optimization: {
-      minimize: false
+      minimize: mode === 'production'
     },
 		resolve: getResolveConfig(env.build_target),
 		entry: {
@@ -71,7 +76,7 @@ module.exports = env => {
 		},
 		output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, 'dist', env.build_target),
+      path: destPath,
       clean: true
     },
 		plugins: [

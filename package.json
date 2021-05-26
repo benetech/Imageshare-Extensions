@@ -8,11 +8,18 @@
   ],
   "main": "index.js",
   "scripts": {
-    "build-firefox": "./node_modules/.bin/webpack --env build_target=firefox",
-    "build-chrome-mv2": "./node_modules/.bin/webpack --env build_target=chrome-mv2",
-    "build-chrome-mv3": "./node_modules/.bin/webpack --env build_target=chrome-mv3",
-    "build-safari": "./node_modules/.bin/webpack --env build_target=safari",
+    "dev-firefox": "./node_modules/.bin/webpack --env build_target=firefox",
+    "dev-chrome-mv2": "./node_modules/.bin/webpack --env build_target=chrome-mv2",
+    "dev-chrome-mv3": "./node_modules/.bin/webpack --env build_target=chrome-mv3",
+    "dev-safari": "./node_modules/.bin/webpack --env build_target=safari",
+
+    "build-firefox": "./node_modules/.bin/webpack --env build_target=firefox --env environment=production",
+    "build-chrome-mv2": "./node_modules/.bin/webpack --env build_target=chrome-mv2 --env environment=production",
+    "build-chrome-mv3": "./node_modules/.bin/webpack --env build_target=chrome-mv3 --env environment=production",
+    "build-safari": "./node_modules/.bin/webpack --env build_target=safari --env environment=production",
+    
     "build-all": "npm run build-firefox && npm run build-chrome-mv2 && npm run build-chrome-mv3 && npm run build-safari",
+    
     "test": "echo \"Error: no test specified\" && exit 1",
     "zip": "zip -r chrome-extension.zip .\\dist"
   },
