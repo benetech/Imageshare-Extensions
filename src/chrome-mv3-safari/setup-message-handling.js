@@ -1,7 +1,7 @@
 import browser from 'get-browser';
 import { createNotification } from 'display-notifications';
 import { COMMAND, TARGET, KEEP_CHANNEL_OPEN } from '../common/constants';
-import { getUserSelection } from '../common/util';
+import { getUserSelection, setMouseCursorBusy, setMouseCursorReady } from '../common/util';
 
 const PERMISSION_GRANTED = 'granted';
 const PERMISSION_DENIED = 'denied';
@@ -52,7 +52,15 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
       selection: msg.selection
     });
   }
- 
+
+  if (msg.command === COMMAND.WORKING) {
+    setMouseCursorBusy();
+  }
+
+  if (msg.command === COMMAND.READY) {
+    setMouseCursorReady();
+  }
+
   // keep the channel open
   return KEEP_CHANNEL_OPEN;
 }

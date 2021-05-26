@@ -1,6 +1,6 @@
 import { COMMAND, TARGET, LIGHT_ICON_PATHS, IMGS_API_URL, DARK_SCHEME, SEARCH } from './constants';
 import { getActiveTabSetting, getSettings } from './settings';
-import { fetchJson } from './util';
+import { fetchJson, withActiveTab } from './util';
 import { displayNotification } from 'display-notifications';
 import browser from 'get-browser';
 import startupBackgroundScript from 'startup-background-script';
@@ -22,7 +22,7 @@ const getAdvancedSearchApiQueryResults = (selection, userSubject, userType, user
 }
 
 const doStandardSearch = selection => {
-  getStandardSearchApiQueryResults(selection)
+  return getStandardSearchApiQueryResults(selection)
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
@@ -43,7 +43,7 @@ const doStandardSearch = selection => {
 };
 
 const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) => {
-  getAdvancedSearchApiQueryResults(selection, userSubject, userType, userAcc, userSrc)
+  return getAdvancedSearchApiQueryResults(selection, userSubject, userType, userAcc, userSrc)
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
@@ -74,7 +74,7 @@ const handleMessagePayload = data => {
 
   if (data.type === SEARCH.ADVANCED) {
     // get criteria
-    getSettings().then(criteria => {
+    return getSettings().then(criteria => {
       // if criteria present then use, otherwise alert user and redirect to options
       if (criteria === undefined){
         //alert user to go to options and set criteria
@@ -86,6 +86,24 @@ const handleMessagePayload = data => {
       }
     });
   }
+};
+
+const working = () => {
+  withActiveTab(tab => {
+    browser.tabs.sendMessage(tab.id, {
+      command: COMMAND.WORKING,
+      target: TARGET.CONTENT
+    });
+  });
+};
+
+const ready = () => {
+  withActiveTab(tab => {
+    browser.tabs.sendMessage(tab.id, {
+      command: COMMAND.READY,
+      target: TARGET.CONTENT
+    });
+  })
 };
 
 const onContextMenuClick = (info, _tab) => {
@@ -100,11 +118,13 @@ const onContextMenuClick = (info, _tab) => {
   console.debug(`Menu item ${option} clicked with selection "${selection}"`);
 
   // Initiate search by subtype
+  working();
+
   handleMessagePayload({
     command: COMMAND.BACKGROUND_SEARCH,
     type: optionToCommandMap[option], 
     selection: selection
-  });
+  }).then(ready);
 };
 
 const onExtensionMessage = (msg, _sender, sendResponse) => {
@@ -121,8 +141,8 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
 
   // Search initiated from popup.js
   if (msg.command && msg.command === COMMAND.SEARCH) {
-    handleMessagePayload(msg);
-    //send response reset
+    working();
+    handleMessagePayload(msg).then(ready)
   }
 
   // Adjust icon for dark color scheme contrast
