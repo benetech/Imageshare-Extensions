@@ -1,8 +1,10 @@
 import browser from 'get-browser';
 import setupMessageHandling from 'setup-message-handling';
-// import { DARK_SCHEME, TARGET } from './constants';
+import { DARK_SCHEME, TARGET } from './constants';
 
-console.debug(`Loading Imageshare extension in ${environment.name} mode`);
+const details = [PACKAGE_NAME, BUILD_TARGET, PACKAGE_VERSION, environment.name];
+
+console.debug('Loading:', details.join(' • '));
 
 if (environment.isDevelopment) {
   browser.storage.local.clear();
@@ -10,12 +12,14 @@ if (environment.isDevelopment) {
 
 setupMessageHandling();
 
-  // // Dark Mode Recognition
-  // if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  //   chrome.runtime.sendMessage({
-  //     target: TARGET.BACKGROUND,
-  //     scheme: DARK_SCHEME
-  //   })
-  // }
+// Dark Mode Recognition
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  console.debug('Switching to dark theme.');
 
-console.debug(['Content script active', BUILD_TARGET, PACKAGE_NAME, PACKAGE_VERSION].join(' / '));
+  chrome.runtime.sendMessage({
+    target: TARGET.BACKGROUND,
+    scheme: DARK_SCHEME
+  })
+}
+
+console.debug('Content script ready:', details.join(' • '));

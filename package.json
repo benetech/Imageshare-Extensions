@@ -1,5 +1,5 @@
 {
-  "name": "Imageshare-Extensions",
+  "name": "Imageshare Browser Extension",
   "version": "1.0.0",
   "description": "Imageshare Search: Searches imageshare keywords for matches with users current site content. Notifies user of matches and opens Imageshare, in a net window, to results view",
   "browserslist": [
