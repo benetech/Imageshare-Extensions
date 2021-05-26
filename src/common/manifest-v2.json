@@ -21,6 +21,7 @@
     "nativeMessaging",
     "activeTab",
     "bookmarks",
+    "unlimitedStorage",
     "*://*/*"
   ],
   "browser_specific_settings": {

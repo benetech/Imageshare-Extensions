@@ -16,6 +16,7 @@
     "storage",
     "tabs",
     "scripting",
+    "unlimitedStorage",
     "activeTab"
   ],
   "host_permissions": ["*://*/*"],
