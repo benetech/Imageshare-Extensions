@@ -26,18 +26,18 @@ const doStandardSearch = selection => {
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
-        return displayNotification(`No results found for ${selection}`, 'Please try another selection');
+        return displayNotification(`No results`, `"${selection}" yielded no Imageshare entries.`);
       }
 
       if (results.length === 1) {
         console.debug(`One result found for ${selection}`);
         openImageshare(results[0].permalink);
-        return displayNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
+        return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
       console.debug(`${results.length} found for ${selection}`);
       openImageshare('https://imageshare.benetech.org/?page=search&q=' + selection);
-      displayNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
+      displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
     .catch(e => console.error('Unable to fetch standard search query results from API', e));
 };
@@ -47,7 +47,7 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
     .then(results => {
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
-        return displayNotification(`No results found for ${selection}`, 'Please try another selection or adjust your Advanced Search criteria via this extensions "OPTIONS" page');
+        return displayNotification(`No results found for ${selection}`, 'Try another selection or adjust your search criteria.');
       }
 
       if (results.length === 1) {
@@ -56,12 +56,12 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
         const resultURL = results[0].permalink;
         openImageshare(resultURL);
 
-        return displayNotification(`${results.length} result found for ${selection}`, 'Your Imageshare result has been opened for you in a new tab.');
+        return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
       console.debug(`${results.length} found for ${selection}`);
       openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc);
-      displayNotification(`${results.length} results found for ${selection}`, 'Imageshare has been opened for you in the next tab. Your results are waiting for you there.');
+      displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
     .catch(e => console.error('Unable to fetch advanced search query results from API', e));
 };
@@ -79,7 +79,7 @@ const handleMessagePayload = data => {
       if (criteria === undefined){
         //alert user to go to options and set criteria
         console.debug(`No pre-existing criteria, notifying user.`);
-        displayNotification('No advanced search criteria.', 'Extension options opened as active browser tab. Please configure search criteria.');
+        displayNotification('No advanced search criteria set.', 'Configure advanced search criteria on options page.');
         openOptionsPage();
       } else {
         doAdvancedSearch(data.selection, criteria.subject, criteria.type, criteria.accommodation, criteria.source);
