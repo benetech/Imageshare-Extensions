@@ -29,7 +29,7 @@ const getResolveConfig = target => { return {
     'startup-background-script$': ['chrome-mv2', 'firefox'].includes(target)
       ? path.resolve(__dirname, './src/chrome-mv2-firefox/startup-background-script.js')
       : path.resolve(__dirname, './src/chrome-mv3-safari/startup-background-script.js'),
-    'get-browser-action$': supportsManifestV3
+    'get-browser-action$': supportsManifestV3(target)
       ? path.resolve(__dirname, './src/chrome-mv3-safari/get-browser-action.js')
       : path.resolve(__dirname, './src/chrome-mv2-firefox/get-browser-action.js')
   }
