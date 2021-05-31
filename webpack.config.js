@@ -27,9 +27,12 @@ const getResolveConfig = target => { return {
       ? path.resolve(__dirname, './src/chrome-mv2-firefox/setup-message-handling.js')
       : path.resolve(__dirname, './src/chrome-mv3-safari/setup-message-handling.js'),
     'startup-background-script$': ['chrome-mv2', 'firefox'].includes(target)
-    ? path.resolve(__dirname, './src/chrome-mv2-firefox/startup-background-script.js')
-    : path.resolve(__dirname, './src/chrome-mv3-safari/startup-background-script.js'),
-}
+      ? path.resolve(__dirname, './src/chrome-mv2-firefox/startup-background-script.js')
+      : path.resolve(__dirname, './src/chrome-mv3-safari/startup-background-script.js'),
+    'get-browser-action$': supportsManifestV3
+      ? path.resolve(__dirname, './src/chrome-mv3-safari/get-browser-action.js')
+      : path.resolve(__dirname, './src/chrome-mv2-firefox/get-browser-action.js')
+  }
 } };
 
 const getManifestPath = target => supportsManifestV3(target) ? './src/common/manifest-v3.json' : './src/common/manifest-v2.json';

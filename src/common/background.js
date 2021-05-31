@@ -4,6 +4,7 @@ import { fetchJson, withActiveTab } from './util';
 import { displayNotification } from 'display-notifications';
 import browser from 'get-browser';
 import startupBackgroundScript from 'startup-background-script';
+import browserAction from 'get-browser-action';
 
 const normaliseSearchParameter = p => {
   if ((p === undefined) || (p == '0')) {
@@ -32,7 +33,7 @@ const getAdvancedSearchApiQueryResults = (selection, subject, type, accommodatio
 const doStandardSearch = selection => {
   return getStandardSearchApiQueryResults(selection)
     .then(results => {
-      browser.browserAction.setBadgeText({ text: results.length.toString() });
+      browserAction.setBadgeText({ text: results.length.toString() });
 
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
@@ -62,7 +63,7 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
 
   return getAdvancedSearchApiQueryResults(selection, subject, type, accommodation, source)
     .then(results => {
-      browser.browserAction.setBadgeText({ text: results.length.toString() });
+      browserAction.setBadgeText({ text: results.length.toString() });
 
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
@@ -169,7 +170,7 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   // Adjust icon for dark color scheme contrast
   if (msg.scheme && msg.scheme === DARK_SCHEME) {
     console.debug('Setting dark color scheme icons');
-    browser.browserAction.setIcon({
+    browserAction.setIcon({
       path: LIGHT_ICON_PATHS
     });
   }
