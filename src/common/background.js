@@ -154,9 +154,9 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   // Adjust icon for dark color scheme contrast
   if (msg.scheme && msg.scheme === DARK_SCHEME) {
     console.debug('Setting dark color scheme icons');
-    // browser.browserAction.setIcon({
-    //   path: LIGHT_ICON_PATHS
-    // });
+    browser.browserAction.setIcon({
+      path: LIGHT_ICON_PATHS
+    });
   }
 
   sendResponse();
