@@ -1,5 +1,5 @@
 import { COMMAND, TARGET, LIGHT_ICON_PATHS, IMGS_API_URL, DARK_SCHEME, SEARCH } from './constants';
-import { getActiveTabSetting, getSettings } from './settings';
+import { getActiveTabSetting, getStoredUserSettings } from './settings';
 import { fetchJson, withActiveTab } from './util';
 import { displayNotification } from 'display-notifications';
 import browser from 'get-browser';
@@ -66,6 +66,8 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
     .catch(e => console.error('Unable to fetch advanced search query results from API', e));
 };
 
+const criteriaNotYetSet = criteria => criteria.notSet;
+
 // seperating standard from advanced calls
 const handleMessagePayload = data => {
   if (data.type === SEARCH.STANDARD) {
@@ -74,9 +76,9 @@ const handleMessagePayload = data => {
 
   if (data.type === SEARCH.ADVANCED) {
     // get criteria
-    return getSettings().then(criteria => {
+    return getStoredUserSettings().then(criteria => {
       // if criteria present then use, otherwise alert user and redirect to options
-      if (criteria === undefined){
+      if (criteriaNotYetSet(criteria)) {
         //alert user to go to options and set criteria
         console.debug(`No pre-existing criteria, notifying user.`);
         displayNotification('No advanced search criteria set.', 'Configure advanced search criteria on options page.');
