@@ -24,6 +24,8 @@ const getAdvancedSearchApiQueryResults = (selection, userSubject, userType, user
 const doStandardSearch = selection => {
   return getStandardSearchApiQueryResults(selection)
     .then(results => {
+      browser.browserAction.setBadgeText({ text: results.length.toString() });
+
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
         return displayNotification(`No results`, `"${selection}" yielded no Imageshare entries.`);
@@ -35,7 +37,7 @@ const doStandardSearch = selection => {
         return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
-      console.debug(`${results.length} found for ${selection}`);
+      console.debug(`${results.length} results found for "${selection}"`);
       openImageshare('https://imageshare.benetech.org/?page=search&q=' + selection);
       displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
@@ -45,6 +47,8 @@ const doStandardSearch = selection => {
 const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) => {
   return getAdvancedSearchApiQueryResults(selection, userSubject, userType, userAcc, userSrc)
     .then(results => {
+      browser.browserAction.setBadgeText({ text: results.length.toString() });
+
       if (results.length === 0) {
         console.debug(`No results found for "${selection}"`);
         return displayNotification(`No results found for ${selection}`, 'Try another selection or adjust your search criteria.');
@@ -59,7 +63,7 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
         return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
-      console.debug(`${results.length} found for ${selection}`);
+      console.debug(`${results.length} results found for "${selection}"`);
       openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc);
       displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
@@ -150,12 +154,14 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   // Adjust icon for dark color scheme contrast
   if (msg.scheme && msg.scheme === DARK_SCHEME) {
     console.debug('Setting dark color scheme icons');
-    browser.browserAction.setIcon({
-      path: LIGHT_ICON_PATHS
-    });
+    // browser.browserAction.setIcon({
+    //   path: LIGHT_ICON_PATHS
+    // });
   }
 
   sendResponse();
+
+  return true;
 };
 
 startupBackgroundScript(onContextMenuClick, onExtensionMessage);

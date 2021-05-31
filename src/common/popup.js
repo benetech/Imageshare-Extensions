@@ -46,27 +46,6 @@ const doAdvancedSearch = () => {
   browser.runtime.sendMessage(payload, response => console.debug('advanced search response', response));
 };
 
-// const xdoStandardSearch = () => withActiveTab(tab => {
-//   const payload = {
-//     command: 'search-only',
-//     type: 'standard',
-//     selection: getUserSearchTerm()
-//   };
-
-//   browser.tabs.sendMessage(tab.id, payload, response => console.debug(response));
-// });
-
-// const xdoAdvancedSearch = () => withActiveTab(tab => {
-//   const payload = {
-//     command: 'search-only',
-//     type: 'advanced',
-//     selection: getUserSearchTerm()
-//   };
-
-//   browser.tabs.sendMessage(tab.id, payload, response => console.debug(response) );
-// });
-
-
 const init = () => {
   el('standard-search').addEventListener('click', doStandardSearch);
   el('advanced-search').addEventListener('click', doAdvancedSearch);
