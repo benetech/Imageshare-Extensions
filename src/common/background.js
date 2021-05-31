@@ -5,6 +5,14 @@ import { displayNotification } from 'display-notifications';
 import browser from 'get-browser';
 import startupBackgroundScript from 'startup-background-script';
 
+const normaliseSearchParameter = p => {
+  if ((p === undefined) || (p == '0')) {
+    return '';
+  }
+
+  return encodeURIComponent(p)
+};
+
 const openImageshare = url => getActiveTabSetting().then(active => browser.tabs.create({url: url, active: active}));
 
 const openOptionsPage = () => {
@@ -15,10 +23,21 @@ const openOptionsPage = () => {
   }
 };
 
-const getStandardSearchApiQueryResults = selection => fetchJson(`${IMGS_API_URL}filter/?query=${selection}`);
+const getStandardSearchApiQueryResults = selection => {
+  selection = encodeURIComponent(selection);
+
+  return fetchJson(`${IMGS_API_URL}filter/?query=${selection}`);
+};
 
 const getAdvancedSearchApiQueryResults = (selection, userSubject, userType, userAcc, userSrc) => {
-  return fetchJson(`${IMGS_API_URL}filter/?query=${selection}&subject=${userSubject}&type=${userType}&acc=${userAcc}&src=${userSrc}`);
+  const subject = normaliseSearchParameter(userSubject);
+  const type = normaliseSearchParameter(userType);
+  const accommodation = normaliseSearchParameter(userAcc);
+  const source = normaliseSearchParameter(userSrc);
+
+  selection = encodeURIComponent(selection);
+
+  return fetchJson(`${IMGS_API_URL}filter/?query=${selection}&subject=${subject}&type=${type}&acc=${accommodation}&src=${source}`);
 }
 
 const doStandardSearch = selection => {

@@ -18,6 +18,7 @@ export const storeApiOptions = async options => {
 export const getStoredUserSettings = async () => {
   return new Promise(resolve => {
     browser.storage.local.get(['settings'], result => {
+
       if (result.settings === undefined) {
         return resolve({
           subject: undefined,
@@ -39,17 +40,20 @@ export const getActiveTabSetting = () => new Promise(resolve => {
 });
 
 export const storeUserSettings = async (subject, type, accommodation, source, setActiveTab) => {
-  const timeStamp = new Date().getTime();
+  const normalise = v => v === 0 ? undefined : v;
+
+  const payload = {
+    'settings': {
+      'subject': subject ? normalise(subject.value) : undefined,
+      'type': type ? normalise(type.value) : undefined,
+      'accommodation': accommodation ? normalise(accommodation.value) : undefined,
+      'source': source ? source.id : undefined,
+      'setActiveTab': !!setActiveTab,
+      'timestamp': new Date().getTime()
+    }
+  };
+
   return new Promise(resolve => {
-    browser.storage.local.set({
-        'settings': {
-            'subject': subject ? subject.value : 0,
-            'type': type ? type.value : 0,
-            'accommodation': accommodation ? accommodation.value : 0,
-            'source': source ? source.id : 0,
-            'setActiveTab': !!setActiveTab,
-            'timestamp': timeStamp
-        }
-    }, resolve);
+    browser.storage.local.set(payload, resolve);
   });
 }
