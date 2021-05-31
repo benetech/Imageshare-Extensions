@@ -23,20 +23,9 @@ const openOptionsPage = () => {
   }
 };
 
-const getStandardSearchApiQueryResults = selection => {
-  selection = encodeURIComponent(selection);
+const getStandardSearchApiQueryResults = selection => fetchJson(`${IMGS_API_URL}filter/?query=${selection}`);
 
-  return fetchJson(`${IMGS_API_URL}filter/?query=${selection}`);
-};
-
-const getAdvancedSearchApiQueryResults = (selection, userSubject, userType, userAcc, userSrc) => {
-  const subject = normaliseSearchParameter(userSubject);
-  const type = normaliseSearchParameter(userType);
-  const accommodation = normaliseSearchParameter(userAcc);
-  const source = normaliseSearchParameter(userSrc);
-
-  selection = encodeURIComponent(selection);
-
+const getAdvancedSearchApiQueryResults = (selection, subject, type, accommodation, source) => {
   return fetchJson(`${IMGS_API_URL}filter/?query=${selection}&subject=${subject}&type=${type}&acc=${accommodation}&src=${source}`);
 }
 
@@ -64,7 +53,14 @@ const doStandardSearch = selection => {
 };
 
 const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) => {
-  return getAdvancedSearchApiQueryResults(selection, userSubject, userType, userAcc, userSrc)
+  const subject = normaliseSearchParameter(userSubject);
+  const type = normaliseSearchParameter(userType);
+  const accommodation = normaliseSearchParameter(userAcc);
+  const source = normaliseSearchParameter(userSrc);
+
+  selection = encodeURIComponent(selection);
+
+  return getAdvancedSearchApiQueryResults(selection, subject, type, accommodation, source)
     .then(results => {
       browser.browserAction.setBadgeText({ text: results.length.toString() });
 
@@ -83,7 +79,7 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
       }
 
       console.debug(`${results.length} results found for "${selection}"`);
-      openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + userSubject + "&type=" + userType + "&acc=" + userAcc + "&src=" + userSrc);
+      openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + subject + "&type=" + type + "&acc=" + accommodation + "&src=" + source);
       displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
     .catch(e => console.error('Unable to fetch advanced search query results from API', e));
