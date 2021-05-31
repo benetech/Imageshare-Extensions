@@ -367,6 +367,16 @@ button[aria-haspopup="listbox"] + [role="listbox"] {
   display: none;
 }
 
+#no-advanced-settings {
+  margin-top: 1em;
+  padding: 1em;
+  border: 2px solid red;
+  border-radius: 5px;
+  background-color: pink;
+
+  display: none;
+}
+
 /* May provide alternate styles for dark mode below */
 /* This may not be supported outside of Safari just yet */
 @media (prefers-color-scheme: dark) {

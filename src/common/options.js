@@ -1,8 +1,11 @@
-import { el, qs, fetchJson, parseSubjects } from './util';
+import { show, hide, el, qs, fetchJson, parseSubjects } from './util';
 import { getStoredApiOptions, storeApiOptions, getStoredUserSettings, storeUserSettings } from './settings';
 import aria from './aria-listbox-expandable';
 
 import './style.css';
+
+const settingsSavedNotification = el('settings-saved');
+const noAdvancedSettingsWarning = el('no-advanced-settings');
 
 const getSpinner = function (contentElement, spinnerElement, statusElement, loadingMessage, readyMessage) {
   return {
@@ -120,7 +123,8 @@ const setupMiscellaneousControls = userSettings => {
 
   saveButton.addEventListener('click', async function () {
     await storeSettings();
-    el('settings-saved').removeAttribute('hidden');
+    settingsSavedNotification.removeAttribute('hidden');
+    hide(noAdvancedSettingsWarning);
   });
 };
 
@@ -135,6 +139,8 @@ const init = async () => {
 
   spinner.loading();
 
+  const userSettings = await getStoredUserSettings();
+
   let options = await getStoredApiOptions();
 
   if (options === undefined || optionsAreStale(options)) {
@@ -142,13 +148,15 @@ const init = async () => {
       await storeApiOptions(options);
   }
 
-  const userSettings = await getStoredUserSettings();
-
   renderCustomDropdowns(options, userSettings);
 
   setupMiscellaneousControls(userSettings);
 
   spinner.finished();
+
+  if (userSettings.notSet) {
+    show(noAdvancedSettingsWarning);
+  }
 };
 
 window.addEventListener("load", init);

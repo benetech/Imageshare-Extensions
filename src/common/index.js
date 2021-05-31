@@ -6,6 +6,11 @@ const details = [PACKAGE_NAME, BUILD_TARGET, PACKAGE_VERSION, environment.name];
 
 console.debug('Loading:', details.join(' • '));
 
+if (environment.isDevelopment) {
+  console.debug('Clearing storage');
+  browser.storage.local.clear();
+}
+
 setupMessageHandling();
 
 // Dark Mode Recognition
