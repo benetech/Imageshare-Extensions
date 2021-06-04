@@ -6,6 +6,7 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 
 const isWebkitOrBlink = target => target !== 'firefox';
@@ -71,7 +72,11 @@ module.exports = env => {
 	return {
 		mode: 'production',
     optimization: {
-      minimize: mode === 'production'
+      minimize: mode === 'production',
+      // don't generate license.txt files -- https://github.com/webpack-contrib/terser-webpack-plugin/issues/229
+      minimizer: [new TerserPlugin({
+        extractComments: false,
+      })],
     },
 		resolve: getResolveConfig(env.build_target),
 		entry: {
