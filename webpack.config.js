@@ -31,7 +31,10 @@ const getResolveConfig = target => { return {
       : path.resolve(__dirname, './src/chrome-mv3-safari/startup-background-script.js'),
     'get-browser-action$': supportsManifestV3(target)
       ? path.resolve(__dirname, './src/chrome-mv3-safari/get-browser-action.js')
-      : path.resolve(__dirname, './src/chrome-mv2-firefox/get-browser-action.js')
+      : path.resolve(__dirname, './src/chrome-mv2-firefox/get-browser-action.js'),
+    'tab-send-message$': target === 'firefox'
+      ? path.resolve(__dirname, './src/firefox/tab-send-message.js')
+      : path.resolve(__dirname, './src/chrome-mv2-mv3-safari/tab-send-message.js')
   }
 } };
 

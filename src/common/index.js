@@ -1,6 +1,7 @@
 import browser from 'get-browser';
 import setupMessageHandling from 'setup-message-handling';
 import { DARK_SCHEME, TARGET } from './constants';
+import './content.css';
 
 const details = [PACKAGE_NAME, BUILD_TARGET, PACKAGE_VERSION, environment.name];
 

@@ -1,6 +1,8 @@
 import { el, qs, withActiveTab } from './util';
+import { getSearchTerms } from './find-terms';
 import { COMMAND, SEARCH, TARGET } from './constants';
 import browser from 'get-browser';
+import sendTabMessage from 'tab-send-message';
 
 import './style.css';
 
@@ -46,9 +48,27 @@ const doAdvancedSearch = () => {
   browser.runtime.sendMessage(payload, response => console.debug('advanced search response', response));
 };
 
+const doFindTerms = function () {
+  const self = this;
+  self.setAttribute('disabled', '');
+
+  getSearchTerms().then(terms => {
+    const payload = {
+      command: COMMAND.FIND_TERMS,
+      target: TARGET.CONTENT,
+      terms: terms
+    };
+
+    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined).then(() => {
+      self.removeAttribute('disabled');
+    }));
+  });
+};
+
 const init = () => {
   el('standard-search').addEventListener('click', doStandardSearch);
   el('advanced-search').addEventListener('click', doAdvancedSearch);
+  el('find-terms').addEventListener('click', doFindTerms);
 
   getUserSelection().then(selection => {
     if (selection === null) {

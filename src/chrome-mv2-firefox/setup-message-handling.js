@@ -1,6 +1,7 @@
 import browser from 'get-browser';
-import { getUserSelection, setMouseCursorBusy, setMouseCursorReady } from '../common/util';
+import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl } from '../common/util';
 import { COMMAND, KEEP_CHANNEL_OPEN, TARGET } from '../common/constants';
+import { wrapTerms } from '../common/find-terms';
 
 const onExtensionMessage = (msg, _sender, sendResponse) => {
   console.debug('Index receiving message', msg);
@@ -25,6 +26,16 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
 
   if (msg.command === COMMAND.READY) {
     setMouseCursorReady();
+  }
+
+  if (msg.command === COMMAND.FIND_TERMS) {
+    wrapTerms(msg.terms).then(nodes => {
+      nodes.forEach(node => {
+        node.setAttribute('aria-label', 'Imageshare search: "' + node.textContent + '"');
+        node.setAttribute('href', getQueryUrl(node.textContent));
+      });
+    });
+    sendResponse(true);
   }
 
   // keep the channel open

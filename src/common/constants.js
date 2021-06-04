@@ -3,7 +3,8 @@ export const COMMAND = {
   WORKING: 'working',
   READY: 'reset',
   NOTIFICATION: 'notification',
-  GET_SELECTION: 'get-selection'
+  GET_SELECTION: 'get-selection',
+  FIND_TERMS: 'find-terms'
 };
 
 export const TARGET = {
@@ -26,5 +27,6 @@ export const LIGHT_ICON_PATHS = {
 };
 
 export const IMGS_API_URL = 'https://imgsdev.wpengine.com/json-api/resources/';
+export const IMGS_TERMS_ENDPOINT = 'https://imgsdev.wpengine.com/json-api/terms';
 
 export const KEEP_CHANNEL_OPEN = true;

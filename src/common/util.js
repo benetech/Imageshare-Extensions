@@ -2,6 +2,7 @@ import browser from 'get-browser';
 
 export const el = id => document.getElementById(id);
 export const qs = q => document.querySelector(q);
+export const qsa = q => document.querySelectorAll(q);
 
 export const show = el => el.style.display = 'block';
 export const hide = el => el.style.display = 'none';
@@ -25,9 +26,9 @@ export const setMouseCursorReady = () => document.body.style.cursor = 'default';
 export const getQueryUrl = selection => "https://imageshare.benetech.org/?page=search&q=" + encodeURIComponent(selection);
 
 export const fetchJson = url => fetch(url, {
-  method: 'GET'
+  method: 'GET',
+  mode: 'cors'
 }).then(response => response.json()).then(json => json.data);
-
 
 export const parseSubjects = subjects => {
   // filters
