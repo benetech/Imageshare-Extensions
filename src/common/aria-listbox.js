@@ -301,9 +301,22 @@ aria.Listbox.prototype.findMatchInRange = function (list, startIndex, endIndex) 
  *  The click event object
  */
 aria.Listbox.prototype.checkClickItem = function (evt) {
-  if (evt.target.getAttribute('role') === 'option') {
-    this.focusItem(evt.target);
-    this.toggleSelectItem(evt.target);
+  let target;
+
+  const hasOptionRole = target => target.getAttribute('role') === 'option';
+
+  if (hasOptionRole(evt.target)) {
+    target = evt.target;
+  }
+
+  // decorative option image child
+  if (evt.target.nodeName === 'IMG' && hasOptionRole(evt.target.parentNode)) {
+    target = evt.target.parentNode;
+  }
+
+  if (target) {
+    this.focusItem(target);
+    this.toggleSelectItem(target);
     this.updateScroll();
   }
 };
