@@ -96,14 +96,14 @@
               </div>
             </div>
 
-            <p tabindex="0">When a new Imageshare search is opened, would you like the new tab to be opened in the foreground making this new tab your Active Tab?</p>
-            <div>
-              <input type="checkbox" id="active-tab" name="active-tab" checked>
+            <div class="field-group bordered">
+              <p id="active-tab-hint" tabindex="0">Automatically switch your current active browser tab to the one containing your search results.</p>
+              <input type="checkbox" id="active-tab" name="active-tab" checked="checked" aria-describedby="active-tab-hint">
               <label for="active-tab">Imageshare as Active Tab</label>
             </div>
 
           <div class="submit-btn-wrapper">
-            <button type="button" class="submit-btn" id="save-advanced-settings"><span>Save Your Settings</span></button>
+            <button type="button" class="submit-btn" id="save-advanced-settings">Save settings</button>
           </div>
       </fieldset>
     </form>
