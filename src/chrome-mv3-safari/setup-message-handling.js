@@ -1,7 +1,7 @@
 import browser from 'get-browser';
 import { createNotification } from 'display-notifications';
 import { COMMAND, TARGET, KEEP_CHANNEL_OPEN } from '../common/constants';
-import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl } from '../common/util';
+import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl, announce } from '../common/util';
 import { wrapTerms } from '../common/find-terms';
 
 const PERMISSION_GRANTED = 'granted';
@@ -66,6 +66,7 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
 
   if (msg.command === COMMAND.WORKING) {
     setMouseCursorBusy();
+    announce("Imageshare - working...");
   }
 
   if (msg.command === COMMAND.READY) {

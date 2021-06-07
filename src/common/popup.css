@@ -1,0 +1,148 @@
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+  
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  color: #222222;
+  
+  min-width: 22em;
+}
+  
+h1 img {
+  max-height: 1em;
+}
+
+/* Keyboard / Buttons */
+kbd {
+  padding: 2px 4px;
+  color: #fff;
+  background-color: #333;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);
+  font-family: monospace, monospace;
+  font-size: 1em;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);
+}
+
+kbd kbd { padding: 0;
+  font-size: 100%;
+  font-weight: bold;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+a {
+  color: #0c4471;
+  text-decoration: underline;
+}
+
+.field-group {
+  margin-bottom: 1em;
+}
+
+.field-group label {
+  display: block;
+  margin-bottom: .5em;
+}
+
+.submit-btn {
+  font-size: 1.2em;
+  color: white;
+  border: 1px solid #737369;
+  border-radius: 10px;
+  background-color: #0c4471;
+  padding: .3em .5em;
+  white-space: nowrap;
+  border: 1px solid #00275c;
+}
+
+.submit-btn:focus,
+.submit-btn:hover {
+  outline: 2px solid darkblue;
+}
+
+.submit-btn:focus,
+.submit-btn:active {
+  color: #0c4471;
+  background-color: white;
+}
+
+.submit-btn[disabled] {
+  border: 1px solid #aaa;
+  background-color: #d3d3d3;
+  color: #000;
+}
+
+.submit-btn:focus, .submit-btn:hover, .listbox-button:focus, .listbox-button:hover, #search:focus, #search:hover,
+input:hover, input:focus {
+  outline: 2px solid darkblue;
+  /* add some space between the outline and the button for clearer focus indication */
+  outline-offset: 2px;
+  /* change the color of the button for added focus indication */
+  /* background-color: red; */
+}
+
+.validation-hint {
+  display: none;
+  border: 1px solid #aa0000;
+  border-radius: 5px;
+  padding: .2em;
+  margin-bottom: .5em;
+  background: pink;
+}
+
+
+.validation-error .validation-hint {
+  display: inline-block;
+}
+
+.validation-error #search {
+  border-color: #AA0000;
+}
+
+.required {
+  color: #AA0000;
+}
+
+@keyframes loading-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner:before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: .2em;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #000;
+  animation: loading-spinner 2s linear infinite;
+}
+
+@media screen and (prefers-reduced-motion: reduce), (update: slow) {
+  .loading-spinner {
+    display: none;
+  }
+}
+
+#find-terms + .loading-spinner {
+  display: none;
+}
+
+#find-terms[disabled] + .loading-spinner {
+  display: inline-block;
+}
+
+/* May provide alternate styles for dark mode below */
+/* This may not be supported outside of Safari just yet */
+/* @media (prefers-color-scheme: dark) {
+  img {
+    filter: invert(1);
+  }
+} */

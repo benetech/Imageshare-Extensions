@@ -20,6 +20,21 @@ export const getUserSelection = () => {
   return '';
 };
 
+export const announce = text => {
+  let container = el('imageshare-extension-announce');
+
+  if (!container) {
+    let container = document.createElement('div');
+    container.id = 'imageshare-extension-announce';
+    container.setAttribute('role', 'alert');
+    container.classList.add('imageshare-sr-only');
+    document.body.appendChild(container);
+  }
+
+  container.textContent = '';
+  container.textContent = text;
+};
+
 export const setMouseCursorBusy = () => document.body.style.cursor = 'wait';
 export const setMouseCursorReady = () => document.body.style.cursor = 'default';
 

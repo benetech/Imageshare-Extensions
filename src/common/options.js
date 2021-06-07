@@ -2,7 +2,7 @@ import { show, hide, el, qs, fetchJson, parseSubjects } from './util';
 import { getStoredApiOptions, storeApiOptions, getStoredUserSettings, storeUserSettings } from './settings';
 import aria from './aria-listbox-expandable';
 
-import './style.css';
+import './options.css';
 
 const settingsSavedNotification = el('settings-saved');
 const noAdvancedSettingsWarning = el('no-advanced-settings');

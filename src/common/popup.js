@@ -4,13 +4,18 @@ import { COMMAND, SEARCH, TARGET } from './constants';
 import browser from 'get-browser';
 import sendTabMessage from 'tab-send-message';
 
-import './style.css';
+import './popup.css';
 
 const getUserSearchTerm = () => el('search').value;
 const setUserSearchTerm = term => el('search').value = term;
 
-const showNoSelectionDOM = () => {
-  qs('form[role="search"]').classList.add('no-selection');
+const showNoSearchTermDOM = () => {
+  qs('.search-term.field-group').classList.add('validation-error');
+  el('no-search-keyword').focus();
+};
+
+const hideNoSearchTermDOM = () => {
+  qs('.search-term.field-group').classList.remove('validation-error');
 };
 
 const getUserSelection = () => {
@@ -26,23 +31,34 @@ const getUserSelection = () => {
   });
 };
 
-const doStandardSearch = () => {
+const withSearchTerm = fn => () => {
+  const term = getUserSearchTerm();
+
+  if (term.trim() === '') {
+    return showNoSearchTermDOM();
+  }
+
+  hideNoSearchTermDOM();
+  fn(term);
+};
+
+const doStandardSearch = term => {
   const payload = {
     command: COMMAND.SEARCH,
     target: TARGET.BACKGROUND,
     type: SEARCH.STANDARD,
-    selection: getUserSearchTerm()
+    selection: term
   };
 
   browser.runtime.sendMessage(payload, response => console.debug('standard search response', response));
 };
 
-const doAdvancedSearch = () => {
+const doAdvancedSearch = term => {
   const payload = {
     command: COMMAND.SEARCH,
     target: TARGET.BACKGROUND,
     type: SEARCH.ADVANCED,
-    selection: getUserSearchTerm()
+    selection: term
   };
 
   browser.runtime.sendMessage(payload, response => console.debug('advanced search response', response));
@@ -66,16 +82,14 @@ const doFindTerms = function () {
 };
 
 const init = () => {
-  el('standard-search').addEventListener('click', doStandardSearch);
-  el('advanced-search').addEventListener('click', doAdvancedSearch);
+  el('standard-search').addEventListener('click', withSearchTerm(doStandardSearch));
+  el('advanced-search').addEventListener('click', withSearchTerm(doAdvancedSearch));
   el('find-terms').addEventListener('click', doFindTerms);
 
   getUserSelection().then(selection => {
-    if (selection === null) {
-      return showNoSelectionDOM();
+    if (selection !== null) {
+      setUserSearchTerm(selection);
     }
-    
-    setUserSearchTerm(selection);
   });
 
   console.debug('Popup handler loaded');
