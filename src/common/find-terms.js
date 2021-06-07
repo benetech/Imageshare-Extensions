@@ -38,13 +38,13 @@ export const getSearchTerms = () => {
 };
 
 export const wrapTerms = terms => {
-  terms.forEach(term => {
-    findAndReplaceDOMText(document.body, {
-      find: new RegExp('\\b' + term + '\\b', 'gi'),
-      wrap: 'a',
-      wrapClass: 'imageshare-term',
-      filterElements: filterElements
-    });
+  // generating a huge OR-regex is way way way faster than generating a regex for each word.
+
+  findAndReplaceDOMText(document.body, {
+    find: new RegExp('\\b(' + terms.join('|') + ')\\b', 'gi'),
+    wrap: 'a',
+    wrapClass: 'imageshare-term',
+    filterElements: filterElements
   });
 
   return Promise.resolve(qsa('a.imageshare-term'));
