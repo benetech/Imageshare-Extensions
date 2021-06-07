@@ -1,5 +1,5 @@
 import { show, hide, el, qs, fetchJson, parseSubjects } from './util';
-import { getStoredApiOptions, storeApiOptions, getStoredUserSettings, storeUserSettings } from './settings';
+import { getStoredApiOptions, storeApiOptions, getStoredUserSettings, storeUserSettings, hasAdvancedSearchCriteriaDefined } from './settings';
 import aria from './aria-listbox-expandable';
 
 import './options.css';
@@ -154,7 +154,7 @@ const init = async () => {
 
   spinner.finished();
 
-  if (userSettings.notSet) {
+  if (!hasAdvancedSearchCriteriaDefined(userSettings)) {
     show(noAdvancedSettingsWarning);
   }
 };
