@@ -131,12 +131,18 @@ input:hover, input:focus {
   }
 }
 
-#find-terms + .loading-spinner {
+#find-terms + .loading-spinner,
+#search-buttons .loading-spinner {
   display: none;
 }
 
-#find-terms[disabled] + .loading-spinner {
+#find-terms[disabled] + .loading-spinner,
+#search-buttons.searching .loading-spinner {
   display: inline-block;
+}
+
+#search-buttons.searching .loading-spinner {
+  margin-top: .5em;
 }
 
 /* May provide alternate styles for dark mode below */

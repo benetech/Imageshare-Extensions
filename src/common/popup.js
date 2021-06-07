@@ -43,6 +43,8 @@ const withSearchTerm = fn => () => {
 };
 
 const doStandardSearch = term => {
+  el('search-buttons').classList.add('searching');
+
   const payload = {
     command: COMMAND.SEARCH,
     target: TARGET.BACKGROUND,
@@ -50,10 +52,12 @@ const doStandardSearch = term => {
     selection: term
   };
 
-  browser.runtime.sendMessage(payload, response => console.debug('standard search response', response));
+  browser.runtime.sendMessage(payload, _ => el('search-buttons').classList.remove('searching'));
 };
 
 const doAdvancedSearch = term => {
+  el('search-buttons').classList.add('searching');
+
   const payload = {
     command: COMMAND.SEARCH,
     target: TARGET.BACKGROUND,
@@ -61,7 +65,7 @@ const doAdvancedSearch = term => {
     selection: term
   };
 
-  browser.runtime.sendMessage(payload, response => console.debug('advanced search response', response));
+  browser.runtime.sendMessage(payload, _ => el('search-buttons').classList.remove('searching'));
 };
 
 const doFindTerms = function () {

@@ -159,12 +159,13 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   // User Settings Notification
   if (msg.command && msg.command === COMMAND.NOTIFICATION) {
     displayNotification(msg.title, msg.message);
+    sendResponse();
   }
 
   // Search initiated from popup.js
   if (msg.command && msg.command === COMMAND.SEARCH) {
     working();
-    handleMessagePayload(msg).then(ready)
+    handleMessagePayload(msg).then(ready).then(sendResponse)
   }
 
   // Adjust icon for dark color scheme contrast
@@ -173,9 +174,8 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
     browserAction.setIcon({
       path: LIGHT_ICON_PATHS
     });
+    sendResponse();
   }
-
-  sendResponse();
 
   return true;
 };
