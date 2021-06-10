@@ -68,6 +68,43 @@ const doAdvancedSearch = term => {
   browser.runtime.sendMessage(payload, _ => el('search-buttons').classList.remove('searching'));
 };
 
+const renderFoundTerms = terms => {
+  const container = el('search-results');
+
+  container.dataset.results = !!terms.length;
+
+  if (terms.length === 0) {
+    return;
+  }
+
+  const label = qs('#search-results label');
+  const select = qs('#search-results select');
+  const viewResults = el('view-term');
+
+  label.textContent = terms.length + ' keywords found in dpage.';
+  label.focus();
+
+  terms.sort().forEach(term => {
+    const node = document.createElement('option');
+    node.value = term;
+    node.textContent = term;
+    select.appendChild(node);
+  });
+
+  viewResults.addEventListener('click', () => {
+    const selectedOption = select.selectedOptions[0];
+
+    const payload = {
+      command: COMMAND.VIEW_TERM,
+      target: TARGET.CONTENT,
+      term: selectedOption.value
+    };
+
+    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined));
+
+  });
+};
+
 const doFindTerms = function () {
   const self = this;
   self.setAttribute('disabled', '');
@@ -79,7 +116,8 @@ const doFindTerms = function () {
       terms: terms
     };
 
-    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined).then(() => {
+    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined).then(terms => {
+      renderFoundTerms(terms);
       self.removeAttribute('disabled');
     }));
   });

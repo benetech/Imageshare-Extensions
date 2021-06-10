@@ -2,7 +2,7 @@ import browser from 'get-browser';
 import { createNotification } from 'display-notifications';
 import { COMMAND, TARGET, KEEP_CHANNEL_OPEN } from '../common/constants';
 import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl, announce } from '../common/util';
-import { wrapTerms } from '../common/find-terms';
+import { findTerms } from '../common/find-terms';
 
 const PERMISSION_GRANTED = 'granted';
 const PERMISSION_DENIED = 'denied';
@@ -55,13 +55,11 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   }
 
   if (msg.command === COMMAND.FIND_TERMS) {
-    wrapTerms(msg.terms).then(nodes => {
-      nodes.forEach(node => {
-        node.setAttribute('aria-label', 'Imageshare search: "' + node.textContent + '"');
-        node.setAttribute('href', getQueryUrl(node.textContent));
-      });
-    });
-    sendResponse(true);
+    findTerms(msg.terms).then(sendResponse);
+  }
+
+  if (msg.command === COMMAND.VIEW_TERM) {
+    document.location.href = getQueryUrl(msg.term);
   }
 
   if (msg.command === COMMAND.WORKING) {

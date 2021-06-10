@@ -4,7 +4,8 @@ export const COMMAND = {
   READY: 'reset',
   NOTIFICATION: 'notification',
   GET_SELECTION: 'get-selection',
-  FIND_TERMS: 'find-terms'
+  FIND_TERMS: 'find-terms',
+  VIEW_TERM: 'view-term'
 };
 
 export const TARGET = {

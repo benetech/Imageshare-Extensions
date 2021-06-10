@@ -152,3 +152,20 @@ input:hover, input:focus {
     filter: invert(1);
   }
 } */
+
+#search-results > * {
+  display: none;
+}
+
+#search-results[data-results="false"] .without-results,
+#search-results[data-results="true"] .with-results {
+  display: block;
+  margin-top: .5em;
+  border: 1px dashed #999;
+  padding: .5em;
+}
+
+#search-results label {
+  display: inline-block;
+  margin-bottom: .5em;
+}

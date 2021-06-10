@@ -32,9 +32,20 @@
       <section>
         <h2>Search current page</h2>
 
-        <p>Highlight Imageshare keywords within the current page.</p>
-        <button type="button" class="submit-btn" id="find-terms">Highlight keywords</button>
+        <p>Find Imageshare keywords within the current page.</p>
+        <button type="button" class="submit-btn" id="find-terms">Find keywords</button>
         <div role="status" class="loading-spinner">Searching...</div>
+
+        <div id="search-results">
+          <div class="without-results" role="alert">No keywords found in page.</div>
+          <div class="with-results">
+            <label for="found-terms" tabindex="-1"></label>
+            <div>
+              <select id="found-terms" name="term"></select>
+              <button id="view-term" type="button" aria-describedby="found-terms">View results</button>
+            </div>
+          </div>
+        </div>
       </section>
     </form>
   </body>
