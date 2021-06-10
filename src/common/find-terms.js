@@ -9,9 +9,20 @@ const getStoredSearchTerms = () => {
   });
 };
 
+const storedSearchTermsAreStale = terms => {
+  const ONE_DAY = 86_400_000;
+
+  const now = (new Date()).getTime();
+
+  return (now - terms.timestamp) > ONE_DAY;
+};
+
 const storeSearchTerms = terms => {
   return new Promise(resolve => {
-    browser.storage.local.set({ terms: terms }, () => resolve(terms))
+    browser.storage.local.set({ terms: {
+      data: terms,
+      timestamp: (new Date()).getTime()
+    } }, () => resolve(terms))
   });
 };
 
@@ -29,11 +40,11 @@ const filterElements = el => {
 
 export const getSearchTerms = () => {
   return getStoredSearchTerms().then(terms => {
-    if (terms === undefined) {
+    if (terms === undefined || storedSearchTermsAreStale(terms)) {
       return fetchSearchTermsFromApi().then(storeSearchTerms);
     }
 
-    return terms;
+    return terms.data;
   })
 };
 
