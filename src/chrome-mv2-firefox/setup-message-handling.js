@@ -33,10 +33,12 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
     findTerms(msg.terms, msg.createLinks)
     .then(sendResponse)
     .then(() => {
-      qsa('a.imageshare-term').forEach(node => node.addEventListener('click', function () {
-        this.setAttribute('aria-label', 'Imageshare search: "' + this.textContent + '"');
-        document.location.href = getQueryUrl(this.textContent);
-      }))
+      qsa('a.imageshare-term').forEach(node => {
+        node.setAttribute('aria-label', 'Imageshare search: "' + node.textContent + '"');
+        node.addEventListener('click', function () {
+          document.location.href = getQueryUrl(this.textContent);
+        })
+      });
     });
   }
 
