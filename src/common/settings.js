@@ -34,6 +34,7 @@ export const getStoredUserSettings = async () => {
           accommodation: undefined,
           source: undefined,
           setActiveTab: true,
+          createKeywordLinks: false
         });
       }
 
@@ -46,7 +47,11 @@ export const getActiveTabSetting = () => new Promise(resolve => {
   getStoredUserSettings().then(settings => resolve(!!settings.setActiveTab));
 });
 
-export const storeUserSettings = async (subject, type, accommodation, source, setActiveTab) => {
+export const getCreateKeywordLinksSetting = () => new Promise(resolve => {
+  getStoredUserSettings().then(settings => resolve(!!settings.createKeywordLinks));
+});
+
+export const storeUserSettings = async (subject, type, accommodation, source, setActiveTab, createKeywordLinks) => {
   const normalise = v => v === 0 ? undefined : v;
 
   const payload = {
@@ -56,6 +61,7 @@ export const storeUserSettings = async (subject, type, accommodation, source, se
       'accommodation': accommodation ? normalise(accommodation.value) : undefined,
       'source': source ? source.id : undefined,
       'setActiveTab': !!setActiveTab,
+      'createKeywordLinks': !!createKeywordLinks,
       'timestamp': new Date().getTime()
     }
   };

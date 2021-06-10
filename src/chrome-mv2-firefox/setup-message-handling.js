@@ -1,5 +1,5 @@
 import browser from 'get-browser';
-import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl, announce } from '../common/util';
+import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl, announce, qsa } from '../common/util';
 import { COMMAND, KEEP_CHANNEL_OPEN, TARGET } from '../common/constants';
 import { findTerms } from '../common/find-terms';
 
@@ -30,7 +30,14 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   }
 
   if (msg.command === COMMAND.FIND_TERMS) {
-    findTerms(msg.terms).then(sendResponse);
+    findTerms(msg.terms, msg.createLinks)
+    .then(sendResponse)
+    .then(() => {
+      qsa('a.imageshare-term').forEach(node => node.addEventListener('click', function () {
+        this.setAttribute('aria-label', 'Imageshare search: "' + this.textContent + '"');
+        document.location.href = getQueryUrl(this.textContent);
+      }))
+    });
   }
 
   if (msg.command === COMMAND.VIEW_TERM) {

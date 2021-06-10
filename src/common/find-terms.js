@@ -48,23 +48,25 @@ export const getSearchTerms = () => {
   })
 };
 
-export const findTerms = terms => {
+export const findTerms = (terms, wrapLinks) => {
   // generating a huge OR-regex is way way way faster than generating a regex for each word.
 
   const finder = findAndReplaceDOMText(document.body, {
     find: new RegExp('\\b(' + terms.join('|') + ')\\b', 'gi'),
-    wrap: 'span',
+    wrap: wrapLinks ? 'a' : 'span',
     wrapClass: 'imageshare-term',
     filterElements: filterElements
   });
 
-  const nodes = qsa('span.imageshare-term');
+  const nodes = qsa('.imageshare-term');
 
   const map = {};
 
   nodes.forEach(node => map[node.textContent.toLowerCase()] = true);
 
-  finder.revert();
+  if (!wrapLinks) {
+    finder.revert();
+  }
 
   return Promise.resolve(Object.keys(map));
 };

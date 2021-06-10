@@ -17,6 +17,10 @@ h1 {
   margin: 0;
 }
 
+.bordered.field-group + .bordered.field-group {
+  margin-top: 1em;
+}
+
 .refinements-wrapper, .submit-btn-wrapper {
   margin-top: 1em;
 }

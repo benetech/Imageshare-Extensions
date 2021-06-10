@@ -5,6 +5,7 @@ import browser from 'get-browser';
 import sendTabMessage from 'tab-send-message';
 
 import './popup.css';
+import { getCreateKeywordLinksSetting } from './settings';
 
 const getUserSearchTerm = () => el('search').value;
 const setUserSearchTerm = term => el('search').value = term;
@@ -101,7 +102,6 @@ const renderFoundTerms = terms => {
     };
 
     withActiveTab(tab => sendTabMessage(tab.id, payload, undefined));
-
   });
 };
 
@@ -109,17 +109,20 @@ const doFindTerms = function () {
   const self = this;
   self.setAttribute('disabled', '');
 
-  getSearchTerms().then(terms => {
-    const payload = {
-      command: COMMAND.FIND_TERMS,
-      target: TARGET.CONTENT,
-      terms: terms
-    };
+  getCreateKeywordLinksSetting().then(createLinks => {
+    getSearchTerms().then(terms => {
+      const payload = {
+        command: COMMAND.FIND_TERMS,
+        target: TARGET.CONTENT,
+        terms: terms,
+        createLinks: createLinks
+      };
 
-    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined).then(terms => {
-      renderFoundTerms(terms);
-      self.removeAttribute('disabled');
-    }));
+      withActiveTab(tab => sendTabMessage(tab.id, payload, undefined).then(terms => {
+        renderFoundTerms(terms);
+        self.removeAttribute('disabled');
+      }));
+    });
   });
 };
 

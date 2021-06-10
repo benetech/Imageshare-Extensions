@@ -54,8 +54,9 @@ const storeSettings = async () => {
   const accommodation = qs("ul#search-acc-list li[aria-selected='true']");
   const source = qs("ul#search-source-list li[aria-selected='true']");
   const setActiveTab = el('active-tab').checked;
+  const createKeywordLinks = el('create-keyword-links').checked;
 
-  return storeUserSettings(subject, type, accommodation, source, setActiveTab)
+  return storeUserSettings(subject, type, accommodation, source, setActiveTab, createKeywordLinks)
 };
 
 const renderCustomDropdown = (prefix, items, defaultSelectedItem, isSelectedItem) => {
@@ -117,9 +118,11 @@ const renderCustomDropdowns = (options, userSettings) => {
 
 const setupMiscellaneousControls = userSettings => {
   const activeTab = el('active-tab');
+  const createKeywordLinks = el('create-keyword-links');
   const saveButton = el('save-advanced-settings');
 
   activeTab.checked = userSettings.setActiveTab;
+  createKeywordLinks.checked = userSettings.createKeywordLinks;
 
   saveButton.addEventListener('click', async function () {
     await storeSettings();

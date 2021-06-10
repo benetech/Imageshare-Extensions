@@ -55,7 +55,14 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   }
 
   if (msg.command === COMMAND.FIND_TERMS) {
-    findTerms(msg.terms).then(sendResponse);
+    findTerms(msg.terms, msg.createLinks)
+    .then(sendResponse)
+    .then(() => {
+      qsa('a.imageshare-term').forEach(node => node.addEventListener('click', function () {
+        this.setAttribute('aria-label', 'Imageshare search: "' + this.textContent + '"');
+        document.location.href = getQueryUrl(this.textContent);
+      }))
+    });
   }
 
   if (msg.command === COMMAND.VIEW_TERM) {
