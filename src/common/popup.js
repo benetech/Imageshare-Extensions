@@ -81,7 +81,7 @@ const renderFoundTerms = terms => {
   const select = qs('#search-results select');
   const viewResults = el('view-term');
 
-  label.textContent = terms.length + ' keywords found in dpage.';
+  label.textContent = terms.length + ' keywords found in page.';
   label.focus();
 
   terms.sort().forEach(term => {
