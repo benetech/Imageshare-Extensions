@@ -53,7 +53,7 @@ export const findTerms = (terms, wrapLinks) => {
 
   const finder = findAndReplaceDOMText(document.body, {
     find: new RegExp('\\b(' + terms.join('|') + ')\\b', 'gi'),
-    wrap: wrapLinks ? 'button' : 'span',
+    wrap: wrapLinks ? 'a' : 'span',
     wrapClass: 'imageshare-term',
     filterElements: filterElements
   });
