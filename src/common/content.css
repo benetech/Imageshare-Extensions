@@ -1,4 +1,4 @@
-a.imageshare-term {
+button.imageshare-term {
     all: initial;
     background-color: #0c4471 !important;
     border: 2px solid #0c4471 !important;
@@ -10,15 +10,15 @@ a.imageshare-term {
     text-decoration: underline !important;
   }
 
-  a.imageshare-term:hover,
-  a.imageshare-term:focus {
+  button.imageshare-term:hover,
+  button.imageshare-term:focus {
     background-color: #fff !important;
     color: #000 !important;
     border: 2px solid #0c4471 !important;
     cursor: pointer;
   }
 
-  a.imageshare-term:before {
+  button.imageshare-term:before {
     content: '';
     width: 1em;
     height: 1em;
