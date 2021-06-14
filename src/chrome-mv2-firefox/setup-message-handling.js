@@ -2,6 +2,7 @@ import browser from 'get-browser';
 import { getUserSelection, setMouseCursorBusy, setMouseCursorReady, getQueryUrl, announce, qsa } from '../common/util';
 import { COMMAND, KEEP_CHANNEL_OPEN, TARGET } from '../common/constants';
 import { findTerms } from '../common/find-terms';
+import { getActiveTabSetting } from '../common/settings';
 
 const onExtensionMessage = (msg, _sender, sendResponse) => {
   console.debug('Index receiving message', msg);
@@ -35,15 +36,10 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
     .then(() => {
       qsa('a.imageshare-term').forEach(node => {
         node.setAttribute('aria-label', 'Imageshare search: "' + node.textContent + '"');
-        node.addEventListener('click', function () {
-          document.location.href = getQueryUrl(this.textContent);
-        })
+        node.setAttribute('href', getQueryUrl(node.textContent));
+        getActiveTabSetting.then(active => !active && node.setAttribute('target', '_blank'));
       });
     });
-  }
-
-  if (msg.command === COMMAND.VIEW_TERM) {
-    document.location.href = getQueryUrl(msg.term);
   }
 
   // keep the channel open

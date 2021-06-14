@@ -97,11 +97,11 @@ const renderFoundTerms = terms => {
 
     const payload = {
       command: COMMAND.VIEW_TERM,
-      target: TARGET.CONTENT,
+      target: TARGET.BACKGROUND,
       term: selectedOption.value
     };
 
-    withActiveTab(tab => sendTabMessage(tab.id, payload, undefined));
+    browser.runtime.sendMessage(payload);
   });
 };
 

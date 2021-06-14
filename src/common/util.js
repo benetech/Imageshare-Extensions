@@ -1,4 +1,5 @@
 import browser from 'get-browser';
+import { getActiveTabSetting } from './settings';
 
 export const el = id => document.getElementById(id);
 export const qs = q => document.querySelector(q);
@@ -11,6 +12,10 @@ export const withActiveTab = f => browser.tabs.query({
   active: true,
   currentWindow: true
 }, tabs => f(tabs[0]));
+
+export const openUrl = url => {
+  getActiveTabSetting().then(active => browser.tabs.create({url: url, active: active}));
+};
 
 export const getUserSelection = () => {
   if (window.getSelection) {

@@ -60,15 +60,10 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
     .then(() => {
       qsa('a.imageshare-term').forEach(node => {
         node.setAttribute('aria-label', 'Imageshare search: "' + node.textContent + '"');
-        node.addEventListener('click', function () {
-          document.location.href = getQueryUrl(this.textContent);
-        })
+        node.setAttribute('href', getQueryUrl(node.textContent));
+        getActiveTabSetting.then(active => !active && node.setAttribute('target', '_blank'));
       });
     });
-  }
-
-  if (msg.command === COMMAND.VIEW_TERM) {
-    document.location.href = getQueryUrl(msg.term);
   }
 
   if (msg.command === COMMAND.WORKING) {

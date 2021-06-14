@@ -1,6 +1,6 @@
 import { COMMAND, TARGET, LIGHT_ICON_PATHS, IMGS_API_URL, DARK_SCHEME, SEARCH } from './constants';
-import { getActiveTabSetting, getStoredUserSettings, hasAdvancedSearchCriteriaDefined } from './settings';
-import { fetchJson, withActiveTab } from './util';
+import { getStoredUserSettings, hasAdvancedSearchCriteriaDefined } from './settings';
+import { fetchJson, getQueryUrl, openUrl, withActiveTab } from './util';
 import { displayNotification } from 'display-notifications';
 import browser from 'get-browser';
 import startupBackgroundScript from 'startup-background-script';
@@ -13,8 +13,6 @@ const normaliseSearchParameter = p => {
 
   return encodeURIComponent(p)
 };
-
-const openImageshare = url => getActiveTabSetting().then(active => browser.tabs.create({url: url, active: active}));
 
 const openOptionsPage = () => {
   if (browser.runtime.openOptionsPage) {
@@ -42,12 +40,12 @@ const doStandardSearch = selection => {
 
       if (results.length === 1) {
         console.debug(`One result found for ${selection}`);
-        openImageshare(results[0].permalink);
+        openUrl(results[0].permalink);
         return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
       console.debug(`${results.length} results found for "${selection}"`);
-      openImageshare('https://imageshare.benetech.org/?page=search&q=' + selection);
+      openUrl('https://imageshare.benetech.org/?page=search&q=' + selection);
       displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
     .catch(e => console.error('Unable to fetch standard search query results from API', e));
@@ -74,13 +72,13 @@ const doAdvancedSearch = (selection, userSubject, userType, userAcc, userSrc) =>
         console.debug(`One result found for ${selection}`);
 
         const resultURL = results[0].permalink;
-        openImageshare(resultURL);
+        openUrl(resultURL);
 
         return displayNotification(`One match found`, 'It has been opened in a new tab.');
       }
 
       console.debug(`${results.length} results found for "${selection}"`);
-      openImageshare("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + subject + "&type=" + type + "&acc=" + accommodation + "&src=" + source);
+      openUrl("https://imageshare.benetech.org/?page=search&q=" + selection + "&subject=" + subject + "&type=" + type + "&acc=" + accommodation + "&src=" + source);
       displayNotification(`${results.length} matches for ${selection}`, 'These matches have been opened in a new tab.');
     })
     .catch(e => console.error('Unable to fetch advanced search query results from API', e));
@@ -151,6 +149,11 @@ const onExtensionMessage = (msg, _sender, sendResponse) => {
   console.debug('Background receiving message', msg);
 
   if (msg.target !== TARGET.BACKGROUND) {
+    sendResponse();
+  }
+
+  if (msg.command === COMMAND.VIEW_TERM) {
+    openUrl(getQueryUrl(msg.term));
     sendResponse();
   }
 
