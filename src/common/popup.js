@@ -12,11 +12,17 @@ const setUserSearchTerm = term => el('search').value = term;
 
 const showNoSearchTermDOM = () => {
   qs('.search-term.field-group').classList.add('validation-error');
-  el('no-search-keyword').focus();
+  const searchField = el('search');
+  searchField.setAttribute('aria-describedby', 'no-search-keyword');
+  searchField.setAttribute('aria-invalid', true);
+  searchField.focus();
 };
 
 const hideNoSearchTermDOM = () => {
   qs('.search-term.field-group').classList.remove('validation-error');
+  const searchField = el('search');
+  searchField.removeAttribute('aria-describedby');
+  searchField.removeAttribute('aria-invalid');
 };
 
 const getUserSelection = () => {
